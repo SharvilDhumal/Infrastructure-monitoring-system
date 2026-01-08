@@ -12,12 +12,7 @@ const register = async (userData) => {
     const data = await response.json();
 
     if (!response.ok) {
-        const error = new Error(data.message || 'Something went wrong');
-        error.response = {
-            status: response.status,
-            data: data
-        };
-        throw error;
+        throw new Error(data.message || 'Something went wrong');
     }
 
     return data;
@@ -35,12 +30,7 @@ const login = async (userData) => {
     const data = await response.json();
 
     if (!response.ok) {
-        const error = new Error(data.message || 'Something went wrong');
-        error.response = {
-            status: response.status,
-            data: data
-        };
-        throw error;
+        throw new Error(data.message || 'Something went wrong');
     }
 
     if (data.token) {
@@ -74,31 +64,13 @@ const logout = () => {
     localStorage.removeItem('user');
 };
 
-const resetPassword = async (token, newPassword, id) => {
+const resetPassword = async (token, newPassword) => {
     const response = await fetch(API_URL + 'reset-password', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ token, newPassword, id }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong');
-    }
-
-    return data;
-};
-
-const verifyEmail = async (userId, token) => {
-    const response = await fetch(API_URL + 'verify-email', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId, token }),
+        body: JSON.stringify({ token, newPassword }),
     });
 
     const data = await response.json();
@@ -115,8 +87,7 @@ const authService = {
     login,
     logout,
     forgotPassword,
-    resetPassword,
-    verifyEmail
+    resetPassword
 };
 
 export default authService;

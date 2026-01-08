@@ -6,6 +6,7 @@ import ForgotPasswordForm from './ForgotPasswordForm';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Label from '../../../components/ui/Label';
+import AuthLayout from '../layout/AuthLayout';
 
 const GoogleIcon = () => (
     <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
@@ -59,11 +60,10 @@ const LoginForm = () => {
     };
 
     return (
-        <>
-            <h1 className="auth-title">{isForgotPassword ? "Reset your password" : "Welcome back"}</h1>
-            <p className="auth-subtitle">
-                {isForgotPassword ? "Enter your registered email and we’ll send you a reset link." : "Welcome back! Please enter your details."}
-            </p>
+        <AuthLayout
+            title={isForgotPassword ? "Reset your password" : "Welcome back"}
+            subtitle={isForgotPassword ? "Enter your registered email and we’ll send you a reset link." : "Welcome back! Please enter your details."}
+        >
             {isForgotPassword ? (
                 <ForgotPasswordForm onBack={() => setIsForgotPassword(false)} />
             ) : (
@@ -117,7 +117,7 @@ const LoginForm = () => {
                         <Button
                             type="button"
                             className="btn-google"
-                            onClick={() => window.location.href = 'http://localhost:5000/api/auth/google?state=login'}
+                            onClick={() => window.location.href = 'http://localhost:5000/auth/google'}
                         >
                             <GoogleIcon />
                             Continue with Google
@@ -129,7 +129,7 @@ const LoginForm = () => {
                     </div>
                 </form>
             )}
-        </>
+        </AuthLayout>
     );
 };
 

@@ -5,12 +5,12 @@ import authService from '../authService';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Label from '../../../components/ui/Label';
+import AuthLayout from '../layout/AuthLayout';
 
 const ResetPasswordForm = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const token = searchParams.get('token');
-    const id = searchParams.get('id');
 
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -39,7 +39,7 @@ const ResetPasswordForm = () => {
         setIsLoading(true);
 
         try {
-            await authService.resetPassword(token, password, id);
+            await authService.resetPassword(token, password);
             // Navigate to EmailVerified page re-purposed as Success Page
             navigate('/email-verified', {
                 state: {
@@ -56,9 +56,10 @@ const ResetPasswordForm = () => {
     };
 
     return (
-        <>
-            <h1 className="auth-title">Set new password</h1>
-            <p className="auth-subtitle">Please enter your new password below.</p>
+        <AuthLayout
+            title="Set new password"
+            subtitle="Please enter your new password below."
+        >
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <Label htmlFor="new-password">New Password</Label>
@@ -88,7 +89,7 @@ const ResetPasswordForm = () => {
                     Reset Password
                 </Button>
             </form>
-        </>
+        </AuthLayout>
     );
 };
 
