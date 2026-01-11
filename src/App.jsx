@@ -12,7 +12,7 @@ import LoaderWrapper from "./components/LoaderWrapper";
 import { Toaster } from "react-hot-toast";
 import Report from "./pages/Report";
 
-// Home page component
+// Home page
 const Home = () => {
   return (
     <LoaderWrapper>
@@ -32,7 +32,7 @@ const Home = () => {
 };
 
 const App = () => {
-  // Force dark mode (project design choice)
+  // Force dark mode
   useEffect(() => {
     document.documentElement.classList.add("dark");
   }, []);
@@ -40,7 +40,6 @@ const App = () => {
   const dotRef = useRef(null);
   const outlineRef = useRef(null);
 
-  // Mouse tracking for custom cursor
   const mouse = useRef({ x: 0, y: 0 });
   const position = useRef({ x: 0, y: 0 });
 
@@ -83,7 +82,7 @@ const App = () => {
         <Route path="/report" element={<Report />} />
       </Routes>
 
-      {/* Custom cursor outline */}
+      {/* Cursor outline */}
       <div
         ref={outlineRef}
         className="fixed top-0 left-0 h-10 w-10 rounded-full pointer-events-none"
@@ -95,7 +94,7 @@ const App = () => {
         }}
       />
 
-      {/* Custom cursor dot */}
+      {/* Cursor dot */}
       <div
         ref={dotRef}
         className="fixed top-0 left-0 h-3 w-3 rounded-full pointer-events-none"
