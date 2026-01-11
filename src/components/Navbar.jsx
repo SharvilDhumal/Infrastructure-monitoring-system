@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import assets from "../assets/assets";
 import { motion } from "framer-motion";
 
@@ -111,9 +112,12 @@ const Navbar = () => {
             </a>
 
             {/* Primary CTA */}
-            <button className="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-[#5044E5] to-[#4d8cea] text-white px-5 py-2.5 rounded-full cursor-pointer shadow-md hover:scale-105 transition-all duration-200">
+            <Link
+              to="/report"
+              className="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-[#5044E5] to-[#4d8cea] text-white px-5 py-2.5 rounded-full cursor-pointer shadow-md hover:scale-105 transition-all duration-200"
+            >
               Report an Issue
-            </button>
+            </Link>
 
             {/* Mobile: hamburger */}
             <button
@@ -165,12 +169,13 @@ const Navbar = () => {
               >
                 Login
               </a>
-              <button
+              <Link
+                to="/report"
                 onClick={() => setOpen(false)}
                 className="px-4 py-3 rounded-full text-center bg-gradient-to-r from-[#5044E5] to-[#4d8cea] text-white hover:scale-[1.02] transition-all duration-200"
               >
                 Report an Issue
-              </button>
+              </Link>
             </div>
           </nav>
         </div>

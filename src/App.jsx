@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import TrustedBy from "./components/TrustedBy";
@@ -9,6 +10,26 @@ import ContactUs from "./components/ContactUs";
 import Footer from "./components/Footer";
 import LoaderWrapper from "./components/LoaderWrapper";
 import { Toaster } from "react-hot-toast";
+import Report from "./pages/Report";
+
+// Home page component
+const Home = () => {
+  return (
+    <LoaderWrapper>
+      <div className="relative bg-black transition-colors pt-16 sm:pt-20">
+        <Toaster />
+        <Navbar />
+        <Hero />
+        <TrustedBy />
+        <Services />
+        <OurWork />
+        <Teams />
+        <ContactUs />
+        <Footer />
+      </div>
+    </LoaderWrapper>
+  );
+};
 
 const App = () => {
   // Force dark mode (project design choice)
@@ -57,20 +78,10 @@ const App = () => {
 
   return (
     <>
-      <LoaderWrapper>
-        {/* Page content */}
-        <div className="relative bg-black transition-colors pt-16 sm:pt-20">
-          <Toaster />
-          <Navbar />
-          <Hero />
-          <TrustedBy />
-          <Services />
-          <OurWork />
-          <Teams />
-          <ContactUs />
-          <Footer />
-        </div>
-      </LoaderWrapper>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/report" element={<Report />} />
+      </Routes>
 
       {/* Custom cursor outline */}
       <div
