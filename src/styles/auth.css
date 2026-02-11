@@ -167,7 +167,7 @@
    Google Button
 ========================= */
 .btn-google {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
@@ -177,11 +177,19 @@
     font-weight: 500;
     height: 48px;
     transition: all 0.2s;
+    width: 100%;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .btn-google:hover {
     background-color: #f9fafb !important;
     border-color: #9ca3af !important;
+}
+
+.btn-google:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
 }
 
 /* =========================

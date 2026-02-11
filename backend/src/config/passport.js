@@ -1,43 +1,43 @@
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const User = require('../models/User');
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL
-},
-    async (accessToken, refreshToken, profile, done) => {
-        try {
-            // Check if user already exists
-            let user = await User.findOne({ email: profile.emails[0].value });
+// Ensure environment variables are loaded
+if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+  console.error("CRITICAL ERROR: Google OAuth credentials are missing in .env");
+}
 
-            if (user) {
-                // If user exists but provider is not google, you might want to link accounts
-                // For now, we just log them in. 
-                // Optional: Update googleId if you had one, or provider.
-                // keeping it simple as per instructions.
-                return done(null, user);
-            }
+console.log("Passport Google Config Loaded:");
+console.log("  ClientID:", process.env.GOOGLE_CLIENT_ID ? process.env.GOOGLE_CLIENT_ID.substring(0, 10) + "..." : "MISSING");
+console.log("  Callback:", process.env.GOOGLE_CALLBACK_URL);
 
-            // Create new user
-            user = new User({
-                name: profile.displayName,
-                email: profile.emails[0].value,
-                provider: 'google',
-                isVerified: true, // Google emails are verified
-                password: '' // No password for Google auth
-            });
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL || "/api/auth/google/callback",
+      passReqToCallback: true, // Allows us to access req in the callback if needed
+    },
+    async (req, accessToken, refreshToken, profile, done) => {
+      try {
+        console.log("Google Strategy: Profile received", profile.emails[0].value);
 
-            await user.save();
+        // Return a simplified user object
+        const user = {
+          name: profile.displayName,
+          email: profile.emails[0]?.value,
+          googleId: profile.id,
+          avatar: profile.photos[0]?.value,
+          provider: "google",
+        };
 
-            // Mark as new user to trigger welcome email in controller
-            user._isNewUser = true;
-
-            done(null, user);
-        } catch (error) {
-            done(error, null);
-        }
-    }));
+        return done(null, user);
+      } catch (error) {
+        console.error("Google Strategy Callback Error:", error);
+        return done(error, null);
+      }
+    }
+  )
+);
 
 module.exports = passport;

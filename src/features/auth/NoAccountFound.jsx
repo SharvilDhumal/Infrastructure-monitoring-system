@@ -3,25 +3,25 @@ import { useNavigate } from 'react-router-dom';
 import AuthLayout from './layout/AuthLayout';
 import Button from '../../components/ui/Button';
 
-const AccountExists = () => {
+const NoAccountFound = () => {
     const navigate = useNavigate();
 
     return (
         <AuthLayout
-            title="You already have an account"
-            subtitle="It looks like you've already signed up with this email. Please log in to continue."
+            title="No account found"
+            subtitle="We couldn't find an account associated with this Google email. Please sign up to create one."
         >
             <div style={{ textAlign: 'center' }}>
                 <Button
-                    onClick={() => navigate('/login')}
+                    onClick={() => navigate('/signup')}
                     variant="primary"
                     style={{ width: '100%', marginBottom: '1rem' }}
                 >
-                    Log In
+                    Sign Up
                 </Button>
 
                 <Button
-                    onClick={() => navigate('/signup')}
+                    onClick={() => navigate('/login')}
                     variant="outline"
                     style={{ width: '100%' }}
                 >
@@ -32,4 +32,4 @@ const AccountExists = () => {
     );
 };
 
-export default AccountExists;
+export default NoAccountFound;

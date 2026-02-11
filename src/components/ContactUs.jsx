@@ -54,7 +54,7 @@ const ContactUs = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="text-sm text-gray-400 dark:text-gray-500 mb-4 uppercase tracking-wider"
+            className="text-sm text-gray-500 dark:text-gray-400 mb-4 uppercase tracking-wider"
           >
             GET IN TOUCH
           </motion.p>
@@ -63,7 +63,7 @@ const ContactUs = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             viewport={{ once: true }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-8"
+            className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-8"
           >
             Contact.
           </motion.h2>
@@ -82,7 +82,7 @@ const ContactUs = () => {
               type="text"
               name="name"
               placeholder="What's your name?"
-              className="w-full px-4 py-4 bg-gray-800/50 dark:bg-gray-800/50 border border-gray-700 dark:border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#5044E5] focus:ring-2 focus:ring-[#5044E5]/20 transition-all"
+              className="w-full px-4 py-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-[#5044E5] focus:ring-2 focus:ring-[#5044E5]/20 transition-all"
               required
             />
           </div>
@@ -92,7 +92,7 @@ const ContactUs = () => {
               type="email"
               name="email"
               placeholder="What's your email?"
-              className="w-full px-4 py-4 bg-gray-800/50 dark:bg-gray-800/50 border border-gray-700 dark:border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#5044E5] focus:ring-2 focus:ring-[#5044E5]/20 transition-all"
+              className="w-full px-4 py-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-[#5044E5] focus:ring-2 focus:ring-[#5044E5]/20 transition-all"
               required
             />
           </div>
@@ -102,7 +102,7 @@ const ContactUs = () => {
               rows={6}
               name="message"
               placeholder="What do you want to say?"
-              className="w-full px-4 py-4 bg-gray-800/50 dark:bg-gray-800/50 border border-gray-700 dark:border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#5044E5] focus:ring-2 focus:ring-[#5044E5]/20 transition-all resize-none"
+              className="w-full px-4 py-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-[#5044E5] focus:ring-2 focus:ring-[#5044E5]/20 transition-all resize-none"
               required
             />
           </div>
