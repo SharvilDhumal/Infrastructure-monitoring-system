@@ -1,36 +1,38 @@
 const mongoose = require('mongoose');
 
-const issueSchema = new mongoose.Schema(
-    {
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            ref: 'User',
-        },
-        title: {
-            type: String,
-            required: true,
-        },
-        description: {
-            type: String,
-            required: true,
-        },
-        imageUrl: {
-            type: String,
-        },
-        location: {
-            type: String,
-            required: true,
-        },
-        status: {
-            type: String,
-            enum: ['Approved', 'Pending', 'Rejected', 'Resolved'],
-            default: 'Pending',
-        },
+const issueSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
-    {
-        timestamps: true,
+    title: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    faultType: {
+        type: String,
+        required: true
+    },
+    location: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ['Pending', 'Approved', 'Rejected', 'Resolved'],
+        default: 'Pending'
+    },
+    imageUrl: {
+        type: String
     }
-);
+}, {
+    timestamps: true
+});
 
 module.exports = mongoose.model('Issue', issueSchema);

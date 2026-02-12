@@ -7,7 +7,8 @@
     display: flex;
     flex-direction: column;
     /* Mobile: single column */
-    background-color: var(--surface);
+    background-color: #ffffff !important;
+    color: #0f172a !important;
     overflow: hidden;
 }
 
@@ -20,7 +21,7 @@
     justify-content: center;
     align-items: center;
     padding: var(--spacing-xl);
-    background-color: var(--surface);
+    background-color: #ffffff !important;
 }
 
 .auth-container {
@@ -105,18 +106,19 @@
     font-size: 2rem;
     font-weight: 800;
     margin-bottom: 0.5rem;
-    color: var(--text-main);
+    color: #0f172a !important;
     letter-spacing: -0.03em;
 }
 
 .auth-subtitle {
-    color: var(--text-muted);
+    color: #64748b !important;
     margin-bottom: 2.5rem;
     font-size: 1rem;
 }
 
 .form-group {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+    position: relative;
 }
 
 /* =========================
@@ -126,7 +128,7 @@
     margin-top: 2rem;
     text-align: center;
     font-size: 0.875rem;
-    color: var(--text-muted);
+    color: #64748b !important;
 }
 
 .auth-link {
@@ -147,7 +149,7 @@
     display: flex;
     align-items: center;
     margin: 1.75rem 0;
-    color: var(--text-muted);
+    color: #64748b !important;
     font-size: 0.875rem;
 }
 
@@ -156,7 +158,7 @@
     content: '';
     flex: 1;
     height: 1px;
-    background-color: var(--border);
+    background-color: #e2e8f0;
 }
 
 .auth-separator span {
@@ -172,8 +174,8 @@
     justify-content: center;
     gap: 0.75rem;
     background-color: white !important;
-    border: 1px solid var(--border) !important;
-    color: var(--text-main) !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #0f172a !important;
     font-weight: 500;
     height: 48px;
     transition: all 0.2s;
@@ -207,4 +209,33 @@
 
 .forgot-password-link:hover {
     text-decoration: underline;
+}
+
+/* =========================
+   UI Fixes & Toggles
+   ========================= */
+.relative {
+    position: relative !important;
+}
+
+.password-toggle {
+    position: absolute !important;
+    right: 1.25rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: transparent !important;
+    border: none !important;
+    color: #94a3b8 !important; /* slate-400 */
+    cursor: pointer !important;
+    padding: 0.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 50 !important;
+    transition: all 0.2s ease !important;
+}
+
+.password-toggle:hover {
+    color: #3b82f6 !important; /* blue-500 */
+    transform: translateY(-50%) scale(1.1) !important;
 }

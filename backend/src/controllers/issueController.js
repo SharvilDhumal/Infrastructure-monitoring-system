@@ -1,55 +1,58 @@
 const Issue = require('../models/Issue');
 
-// @desc    Create a new issue
-// @route   POST /api/issues
-// @access  Private
-const createIssue = async (req, res) => {
+exports.getAllIssues = async (req, res) => {
     try {
-        const { title, description, imageUrl, location } = req.body;
-
-        if (!title || !description || !location) {
-            return res.status(400).json({ message: 'Please provide all required fields' });
-        }
-
-        const issue = await Issue.create({
-            userId: req.user._id,
-            title,
-            description,
-            imageUrl,
-            location,
-            status: 'Pending', // Default status
+        const issues = await Issue.find().populate('user', 'name email');
+        res.status(200).json({
+            success: true,
+            issues
         });
-
-        res.status(201).json(issue);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server Error' });
     }
 };
 
-// @desc    Get logged-in user's issues with stats
-// @route   GET /api/issues/user
-// @access  Private
-const getUserIssues = async (req, res) => {
+exports.createIssue = async (req, res) => {
     try {
-        const issues = await Issue.find({ userId: req.user._id }).sort({ createdAt: -1 });
+        const { title, faultType, location, description, imageUrl } = req.body;
+
+        const issue = await Issue.create({
+            user: req.user._id,
+            title,
+            faultType,
+            location,
+            description,
+            imageUrl
+        });
+
+        res.status(201).json({
+            success: true,
+            issue
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+exports.getUserIssues = async (req, res) => {
+    try {
+        const issues = await Issue.find({ user: req.user._id }).sort({ createdAt: -1 });
 
         const stats = {
             total: issues.length,
-            approved: issues.filter((issue) => issue.status === 'Approved').length,
-            pending: issues.filter((issue) => issue.status === 'Pending').length,
-            rejected: issues.filter((issue) => issue.status === 'Rejected').length,
-            resolved: issues.filter((issue) => issue.status === 'Resolved').length,
+            approved: issues.filter(i => i.status === 'Approved').length,
+            pending: issues.filter(i => i.status === 'Pending').length,
+            rejected: issues.filter(i => i.status === 'Rejected').length,
+            resolved: issues.filter(i => i.status === 'Resolved').length,
         };
 
-        res.json({ stats, issues });
+        res.status(200).json({
+            success: true,
+            issues,
+            stats
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server Error' });
     }
-};
-
-module.exports = {
-    createIssue,
-    getUserIssues,
 };

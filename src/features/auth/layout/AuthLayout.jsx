@@ -4,7 +4,20 @@ import authSideImage from '../../../assets/authimg.png';
 
 const AuthLayout = ({ children, title, subtitle }) => {
     return (
-        <div className="auth-page" style={{ backgroundColor: 'var(--surface)', color: 'var(--text-main)' }}>
+        <div 
+          className="auth-page" 
+          style={{ 
+            backgroundColor: '#ffffff', 
+            color: '#0f172a',
+            '--text-main': '#0f172a',
+            '--text-muted': '#64748b',
+            '--input-bg': '#f8fafc',
+            '--input-border': '#e2e8f0',
+            '--input-text': '#0f172a',
+            '--input-placeholder': '#94a3b8',
+            '--surface': '#ffffff'
+          }}
+        >
             {/* Left Side - Content/Form */}
             <div className="auth-content">
                 <div className="auth-container">
@@ -20,7 +33,7 @@ const AuthLayout = ({ children, title, subtitle }) => {
                             fontSize: '1.5rem',
                             fontWeight: '600',
                             letterSpacing: '0.05em',
-                            color: 'var(--text-main)',
+                            color: '#0f172a', /* Explicit dark color */
                             margin: 0,
                             paddingBottom: '0.5rem',
                             background: 'linear-gradient(90deg, #1a1a1a, #4a5568)',

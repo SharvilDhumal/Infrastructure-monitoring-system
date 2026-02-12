@@ -6,6 +6,7 @@ const connectDB = require('./config/db');
 connectDB();
 
 app.use('/api/issues', require('./routes/issueRoutes'));
+app.use('/api', require('./routes/streetlightRoutes'));
 
 const PORT = process.env.PORT || 5001;
 

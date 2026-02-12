@@ -3,10 +3,24 @@ import { motion } from "framer-motion";
 import IntroLoader from "./IntroLoader";
 
 const LoaderWrapper = ({ children }) => {
-  const [showLoader, setShowLoader] = useState(true); // Always start with loader visible
-  const [showContent, setShowContent] = useState(false);
+  // Check if user has already seen the loader in this session
+  const [showLoader, setShowLoader] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !sessionStorage.getItem("hasVisited");
+    }
+    return true;
+  });
+  const [showContent, setShowContent] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !!sessionStorage.getItem("hasVisited");
+    }
+    return false;
+  });
 
   const handleLoaderComplete = () => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("hasVisited", "true");
+    }
     setShowLoader(false);
     // Small delay before showing content for smooth transition
     setTimeout(() => {

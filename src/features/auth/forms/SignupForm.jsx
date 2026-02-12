@@ -6,6 +6,7 @@ import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Label from '../../../components/ui/Label';
 import AuthLayout from '../layout/AuthLayout';
+import { Eye, EyeOff } from 'lucide-react';
 
 
 
@@ -17,6 +18,7 @@ const SignupForm = () => {
         password: '',
     });
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -70,14 +72,24 @@ const SignupForm = () => {
 
                 <div className="form-group">
                     <Label htmlFor="password">Password</Label>
-                    <Input
-                        id="password"
-                        type="password"
-                        placeholder="Create a password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
+                    <div className="relative">
+                        <Input
+                            id="password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Create a password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            className="pr-12"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="password-toggle"
+                        >
+                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                    </div>
                 </div>
 
                 <Button type="submit" variant="primary" isLoading={isLoading}>Sign Up</Button>

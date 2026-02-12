@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import toast from 'react-hot-toast'; // Removed unused Link import
 import authService from '../authService';
 import ForgotPasswordForm from './ForgotPasswordForm';
@@ -7,6 +7,7 @@ import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Label from '../../../components/ui/Label';
 import AuthLayout from '../layout/AuthLayout';
+import { Eye, EyeOff } from 'lucide-react';
 
 
 
@@ -31,6 +32,7 @@ const LoginForm = () => {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -82,14 +84,24 @@ const LoginForm = () => {
 
                     <div className="form-group">
                         <Label htmlFor="password">Password</Label>
-                        <Input
-                            id="password"
-                            type="password"
-                            placeholder="••••••••"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
+                        <div className="relative">
+                            <Input
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                placeholder="••••••••"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                                className="pr-12"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="password-toggle"
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
+                        </div>
                         <div style={{ textAlign: 'right', marginTop: '0.5rem' }}>
                             <button
                                 type="button"
@@ -123,7 +135,7 @@ const LoginForm = () => {
 
 
                     <div className="auth-footer">
-                        Don't have an account? <span onClick={() => navigate('/signup')} className="auth-link" style={{ cursor: 'pointer' }}>Sign up</span>
+                        Don't have an account? <Link to="/signup" className="auth-link">Sign up</Link>
                     </div>
                 </form>
             )}
