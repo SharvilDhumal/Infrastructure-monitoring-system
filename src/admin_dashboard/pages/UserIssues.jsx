@@ -8,7 +8,7 @@ const UserIssues = () => {
     const [error, setError] = useState(null);
 
     const API_URL = 'http://localhost:5000/api/issues';
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     const fetchIssues = async () => {
         try {

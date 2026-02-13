@@ -34,8 +34,8 @@ const login = async (userData) => {
     }
 
     if (data.token) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('user', JSON.stringify(data.user));
     }
 
     return data;
@@ -60,8 +60,8 @@ const forgotPassword = async (email) => {
 };
 
 const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
 };
 
 const resetPassword = async (token, newPassword) => {

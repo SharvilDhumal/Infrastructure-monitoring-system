@@ -57,8 +57,8 @@ const LoginForm = () => {
                     name: 'Admin User',
                     email: 'admin@gmail.com'
                 };
-                localStorage.setItem('user', JSON.stringify(adminUser));
-                localStorage.setItem('token', 'mock-admin-token');
+                sessionStorage.setItem('user', JSON.stringify(adminUser));
+                sessionStorage.setItem('token', 'mock-admin-token');
                 toast.success('Admin Login successful!');
                 navigate('/main-dashboard');
                 return;

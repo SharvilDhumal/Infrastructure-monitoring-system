@@ -39,8 +39,8 @@ const Profile = () => {
 
     useEffect(() => {
         const checkAuth = async () => {
-            const storedUser = localStorage.getItem('user');
-            const token = localStorage.getItem('token');
+            const storedUser = sessionStorage.getItem('user');
+            const token = sessionStorage.getItem('token');
 
             if (!token || !storedUser) {
                 navigate('/login');

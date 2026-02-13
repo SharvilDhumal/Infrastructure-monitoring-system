@@ -13,7 +13,7 @@ const GoogleSuccess = () => {
 
         if (token) {
             // Save token
-            localStorage.setItem('token', token);
+            sessionStorage.setItem('token', token);
 
             // Optional: Store user type/flow if needed, but requirements say redirect to / and NOT /dashboard
 
