@@ -50,6 +50,20 @@ const LoginForm = () => {
 
         setIsLoading(true);
         try {
+            // Hardcoded Admin Bypass
+            if (formData.email === 'admin@gmail.com' && formData.password === 'Admin@123') {
+                const adminUser = {
+                    id: 'admin-id',
+                    name: 'Admin User',
+                    email: 'admin@gmail.com'
+                };
+                localStorage.setItem('user', JSON.stringify(adminUser));
+                localStorage.setItem('token', 'mock-admin-token');
+                toast.success('Admin Login successful!');
+                navigate('/main-dashboard');
+                return;
+            }
+
             await authService.login(formData);
             toast.success('Login successful!');
             navigate('/');

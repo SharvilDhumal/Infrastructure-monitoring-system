@@ -12,4 +12,7 @@ router.get('/user', protect, issueController.getUserIssues);
 // POST a new issue (Protected)
 router.post('/', protect, issueController.createIssue);
 
+// UPDATE issue status (Temporarily public for testing with mock admin credentials)
+router.put('/:id/status', issueController.updateIssueStatus);
+
 module.exports = router;

@@ -1,0 +1,49 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --main-bg: #0B1120;
+  --section-bg: #0F172A;
+  --card-bg: #111827;
+  --sidebar-bg: #0F172A;
+  --text-primary: #E5E7EB;
+  --text-secondary: #94A3B8;
+  --text-muted: #6B7280;
+
+  --accent-indigo: #6366F1;
+  --accent-cyan: #22D3EE;
+  --accent-violet: #A78BFA;
+
+  --accent-green: #10B981;
+  --accent-amber: #F59E0B;
+  --accent-red: #F43F5E;
+
+  --card-border: rgba(99, 102, 241, 0.15);
+  --card-glow: 0 0 20px rgba(99, 102, 241, 0.08);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.7);
+
+  --border-radius: 16px;
+  --border-radius-sm: 12px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--main-bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

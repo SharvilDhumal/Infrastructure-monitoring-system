@@ -1,0 +1,114 @@
+.infrastructure-health-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%);
+}
+
+.infrastructure-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.infrastructure-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: var(--main-bg);
+  border-radius: var(--border-radius-sm);
+  transition: all 0.2s ease;
+}
+
+.infrastructure-item:hover {
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.infrastructure-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.infrastructure-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.infrastructure-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.infrastructure-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.infrastructure-status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.infrastructure-health-bar {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(0, 0, 0, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.health-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.infrastructure-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.health-percentage {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.health-details {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .infrastructure-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .infrastructure-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+

@@ -23,6 +23,7 @@ import AccountExists from "./features/auth/AccountExists";
 import NoAccountFound from "./features/auth/NoAccountFound";
 import Profile from "./pages/Profile";
 import StreetlightDashboard from "./components/StreetlightDashboard";
+import AdminDashboard from "./admin_dashboard/App";
 
 // Home page
 const Home = () => {
@@ -102,6 +103,7 @@ const App = () => {
         <Route path="/no-account-found" element={<NoAccountFound />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/streetlights" element={<StreetlightDashboard />} />
+        <Route path="/main-dashboard/*" element={<AdminDashboard />} />
       </Routes>
 
       {/* Cursor outline */}

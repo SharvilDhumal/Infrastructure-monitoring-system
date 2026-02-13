@@ -1,0 +1,37 @@
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+import Sidebar from './components/Sidebar'
+import Navbar from './components/Navbar'
+import Overview from './pages/Overview'
+import InfrastructureMonitoring from './pages/InfrastructureMonitoring'
+
+import IncidentsMaintenance from './pages/IncidentsMaintenance'
+import Analytics from './pages/Analytics'
+import Settings from './pages/Settings'
+import UserIssues from './pages/UserIssues'
+import "leaflet/dist/leaflet.css";
+import './App.css'
+import './index.css'
+
+function AdminDashboard() {
+  return (
+    <div className="app">
+      <Navbar />
+      <Sidebar />
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Overview />} />
+          <Route path="/infrastructure" element={<InfrastructureMonitoring />} />
+
+          <Route path="/incidents" element={<IncidentsMaintenance />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/user-issues" element={<UserIssues />} />
+        </Routes>
+      </main>
+    </div>
+  )
+}
+
+export default AdminDashboard
+

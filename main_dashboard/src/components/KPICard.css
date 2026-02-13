@@ -1,0 +1,61 @@
+.kpi-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: var(--border-radius);
+    padding: 32px;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-glow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    background: rgba(17, 24, 39, 0.8);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+}
+
+.kpi-card.total {
+    border-left: 4px solid var(--accent-cyan);
+}
+
+.kpi-card.resolved {
+    border-left: 4px solid var(--accent-green);
+}
+
+.kpi-card.total:hover {
+    box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15);
+    border-color: rgba(34, 211, 238, 0.4);
+}
+
+.kpi-card.resolved:hover {
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+.kpi-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.kpi-value {
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.kpi-subtext {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}

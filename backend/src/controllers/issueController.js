@@ -56,3 +56,26 @@ exports.getUserIssues = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 };
+
+exports.updateIssueStatus = async (req, res) => {
+    try {
+        const { status } = req.body;
+        const issue = await Issue.findByIdAndUpdate(
+            req.params.id,
+            { status },
+            { new: true, runValidators: true }
+        );
+
+        if (!issue) {
+            return res.status(404).json({ message: 'Issue not found' });
+        }
+
+        res.status(200).json({
+            success: true,
+            issue
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};

@@ -1,0 +1,33 @@
+.overview {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.overview-header {
+  margin-bottom: 16px;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+}
+
+.overview-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.overview-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.overview-charts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
