@@ -20,7 +20,6 @@ const streetlightSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['ON', 'OFF'],
         default: 'OFF'
     },
     relayState: {

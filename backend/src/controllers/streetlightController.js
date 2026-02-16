@@ -1,13 +1,17 @@
+const axios = require('axios');
 const Streetlight = require('../models/Streetlight');
 
 // POST /api/streetlight-data
 exports.receiveData = async (req, res) => {
     try {
-        const { streetlightId, voltage, current, power, status, relayState } = req.body;
+        const { streetlightId, voltage, current, status, relayState } = req.body;
 
         if (!streetlightId) {
             return res.status(400).json({ message: 'streetlightId is required' });
         }
+
+        // Calculate power: P = V * I
+        const power = (voltage || 0) * (current || 0);
 
         const newData = new Streetlight({
             streetlightId,
@@ -45,9 +49,6 @@ exports.getLatestStatus = async (req, res) => {
             }
         ]);
 
-        // If no data, return empty array
-        // Note: The frontend expects 4 streetlights. We can either pre-populate DB or handle empty on frontend.
-        // For now, return what we have.
         res.json(latestData);
     } catch (error) {
         console.error('Error fetching latest status:', error);
@@ -61,10 +62,37 @@ exports.getHistory = async (req, res) => {
         const { id } = req.params;
         const history = await Streetlight.find({ streetlightId: id })
             .sort({ timestamp: -1 })
-            .limit(50); // Limit to last 50 entries
+            .limit(50);
         res.json(history);
     } catch (error) {
         console.error('Error fetching history:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// POST /api/toggle-relay
+exports.toggleRelay = async (req, res) => {
+    try {
+        const { id, state } = req.body; // id = 1, 2, 3, 4; state = 'on' or 'off'
+
+        if (!id || !state) {
+            return res.status(400).json({ message: 'id and state are required' });
+        }
+
+        // Use the ESP32's actual IP 10.39.59.88 instead of streetlight.local
+        const esp32Url = `http://10.39.59.88/relay?ch=${id}&state=${state}`;
+
+        console.log(`Forwarding relay command to ESP32: ${esp32Url}`);
+
+        try {
+            const response = await axios.get(esp32Url, { timeout: 5000 });
+            res.json({ message: `Relay ${id} turned ${state} successfully`, espResponse: response.data });
+        } catch (espError) {
+            console.error('Error communicatng with ESP32:', espError.message);
+            res.status(502).json({ message: 'Failed to communicate with ESP32. Is it online and reachable at streetlight.local?', error: espError.message });
+        }
+    } catch (error) {
+        console.error('Error in toggleRelay:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };

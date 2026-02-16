@@ -3,17 +3,17 @@ import axios from 'axios';
 import { 
   Lightbulb, Activity, Zap, Power, Clock, 
   AlertTriangle, ShieldCheck, Wifi, WifiOff, 
-  TrendingUp, BarChart3, Radio
+  TrendingUp, BarChart3, Radio, PowerOff
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
 
 // Thresholds & Constants
-const STALE_THRESHOLD_MS = 10000; // 10 seconds
-const OVERLOAD_CURRENT_A = 5.0; // Example threshold for Overload
+const STALE_THRESHOLD_MS = 15000; // 15 seconds
+const OVERLOAD_CURRENT_A = 5.0;
 
 /**
  * RelativeTime Component
- * Handles the "5s ago" logic with a 1s ticker
  */
 const RelativeTime = ({ timestamp }) => {
   const [secondsAgo, setSecondsAgo] = useState(0);
@@ -29,24 +29,30 @@ const RelativeTime = ({ timestamp }) => {
   }, [timestamp]);
 
   if (!timestamp) return 'No data';
+  if (secondsAgo < 0) return 'Just now';
   return `${secondsAgo}s ago`;
 };
 
 /**
  * StreetlightCard Component
- * High-fidelity card with intelligent status indicators
  */
-const StreetlightCard = ({ data, index }) => {
+const StreetlightCard = ({ data, index, onToggle }) => {
   const isStale = !data.timestamp || (Date.now() - new Date(data.timestamp).getTime() > STALE_THRESHOLD_MS);
   const isOverload = data.current > OVERLOAD_CURRENT_A;
-  const isOn = data.status === 'ON';
+  const isRelayOn = data.relayState === true;
+  
+  // Logical Status from data
+  // "NORMAL Operation", "⚠ STREETLIGHT FAULTY", "Relay OFF", "🚨 OVERCURRENT! Relay OFF"
+  const backendStatus = data.status || "Unknown";
 
   // Status computation for visual identity
   const statusConfig = isStale 
     ? { color: 'text-rose-500', bg: 'bg-rose-500/10', border: 'border-rose-500/20', label: 'OFFLINE', icon: <WifiOff size={14} /> }
-    : isOverload 
-    ? { color: 'text-amber-500', bg: 'bg-amber-500/10', border: 'border-amber-500/30', label: 'OVERLOAD', icon: <AlertTriangle size={14} /> }
-    : isOn
+    : backendStatus.includes("OVERCURRENT")
+    ? { color: 'text-red-500', bg: 'bg-red-500/10', border: 'border-red-500/30', label: 'FAULTY', icon: <AlertTriangle size={14} /> }
+    : backendStatus.includes("FAULTY")
+    ? { color: 'text-amber-500', bg: 'bg-amber-500/10', border: 'border-amber-500/30', label: 'CHECK LAMP', icon: <AlertTriangle size={14} /> }
+    : isRelayOn
     ? { color: 'text-emerald-500', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', label: 'ACTIVE', icon: <Wifi size={14} /> }
     : { color: 'text-slate-400', bg: 'bg-slate-700/30', border: 'border-slate-700', label: 'STANDBY', icon: <Radio size={14} /> };
 
@@ -60,15 +66,15 @@ const StreetlightCard = ({ data, index }) => {
       className={`relative group bg-[#0f172a] border ${statusConfig.border} rounded-2xl p-5 shadow-xl transition-all duration-300`}
     >
       {/* Background Glow for Active Lights */}
-      {isOn && !isStale && (
+      {isRelayOn && !isStale && (
         <div className="absolute inset-0 bg-emerald-500/5 blur-xl rounded-2xl -z-10 group-hover:bg-emerald-500/10 transition-colors" />
       )}
 
       {/* Header Info */}
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className={`p-3 rounded-xl transition-colors ${isOn ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-500'}`}>
-            <Lightbulb size={22} className={isOn && !isStale ? 'drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]' : ''} />
+          <div className={`p-3 rounded-xl transition-colors ${isRelayOn ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-500'}`}>
+            <Lightbulb size={22} className={isRelayOn && !isStale ? 'drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]' : ''} />
           </div>
           <div>
             <h3 className="text-white font-semibold flex items-center gap-2 tracking-tight">
@@ -124,14 +130,41 @@ const StreetlightCard = ({ data, index }) => {
             </div>
           </div>
           
-          {/* Relay Visual Toggle (Read Only Display) */}
           <div className="flex flex-col items-end">
             <span className="text-[9px] text-slate-500 font-bold uppercase mb-1">Relay State</span>
-            <div className={`w-8 h-4 rounded-full relative transition-colors ${data.relayState ? 'bg-emerald-500' : 'bg-slate-700'}`}>
-              <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${data.relayState ? 'left-[1.125rem]' : 'left-0.5'}`} />
+            <div className={`w-8 h-4 rounded-full relative transition-colors ${isRelayOn ? 'bg-emerald-500' : 'bg-slate-700'}`}>
+              <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${isRelayOn ? 'left-[1.125rem]' : 'left-0.5'}`} />
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Control Actions */}
+      <div className="grid grid-cols-2 gap-3 mb-6 px-1">
+        <button 
+          onClick={() => onToggle(index + 1, 'on')}
+          disabled={isRelayOn && !isStale}
+          className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${
+            isRelayOn && !isStale 
+              ? 'bg-emerald-500/10 text-emerald-500/50 cursor-not-allowed border border-emerald-500/10' 
+              : 'bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 border border-emerald-500/30 active:scale-95'
+          }`}
+        >
+          <Power size={14} />
+          ON
+        </button>
+        <button 
+          onClick={() => onToggle(index + 1, 'off')}
+          disabled={!isRelayOn && !isStale}
+          className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${
+            !isRelayOn && !isStale 
+              ? 'bg-rose-500/10 text-rose-500/50 cursor-not-allowed border border-rose-500/10' 
+              : 'bg-rose-600/20 text-rose-400 hover:bg-rose-600/30 border border-rose-500/30 active:scale-95'
+          }`}
+        >
+          <PowerOff size={14} />
+          OFF
+        </button>
       </div>
 
       {/* Footer Meta */}
@@ -169,10 +202,10 @@ const SummaryMetric = ({ label, value, unit, icon: Icon, colorClass }) => (
 
 /**
  * StreetlightDashboard Component
- * Main View
  */
 const StreetlightDashboard = () => {
   const [streetlights, setStreetlights] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [displayData, setDisplayData] = useState(() => 
     Array.from({ length: 4 }, (_, i) => ({
       streetlightId: `SL-0${i + 1}`,
@@ -205,14 +238,29 @@ const StreetlightDashboard = () => {
     }
   }, [streetlights]);
 
+  const handleToggle = async (channel, state) => {
+    const toastId = toast.loading(`Turning ${state.toUpperCase()} Streetlight ${channel}...`);
+    try {
+      await axios.post('http://localhost:5000/api/toggle-relay', { id: channel, state });
+      toast.success(`Streetlight ${channel} turned ${state.toUpperCase()}`, { id: toastId });
+      // Update local state optimisticially or wait for next poll
+      fetchData();
+    } catch (error) {
+      console.error(error);
+      const errorMsg = error.response?.data?.message || `Failed to control Streetlight ${channel}`;
+      toast.error(errorMsg, { id: toastId });
+    }
+  };
+
   // Derived Summary Metrics
   const stats = useMemo(() => {
     const total = displayData.length;
     const now = Date.now();
     const online = displayData.filter(d => d.timestamp && (now - new Date(d.timestamp).getTime() < STALE_THRESHOLD_MS)).length;
+    const faulty = displayData.filter(d => d.status && d.status.includes('FAULTY')).length;
     const power = displayData.reduce((acc, curr) => acc + (curr.power || 0), 0);
     const health = online === total ? 'OPTIMAL' : online > 0 ? 'WARNING' : 'CRITICAL';
-    return { total, online, offline: total - online, power, health };
+    return { total, online, offline: total - online, faulty, power, health };
   }, [displayData]);
 
   return (
@@ -249,7 +297,7 @@ const StreetlightDashboard = () => {
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
           <SummaryMetric label="Connected" value={stats.total} icon={BarChart3} colorClass="text-blue-400" />
           <SummaryMetric label="Operational" value={stats.online} icon={Wifi} colorClass="text-emerald-400" />
-          <SummaryMetric label="Fault Detected" value={stats.offline} icon={WifiOff} colorClass="text-rose-400" />
+          <SummaryMetric label="Fault Detected" value={stats.faulty} icon={WifiOff} colorClass="text-rose-400" />
           <SummaryMetric label="Total Power" value={stats.power.toFixed(1)} unit="W" icon={TrendingUp} colorClass="text-amber-400" />
         </section>
 
@@ -266,6 +314,7 @@ const StreetlightDashboard = () => {
                 key={data.streetlightId} 
                 data={data} 
                 index={index} 
+                onToggle={handleToggle}
               />
             ))}
           </AnimatePresence>
