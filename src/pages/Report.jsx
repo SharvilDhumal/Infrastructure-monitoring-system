@@ -5,7 +5,7 @@ import { Toaster } from "react-hot-toast";
 
 const Report = () => {
   return (
-    <div className="min-h-screen bg-[#05070a] selection:bg-blue-500/30">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#05070a] selection:bg-blue-500/30 transition-colors duration-200">
       <Toaster position="top-center" />
       <Navbar />
       
