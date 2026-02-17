@@ -144,21 +144,21 @@ const ReportFormPage = () => {
       <motion.div 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="max-w-md mx-auto sky-glass p-8 rounded-3xl border border-white/10 text-center shadow-2xl relative overflow-hidden"
+        className="max-w-md mx-auto bg-white dark:bg-white/5 backdrop-blur-2xl p-8 rounded-3xl border border-gray-200 dark:border-white/10 text-center shadow-2xl relative overflow-hidden"
       >
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-emerald-500" />
         <div className="mb-6 flex justify-center">
-          <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center text-green-400 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
+          <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
             <CheckCircle2 size={40} />
           </div>
         </div>
-        <h2 className="text-3xl font-bold text-white mb-3">Submission Received</h2>
-        <p className="text-gray-400 mb-8">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">Submission Received</h2>
+        <p className="text-gray-600 dark:text-gray-400 mb-8">
           Your infrastructure report has been recorded. Our response team will be notified immediately.
         </p>
         <button
           onClick={handleBack}
-          className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group"
+          className="w-full py-4 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group"
         >
           Submit New Report
           <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -175,15 +175,15 @@ const ReportFormPage = () => {
       className="max-w-2xl mx-auto"
     >
       <div className="text-center mb-10">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
           Report <span className="bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">Infrastructure</span> Fault
         </h1>
-        <p className="text-gray-400 text-lg max-w-lg mx-auto">
+        <p className="text-gray-600 dark:text-gray-400 text-lg max-w-lg mx-auto">
           Help us maintain your city. Provide details about the issue and we'll handle the rest.
         </p>
       </div>
 
-      <div className="bg-white/5 backdrop-blur-2xl p-8 md:p-10 rounded-[2.5rem] border border-white/10 shadow-2xl overflow-hidden relative">
+      <div className="bg-white dark:bg-white/5 backdrop-blur-2xl p-8 md:p-10 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl overflow-hidden relative">
         {/* Decorative elements */}
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/10 blur-[80px] rounded-full" />
         <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-indigo-500/10 blur-[80px] rounded-full" />
@@ -191,7 +191,7 @@ const ReportFormPage = () => {
         <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
           {/* Image Upload */}
           <div className="space-y-2">
-            <label className="text-gray-400 font-medium ml-1 flex items-center gap-2">
+            <label className="text-gray-700 dark:text-gray-400 font-medium ml-1 flex items-center gap-2">
               <Camera size={18} /> Evidence Image
             </label>
             <div
@@ -201,7 +201,7 @@ const ReportFormPage = () => {
               className={`relative h-64 border-2 border-dashed rounded-3xl transition-all duration-300 group overflow-hidden ${
                 dragActive ? 'border-blue-500 bg-blue-500/10' : 
                 errors.image ? 'border-red-500/50 bg-red-500/5' : 
-                formData.imagePreview ? 'border-white/20' : 'border-white/10 hover:border-white/30 hover:bg-white/5 '
+                formData.imagePreview ? 'border-gray-200 dark:border-white/20' : 'border-gray-200 dark:border-white/10 hover:border-blue-400/50 dark:hover:border-white/30 hover:bg-gray-50 dark:hover:bg-white/5 '
               }`}
             >
               <input
@@ -238,10 +238,10 @@ const ReportFormPage = () => {
                   </motion.div>
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center text-center p-6 bg-transparent">
-                    <div className="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-400 mb-4 group-hover:scale-110 transition-transform duration-300 shadow-xl border border-blue-500/20">
+                    <div className="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500 dark:text-blue-400 mb-4 group-hover:scale-110 transition-transform duration-300 shadow-xl border border-blue-500/20">
                       <Upload size={28} />
                     </div>
-                    <p className="text-white font-semibold text-lg mb-1">Click or drag photo here</p>
+                    <p className="text-gray-900 dark:text-white font-semibold text-lg mb-1">Click or drag photo here</p>
                     <p className="text-gray-500 text-sm">Clear captures help us respond faster</p>
                   </div>
                 )}
@@ -253,7 +253,7 @@ const ReportFormPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Fault Type */}
             <div className="space-y-2">
-              <label htmlFor="faultType" className="text-gray-400 font-medium ml-1 flex items-center gap-2">
+              <label htmlFor="faultType" className="text-gray-700 dark:text-gray-400 font-medium ml-1 flex items-center gap-2">
                 <AlertCircle size={18} /> Type of Issue
               </label>
               <div className="relative">
@@ -262,13 +262,13 @@ const ReportFormPage = () => {
                   name="faultType"
                   value={formData.faultType}
                   onChange={handleChange}
-                  className={`w-full bg-white/5 border rounded-2xl py-4 px-5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer hover:bg-white/10 ${
-                    errors.faultType ? 'border-red-500/50' : 'border-white/10'
+                  className={`w-full bg-gray-50 dark:bg-white/5 border rounded-2xl py-4 px-5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer hover:bg-gray-100 dark:hover:bg-white/10 ${
+                    errors.faultType ? 'border-red-500/50' : 'border-gray-200 dark:border-white/10'
                   }`}
                 >
-                  <option value="" className="bg-gray-900">Select a category</option>
+                  <option value="" className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">Select a category</option>
                   {FAULT_TYPES.map(type => (
-                    <option key={type.id} value={type.id} className="bg-gray-900">{type.label}</option>
+                    <option key={type.id} value={type.id} className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">{type.label}</option>
                   ))}
                 </select>
                 <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
@@ -280,7 +280,7 @@ const ReportFormPage = () => {
 
             {/* Location */}
             <div className="space-y-2">
-              <label htmlFor="location" className="text-gray-400 font-medium ml-1 flex items-center gap-2">
+              <label htmlFor="location" className="text-gray-700 dark:text-gray-400 font-medium ml-1 flex items-center gap-2">
                 <MapPin size={18} /> Incident Location
               </label>
               <input
@@ -290,8 +290,8 @@ const ReportFormPage = () => {
                 value={formData.location}
                 onChange={handleChange}
                 placeholder="Where is the fault?"
-                className={`w-full bg-white/5 border rounded-2xl py-4 px-5 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:bg-white/10 ${
-                  errors.location ? 'border-red-500/50' : 'border-white/10'
+                className={`w-full bg-gray-50 dark:bg-white/5 border rounded-2xl py-4 px-5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:bg-gray-100 dark:hover:bg-white/10 ${
+                  errors.location ? 'border-red-500/50' : 'border-gray-200 dark:border-white/10'
                 }`}
               />
               {errors.location && <p className="text-red-400 text-xs mt-1 flex items-center gap-1 ml-1"><AlertCircle size={12} /> {errors.location}</p>}
@@ -300,7 +300,7 @@ const ReportFormPage = () => {
 
           {/* Description */}
           <div className="space-y-2">
-            <label htmlFor="description" className="text-gray-400 font-medium ml-1 flex items-center gap-2">
+            <label htmlFor="description" className="text-gray-700 dark:text-gray-400 font-medium ml-1 flex items-center gap-2">
               <MessageSquare size={18} /> Detailed Description
             </label>
             <textarea
@@ -310,8 +310,8 @@ const ReportFormPage = () => {
               onChange={handleChange}
               rows="4"
               placeholder="Tell us what's wrong..."
-              className={`w-full bg-white/5 border rounded-[1.5rem] py-4 px-5 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:bg-white/10 resize-none ${
-                errors.description ? 'border-red-500/50' : 'border-white/10'
+              className={`w-full bg-gray-50 dark:bg-white/5 border rounded-[1.5rem] py-4 px-5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:bg-gray-100 dark:hover:bg-white/10 resize-none ${
+                errors.description ? 'border-red-500/50' : 'border-gray-200 dark:border-white/10'
               }`}
             />
             {errors.description && <p className="text-red-400 text-xs mt-1 flex items-center gap-1 ml-1"><AlertCircle size={12} /> {errors.description}</p>}
