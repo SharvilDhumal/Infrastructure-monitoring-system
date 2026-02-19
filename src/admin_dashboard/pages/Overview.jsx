@@ -12,6 +12,7 @@ import ModuleBarChart from "../components/ModuleBarChart";
 import ViewDetailsModal from "../components/ViewDetailsModal";
 import AssignTeamModal from "../components/AssignTeamModal";
 import { useIssues } from "../hooks/useIssues";
+import AdminWelcomeBanner from "../components/AdminWelcomeBanner";
 import "./Overview.css";
 
 const Overview = () => {
@@ -47,17 +48,12 @@ const Overview = () => {
 
   return (
     <div className="overview">
-      {/* Page Header */}
-      <div className="overview-header">
-        <h1>Overview</h1>
-        <p>Real-time infrastructure monitoring and insights</p>
-      </div>
+      <AdminWelcomeBanner />
 
       {/* Context strip */}
       <ContextHeader />
 
-      {/* ✅ SINGLE BANNER */}
-      <InfrastructureBanner />
+      {/* Banner removed for minimal design */}
 
       {loading ? (
         <div className="overview-loading">Loading data...</div>
@@ -65,7 +61,7 @@ const Overview = () => {
         <div className="overview-grid">
           {/* MAIN */}
           <div className="overview-main">
-            <CriticalIssuesList 
+            <CriticalIssuesList
               issues={criticalIssues}
               onViewDetails={handleViewDetails}
               onAssign={handleAssignClick}
@@ -94,14 +90,14 @@ const Overview = () => {
 
       {/* Modals */}
       {showDetailsModal && (
-        <ViewDetailsModal 
+        <ViewDetailsModal
           issue={selectedIssue}
           onClose={handleCloseModals}
         />
       )}
 
       {showAssignModal && (
-        <AssignTeamModal 
+        <AssignTeamModal
           issue={selectedIssue}
           onAssign={handleAssignTeam}
           onClose={handleCloseModals}

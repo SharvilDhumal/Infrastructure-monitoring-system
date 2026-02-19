@@ -1,13 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
-import { 
-  Upload, 
-  MapPin, 
-  AlertCircle, 
-  CheckCircle2, 
-  X, 
-  Type, 
+import {
+  Upload,
+  MapPin,
+  AlertCircle,
+  CheckCircle2,
+  X,
+  Type,
   ChevronRight,
   Camera,
   MessageSquare
@@ -34,6 +34,11 @@ const ReportFormPage = () => {
     location: '',
     description: ''
   });
+
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const [stream, setStream] = useState(null);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [dragActive, setDragActive] = useState(false);
@@ -69,20 +74,90 @@ const ReportFormPage = () => {
     if (errors.image) setErrors(prev => ({ ...prev, image: '' }));
   };
 
+  const startCamera = async () => {
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+      });
+      setStream(mediaStream);
+      setIsCameraOpen(true);
+    } catch (err) {
+      console.error("Camera access error:", err);
+      toast.error("Could not access camera. Please check permissions.");
+    }
+  };
+
+  // Callback ref to handle video stream assignment precisely when element mounts
+  const videoCallbackRef = useCallback((node) => {
+    videoRef.current = node;
+    if (node && stream) {
+      node.srcObject = stream;
+    }
+  }, [stream]);
+
+  const stopCamera = () => {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+    }
+    setStream(null);
+    setIsCameraOpen(false);
+  };
+
+  const capturePhoto = () => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      const context = canvas.getContext('2d');
+
+      // Match canvas dimensions to video
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      // Draw current video frame to canvas
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Convert to data URL
+      const dataUrl = canvas.toDataURL('image/jpeg');
+
+      // Create a file-like object from data URL
+      fetch(dataUrl)
+        .then(res => res.blob())
+        .then(blob => {
+          const file = new File([blob], `capture_${Date.now()}.jpg`, { type: 'image/jpeg' });
+          setFormData(prev => ({
+            ...prev,
+            image: file,
+            imagePreview: dataUrl
+          }));
+          stopCamera();
+          if (errors.image) setErrors(prev => ({ ...prev, image: '' }));
+        });
+    }
+  };
+
+  // Cleanup camera on unmount
+  useEffect(() => {
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [stream]);
+
   const validateForm = () => {
     const newErrors = {};
     if (!formData.image) newErrors.image = 'Image is required';
     if (!formData.faultType) newErrors.faultType = 'Select a fault type';
     if (!formData.location.trim()) newErrors.location = 'Location is required';
     if (!formData.description.trim()) newErrors.description = 'Description is required';
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Check authentication
     const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 
@@ -97,10 +172,10 @@ const ReportFormPage = () => {
     }
 
     setIsLoading(true);
-    
+
     try {
       const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api/issues';
-      
+
       const response = await axios.post(API_URL, {
         title: formData.faultType, // Using faultType as title for now, or could combine
         faultType: formData.faultType,
@@ -109,7 +184,7 @@ const ReportFormPage = () => {
         imageUrl: formData.imagePreview // For now sending base64 preview, in prod use S3/Cloudinary
       }, {
         headers: {
-            Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       });
 
@@ -140,7 +215,7 @@ const ReportFormPage = () => {
 
   if (isSubmitted) {
     return (
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         className="max-w-md mx-auto bg-white dark:bg-white/5 backdrop-blur-2xl p-8 rounded-3xl border border-gray-200 dark:border-white/10 text-center shadow-2xl relative overflow-hidden"
@@ -167,7 +242,7 @@ const ReportFormPage = () => {
   }
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
@@ -197,34 +272,73 @@ const ReportFormPage = () => {
               onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
               onDragLeave={() => setDragActive(false)}
               onDrop={(e) => { e.preventDefault(); setDragActive(false); handleFile(e.dataTransfer.files[0]); }}
-              className={`relative h-64 border-2 border-dashed rounded-3xl transition-all duration-300 group overflow-hidden ${
-                dragActive ? 'border-blue-500 bg-blue-500/10' : 
-                errors.image ? 'border-red-500/50 bg-red-500/5' : 
-                formData.imagePreview ? 'border-gray-200 dark:border-white/20' : 'border-gray-200 dark:border-white/10 hover:border-blue-400/50 dark:hover:border-white/30 hover:bg-gray-50 dark:hover:bg-white/5 '
-              }`}
+              className={`relative h-64 border-2 border-dashed rounded-3xl transition-all duration-300 group overflow-hidden ${dragActive ? 'border-blue-500 bg-blue-500/10' :
+                errors.image ? 'border-red-500/50 bg-red-500/5' :
+                  formData.imagePreview ? 'border-gray-200 dark:border-white/20' : 'border-gray-200 dark:border-white/10 hover:border-blue-400/50 dark:hover:border-white/30 hover:bg-gray-50 dark:hover:bg-white/5 '
+                }`}
             >
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
-              />
-              
+              {/* Hidden Canvas for capture */}
+              <canvas ref={canvasRef} className="hidden" />
+
+              {!isCameraOpen && (
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+                />
+              )}
+
               <AnimatePresence mode="wait">
-                {formData.imagePreview ? (
-                  <motion.div 
+                {isCameraOpen ? (
+                  <motion.div
+                    key="camera"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 bg-black flex flex-col items-center justify-center"
+                  >
+                    <video
+                      ref={videoCallbackRef}
+                      autoPlay
+                      playsInline
+                      muted
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute bottom-4 flex gap-4 z-30">
+                      <button
+                        type="button"
+                        onClick={capturePhoto}
+                        className="p-4 bg-white text-blue-600 rounded-full shadow-lg hover:scale-110 transition-transform"
+                        title="Capture Photo"
+                      >
+                        <Camera size={24} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={stopCamera}
+                        className="p-4 bg-red-600 text-white rounded-full shadow-lg hover:scale-110 transition-transform"
+                        title="Close Camera"
+                      >
+                        <X size={24} />
+                      </button>
+                    </div>
+                  </motion.div>
+                ) : formData.imagePreview ? (
+                  <motion.div
+                    key="preview"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     className="absolute inset-0 p-4"
                   >
-                    <img 
-                      src={formData.imagePreview} 
-                      alt="Preview" 
+                    <img
+                      src={formData.imagePreview}
+                      alt="Preview"
                       className="w-full h-full object-cover rounded-2xl"
                     />
-                    <button 
+                    <button
                       type="button"
                       onClick={(e) => { e.stopPropagation(); setFormData(prev => ({ ...prev, image: null, imagePreview: null })); }}
                       className="absolute top-6 right-6 p-2 bg-black/60 hover:bg-black/80 text-white rounded-full transition-colors z-30 backdrop-blur-md border border-white/10"
@@ -232,15 +346,24 @@ const ReportFormPage = () => {
                       <X size={20} />
                     </button>
                     <div className="absolute bottom-6 left-6 right-6 p-3 bg-black/40 backdrop-blur-md rounded-xl text-white text-xs font-medium border border-white/10 truncate">
-                      {formData.image.name}
+                      {formData.image?.name || 'Captured Photo'}
                     </div>
                   </motion.div>
                 ) : (
-                  <div className="h-full flex flex-col items-center justify-center text-center p-6 bg-transparent">
-                    <div className="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500 dark:text-blue-400 mb-4 group-hover:scale-110 transition-transform duration-300 shadow-xl border border-blue-500/20">
-                      <Upload size={28} />
+                  <div key="upload" className="h-full flex flex-col items-center justify-center text-center p-6 bg-transparent">
+                    <div className="flex gap-4 mb-4">
+                      <div className="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500 dark:text-blue-400 group-hover:scale-110 transition-transform duration-300 shadow-xl border border-blue-500/20">
+                        <Upload size={28} />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); startCamera(); }}
+                        className="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-500 dark:text-indigo-400 hover:scale-110 transition-transform duration-300 shadow-xl border border-indigo-500/20 z-30"
+                      >
+                        <Camera size={28} />
+                      </button>
                     </div>
-                    <p className="text-gray-900 dark:text-white font-semibold text-lg mb-1">Click or drag photo here</p>
+                    <p className="text-gray-900 dark:text-white font-semibold text-lg mb-1">Click/Drag to upload or use Camera</p>
                     <p className="text-gray-500 text-sm">Clear captures help us respond faster</p>
                   </div>
                 )}
@@ -261,9 +384,8 @@ const ReportFormPage = () => {
                   name="faultType"
                   value={formData.faultType}
                   onChange={handleChange}
-                  className={`w-full bg-gray-50 dark:bg-white/5 border rounded-2xl py-4 px-5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer hover:bg-gray-100 dark:hover:bg-white/10 ${
-                    errors.faultType ? 'border-red-500/50' : 'border-gray-200 dark:border-white/10'
-                  }`}
+                  className={`w-full bg-gray-50 dark:bg-white/5 border rounded-2xl py-4 px-5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer hover:bg-gray-100 dark:hover:bg-white/10 ${errors.faultType ? 'border-red-500/50' : 'border-gray-200 dark:border-white/10'
+                    }`}
                 >
                   <option value="" className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">Select a category</option>
                   {FAULT_TYPES.map(type => (
@@ -289,9 +411,8 @@ const ReportFormPage = () => {
                 value={formData.location}
                 onChange={handleChange}
                 placeholder="Where is the fault?"
-                className={`w-full bg-gray-50 dark:bg-white/5 border rounded-2xl py-4 px-5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:bg-gray-100 dark:hover:bg-white/10 ${
-                  errors.location ? 'border-red-500/50' : 'border-gray-200 dark:border-white/10'
-                }`}
+                className={`w-full bg-gray-50 dark:bg-white/5 border rounded-2xl py-4 px-5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:bg-gray-100 dark:hover:bg-white/10 ${errors.location ? 'border-red-500/50' : 'border-gray-200 dark:border-white/10'
+                  }`}
               />
               {errors.location && <p className="text-red-400 text-xs mt-1 flex items-center gap-1 ml-1"><AlertCircle size={12} /> {errors.location}</p>}
             </div>
@@ -309,9 +430,8 @@ const ReportFormPage = () => {
               onChange={handleChange}
               rows="4"
               placeholder="Tell us what's wrong..."
-              className={`w-full bg-gray-50 dark:bg-white/5 border rounded-[1.5rem] py-4 px-5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:bg-gray-100 dark:hover:bg-white/10 resize-none ${
-                errors.description ? 'border-red-500/50' : 'border-gray-200 dark:border-white/10'
-              }`}
+              className={`w-full bg-gray-50 dark:bg-white/5 border rounded-[1.5rem] py-4 px-5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:bg-gray-100 dark:hover:bg-white/10 resize-none ${errors.description ? 'border-red-500/50' : 'border-gray-200 dark:border-white/10'
+                }`}
             />
             {errors.description && <p className="text-red-400 text-xs mt-1 flex items-center gap-1 ml-1"><AlertCircle size={12} /> {errors.description}</p>}
           </div>

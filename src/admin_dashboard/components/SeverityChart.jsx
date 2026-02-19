@@ -4,77 +4,98 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, Legend
 const SeverityChart = ({ data, loading = false }) => {
     if (loading) {
         return (
-            <div className="bg-[#111827]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 h-[400px] shadow-[0_0_30px_rgba(34,211,238,0.1)]">
-                <div className="h-6 w-48 skeleton mb-10" />
-                <div className="h-64 h-full skeleton rounded-2xl" />
+            <div className="severity-chart-card loading">
+                <div style={{ height: '24px', width: '200px', background: '#f1f5f9', marginBottom: '32px' }} />
+                <div style={{ height: '250px', width: '100%', background: '#f8fafc' }} />
             </div>
         );
     }
 
-    // Transformation logic if data is from aggregation _id/count
     const formattedData = data?.map(item => ({
         name: item._id,
         count: item.count
     })) || [];
 
     const COLORS = {
-        High: '#F43F5E',
+        High: '#dc3545',
         Medium: '#f59e0b',
-        Low: '#10B981'
+        Low: '#28a745'
     };
 
     return (
-        <div className="bg-[#111827]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-[0_0_40px_rgba(0,0,0,0.3)] h-[400px] relative overflow-hidden group hover:border-white/20 transition-all">
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"></div>
-
-            <h3 className="text-xl font-black text-white mb-6 tracking-tighter uppercase italic flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)] animate-pulse"></span>
-                Severity <span className="text-cyan-400">Spectrum</span>
+        <div
+            className="severity-chart-card"
+            style={{
+                background: '#ffffff',
+                border: '1px solid #e2e8f0',
+                borderRadius: '4px',
+                padding: '32px',
+                height: '400px',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                position: 'relative'
+            }}
+        >
+            <h3 style={{
+                fontSize: '18px',
+                fontWeight: '700',
+                color: '#0f172a',
+                marginBottom: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+            }}>
+                <span style={{ width: '4px', height: '20px', background: '#002147', borderRadius: '2px' }}></span>
+                Issue Severity Spectrum
             </h3>
 
-            <ResponsiveContainer width="100%" height="85%">
+            <ResponsiveContainer width="100%" height="80%">
                 <BarChart data={formattedData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
                     <XAxis
                         dataKey="name"
-                        stroke="#FFFFFF"
-                        fontSize={10}
-                        fontWeight="900"
+                        stroke="#64748b"
+                        fontSize={12}
+                        fontWeight="600"
                         tickLine={false}
                         axisLine={false}
                         dy={10}
-                        tickFormatter={(val) => val.toUpperCase()}
                     />
                     <YAxis
-                        stroke="#9CA3AF"
-                        fontSize={10}
-                        fontWeight="bold"
+                        stroke="#64748b"
+                        fontSize={12}
+                        fontWeight="600"
                         tickLine={false}
                         axisLine={false}
                     />
                     <Tooltip
-                        cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
+                        cursor={{ fill: '#f8fafc' }}
                         contentStyle={{
-                            backgroundColor: '#0F172A',
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
-                            borderRadius: '16px',
-                            color: '#FFFFFF',
-                            backdropFilter: 'blur(20px)',
-                            boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
+                            backgroundColor: '#ffffff',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '4px',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                         }}
-                        itemStyle={{ color: '#F3F4F6', fontSize: '12px', fontWeight: 'bold' }}
                     />
-                    <Bar dataKey="count" radius={[8, 8, 0, 0]} barSize={45}>
+                    <Bar dataKey="count" radius={[4, 4, 0, 0]} barSize={40}>
                         {formattedData.map((entry, index) => (
                             <Cell
                                 key={`cell-${index}`}
-                                fill={COLORS[entry.name] || '#6366F1'}
-                                className="transition-all duration-300 hover:opacity-80"
+                                fill={COLORS[entry.name] || '#002147'}
                             />
                         ))}
                     </Bar>
                 </BarChart>
             </ResponsiveContainer>
+
+            <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '100%',
+                height: '4px',
+                background: '#002147',
+                opacity: 0.8
+            }} />
         </div>
     );
 };

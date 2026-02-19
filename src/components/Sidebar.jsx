@@ -17,21 +17,20 @@ const Sidebar = ({ user, activeTab, setActiveTab, onLogout }) => {
         <div className="w-72 bg-[#0a0c10]/80 backdrop-blur-2xl border-r border-white/5 h-screen fixed left-0 top-0 flex flex-col z-50">
             {/* Logo Section */}
             <div className="p-8 pb-4">
-               <button 
-                onClick={() => navigate('/')}
-                className="flex items-center gap-3 text-white font-bold text-xl hover:opacity-80 transition-opacity"
-               >
-                 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
-                    <ShieldCheck size={20} />
-                 </div>
-                 InfraVision
-               </button>
+                <button
+                    onClick={() => navigate('/')}
+                    className="flex items-center gap-3 text-white font-bold text-xl hover:opacity-80 transition-opacity"
+                >
+                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
+                        <ShieldCheck size={20} />
+                    </div>
+                    InfraVision
+                </button>
             </div>
 
             {/* User Info Container */}
             <div className="px-6 py-8">
                 <div className="p-6 rounded-[2rem] bg-white/5 border border-white/5 relative overflow-hidden group hover:border-white/10 transition-colors">
-                    <div className="absolute -top-10 -right-10 w-24 h-24 bg-blue-600/10 blur-2xl rounded-full group-hover:bg-blue-600/20 transition-colors" />
                     <div className="flex flex-col items-center relative z-10">
                         <div className="w-20 h-20 rounded-full border-2 border-white/10 p-1 mb-4 group-hover:border-blue-500/50 transition-colors">
                             <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-3xl font-bold text-white shadow-xl">

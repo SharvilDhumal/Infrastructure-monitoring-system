@@ -1,69 +1,52 @@
 .context-header {
   width: 100%;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   position: relative;
-  z-index: 1;
-}
-
-.context-header-image {
-  position: relative;
-  width: 100%;
   z-index: 1;
 }
 
 .context-status-chips {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   flex-wrap: wrap;
+}
+
+.status-chip {
+  background: #ffffff;
+  padding: 16px 20px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid var(--chip-color);
+}
+
+.status-chip-label {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-chip-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
 }
 
 .context-metrics-panel {
   display: flex;
   gap: 24px;
   align-items: center;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  padding: 20px;
-  border-radius: var(--border-radius-sm);
-  box-shadow: var(--shadow-md);
-}
-
-.context-metrics-panel.charts {
-  gap: 16px;
-  align-items: stretch;
-}
-
-@media (max-width: 900px) {
-  .context-metrics-panel.charts {
-    flex-direction: column;
-  }
-}
-
-.status-chip {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  padding: 12px 18px;
-  border-radius: var(--border-radius-sm);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  box-shadow: var(--shadow-md);
-  min-width: 140px;
-  border-left: 3px solid var(--chip-color);
-}
-
-.status-chip-label {
-  font-size: 12px;
-  color: var(--text-secondary);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.status-chip-value {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--chip-color);
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
 }
 
 .map-marker {
@@ -97,9 +80,12 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
+
   50% {
     box-shadow: 0 2px 16px var(--marker-color);
   }
@@ -126,6 +112,7 @@
     opacity: 0;
     transform: translateX(-50%) translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
@@ -249,5 +236,3 @@
     max-width: 280px;
   }
 }
-
-

@@ -1,9 +1,9 @@
 .bar-card {
-  background: var(--card-bg);
-  border-radius: var(--border-radius-sm);
-  padding: 16px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   height: 100%;
 }
 
@@ -64,30 +64,3 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,35 +1,36 @@
 .leaflet-wrapper {
-    width: 100%;
-    height: 340px;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-top: 12px;
+  width: 100%;
+  height: 380px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.leaflet-map {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+}
+
+.leaflet-fallback {
+  width: 100%;
+  height: 100%;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .leaflet-wrapper {
+    height: 280px;
   }
-  
-  .leaflet-map {
-    width: 100%;
-    height: 100%;
-    min-height: 340px; /* prevents invisible map */
-  }
-  
+
   .leaflet-fallback {
-    width: 100%;
-    height: 320px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-secondary);
-    font-weight: 600;
+    height: 280px;
   }
-  
-  @media (max-width: 768px) {
-    .leaflet-wrapper {
-      height: 280px;
-    }
-    .leaflet-fallback {
-      height: 280px;
-    }
-  }
-  
+}

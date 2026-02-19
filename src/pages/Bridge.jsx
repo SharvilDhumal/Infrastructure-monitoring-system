@@ -71,7 +71,7 @@ const generatePredictiveData = () => {
   return data;
 };
 
-const Bridge = () => {
+const Bridge = ({ hideLayout = false }) => {
   const [bridgeStatus, setBridgeStatus] = useState("Safe");
   const [activeAlerts, setActiveAlerts] = useState(3);
   const [lastInspection, setLastInspection] = useState("2026-02-19 14:32 UTC");
@@ -136,18 +136,20 @@ const Bridge = () => {
   const StatusIcon = statusConfig.icon;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 pt-20 pb-12">
+    <div className={`min-h-screen ${hideLayout ? 'bg-transparent pt-6' : 'bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 pt-20'} pb-12`}>
       {/* Header Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title & Global Status */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-            Bridge Structural Health Monitoring
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Control Panel – Real-Time Infrastructure Assessment
-          </p>
-        </div>
+        {!hideLayout && (
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+              Bridge Structural Health Monitoring
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Control Panel – Real-Time Infrastructure Assessment
+            </p>
+          </div>
+        )}
 
         {/* Header Cards Row */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
@@ -272,13 +274,12 @@ const Bridge = () => {
                   Threshold: {kpi.threshold}
                 </span>
                 <div
-                  className={`h-2 w-2 rounded-full ${
-                    kpi.status === "normal"
+                  className={`h-2 w-2 rounded-full ${kpi.status === "normal"
                       ? "bg-green-500"
                       : kpi.status === "good"
                         ? "bg-blue-500"
                         : "bg-yellow-500"
-                  }`}
+                    }`}
                 />
               </div>
             </div>
@@ -497,23 +498,21 @@ const Bridge = () => {
               ].map((alert, idx) => (
                 <div
                   key={idx}
-                  className={`p-3 rounded-lg border ${
-                    alert.severity === "High"
+                  className={`p-3 rounded-lg border ${alert.severity === "High"
                       ? "bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800"
                       : alert.severity === "Medium"
                         ? "bg-yellow-50 dark:bg-yellow-900 border-yellow-200 dark:border-yellow-800"
                         : "bg-blue-50 dark:bg-blue-900 border-blue-200 dark:border-blue-800"
-                  }`}
+                    }`}
                 >
                   <div className="flex justify-between items-start mb-1">
                     <span
-                      className={`text-xs font-semibold ${
-                        alert.severity === "High"
+                      className={`text-xs font-semibold ${alert.severity === "High"
                           ? "text-red-700 dark:text-red-200"
                           : alert.severity === "Medium"
                             ? "text-yellow-700 dark:text-yellow-200"
                             : "text-blue-700 dark:text-blue-200"
-                      }`}
+                        }`}
                     >
                       {alert.severity}
                     </span>

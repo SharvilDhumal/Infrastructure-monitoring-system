@@ -15,75 +15,90 @@ const AnimatedNumber = ({ value }) => {
 
 const StatCard = ({ title, value, unit, icon: Icon, trend, color = "indigo", isCritical = false }) => {
     const colorMap = {
-        indigo: "from-indigo-600 to-indigo-400 text-indigo-400 shadow-indigo-500/20",
-        cyan: "from-cyan-500 to-cyan-300 text-cyan-400 shadow-cyan-500/20",
-        rose: "from-rose-600 to-rose-400 text-rose-400 shadow-rose-500/20",
-        emerald: "from-emerald-500 to-emerald-300 text-emerald-400 shadow-emerald-500/20",
-        amber: "from-amber-500 to-amber-300 text-amber-400 shadow-amber-500/20",
+        indigo: { text: "#002147", bg: "#f0f4f8", accent: "#002147" },
+        cyan: { text: "#004d40", bg: "#e6fffa", accent: "#004d40" },
+        rose: { text: "#c53030", bg: "#fff5f5", accent: "#c53030" },
+        emerald: { text: "#22543d", bg: "#f0fff4", accent: "#22543d" },
+        amber: { text: "#744210", bg: "#fffaf0", accent: "#744210" },
     };
 
-    const selectedColor = colorMap[color] || colorMap.indigo;
-    const gradientClasses = selectedColor.split(' ').slice(0, 2).join(' ');
-    const textClasses = selectedColor.split(' ')[2];
+    const config = colorMap[color] || colorMap.indigo;
 
     return (
-        <motion.div
-            whileHover={{ y: -8, scale: 1.02 }}
-            className={`relative group bg-[#111827]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl transition-all duration-300
-                 ${isCritical ? 'pulse-critical ring-1 ring-rose-500/50' : 'hover:border-white/20'}`}
+        <div
+            className={`stat-card-formal ${isCritical ? 'critical-border' : ''}`}
+            style={{
+                background: '#ffffff',
+                border: '1px solid #e2e8f0',
+                borderRadius: '4px',
+                padding: '24px',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px'
+            }}
         >
-            {/* Background Glow */}
-            <div className={`absolute -right-4 -top-4 w-24 h-24 bg-gradient-to-br ${gradientClasses} opacity-5 blur-3xl group-hover:opacity-10 transition-opacity`} />
-
-            <div className="flex items-start justify-between mb-6">
-                <div className={`p-4 rounded-xl bg-gradient-to-br ${gradientClasses}/10 border border-white/10 shadow-lg`}>
-                    {Icon && <Icon size={24} className={textClasses} />}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div
+                    style={{
+                        padding: '12px',
+                        borderRadius: '4px',
+                        background: config.bg,
+                        color: config.accent,
+                        border: `1px solid ${config.accent}15`
+                    }}
+                >
+                    {Icon && <Icon size={20} />}
                 </div>
 
                 {trend && (
-                    <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border
-                          ${trend > 0 ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-rose-500/10 border-rose-500/20 text-rose-400'}`}>
-                        {trend > 0 ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+                    <div style={{
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        color: trend > 0 ? '#10b981' : '#ef4444',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '2px'
+                    }}>
+                        {trend > 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
                         {Math.abs(trend)}%
                     </div>
                 )}
             </div>
 
-            <div className="space-y-1">
-                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-[0.2em]">
+            <div>
+                <h3 style={{
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    color: '#64748b',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    marginBottom: '4px'
+                }}>
                     {title}
                 </h3>
 
-                <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-extrabold text-white tracking-tighter">
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                    <span style={{ fontSize: '28px', fontWeight: '800', color: '#0f172a' }}>
                         <AnimatedNumber value={value} />
                     </span>
-                    {unit && <span className="text-sm font-bold text-gray-500">{unit}</span>}
+                    {unit && <span style={{ fontSize: '14px', fontWeight: '600', color: '#64748b' }}>{unit}</span>}
                 </div>
             </div>
 
-            {/* Decorative pulse line */}
-            <div className="mt-6 h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                <motion.div
-                    initial={{ x: "-100%" }}
-                    animate={{ x: "0%" }}
-                    transition={{ duration: 1.5, ease: "easeOut" }}
-                    className={`h-full w-full bg-gradient-to-r ${gradientClasses} shadow-[0_0_10px_rgba(99,102,241,0.5)]`}
-                />
-            </div>
-
-            <AnimatePresence>
-                {isCritical && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="absolute top-2 right-2"
-                    >
-                        <Activity size={14} className="text-rose-500 animate-pulse" />
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </motion.div>
+            {/* Subtle accent bar at bottom */}
+            <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '100%',
+                height: '3px',
+                background: config.accent,
+                opacity: 0.8,
+                borderRadius: '0 0 4px 4px'
+            }} />
+        </div>
     );
 };
 

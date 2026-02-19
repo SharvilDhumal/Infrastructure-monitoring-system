@@ -62,43 +62,43 @@ const StreetlightCard = ({ data, index, onToggle }) => {
   // Status computation for visual identity
   const statusConfig = isStale
     ? {
-        color: "text-rose-500",
-        bg: "bg-rose-500/10",
-        border: "border-rose-500/20",
-        label: "OFFLINE",
-        icon: <WifiOff size={14} />,
-      }
+      color: "text-rose-500",
+      bg: "bg-rose-500/10",
+      border: "border-rose-500/20",
+      label: "OFFLINE",
+      icon: <WifiOff size={14} />,
+    }
     : backendStatus.includes("OVERCURRENT")
       ? {
-          color: "text-red-500",
-          bg: "bg-red-500/10",
-          border: "border-red-500/30",
-          label: "FAULTY",
-          icon: <AlertTriangle size={14} />,
-        }
+        color: "text-red-500",
+        bg: "bg-red-500/10",
+        border: "border-red-500/30",
+        label: "FAULTY",
+        icon: <AlertTriangle size={14} />,
+      }
       : backendStatus.includes("FAULTY")
         ? {
-            color: "text-amber-500",
-            bg: "bg-amber-500/10",
-            border: "border-amber-500/30",
-            label: "CHECK LAMP",
-            icon: <AlertTriangle size={14} />,
-          }
+          color: "text-amber-500",
+          bg: "bg-amber-500/10",
+          border: "border-amber-500/30",
+          label: "CHECK LAMP",
+          icon: <AlertTriangle size={14} />,
+        }
         : isRelayOn
           ? {
-              color: "text-emerald-500",
-              bg: "bg-emerald-500/10",
-              border: "border-emerald-500/20",
-              label: "ACTIVE",
-              icon: <Wifi size={14} />,
-            }
+            color: "text-emerald-500",
+            bg: "bg-emerald-500/10",
+            border: "border-emerald-500/20",
+            label: "ACTIVE",
+            icon: <Wifi size={14} />,
+          }
           : {
-              color: "text-slate-400",
-              bg: "bg-slate-700/30",
-              border: "border-slate-700",
-              label: "STANDBY",
-              icon: <Radio size={14} />,
-            };
+            color: "text-slate-400",
+            bg: "bg-slate-700/30",
+            border: "border-slate-700",
+            label: "STANDBY",
+            icon: <Radio size={14} />,
+          };
 
   return (
     <motion.div
@@ -233,11 +233,10 @@ const StreetlightCard = ({ data, index, onToggle }) => {
         <button
           onClick={() => onToggle(index + 1, "on")}
           disabled={isRelayOn && !isStale}
-          className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${
-            isRelayOn && !isStale
+          className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${isRelayOn && !isStale
               ? "bg-emerald-500/10 text-emerald-500/50 cursor-not-allowed border border-emerald-500/10"
               : "bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 border border-emerald-500/30 active:scale-95"
-          }`}
+            }`}
         >
           <Power size={14} />
           ON
@@ -245,11 +244,10 @@ const StreetlightCard = ({ data, index, onToggle }) => {
         <button
           onClick={() => onToggle(index + 1, "off")}
           disabled={!isRelayOn && !isStale}
-          className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${
-            !isRelayOn && !isStale
+          className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${!isRelayOn && !isStale
               ? "bg-rose-500/10 text-rose-500/50 cursor-not-allowed border border-rose-500/10"
               : "bg-rose-600/20 text-rose-400 hover:bg-rose-600/30 border border-rose-500/30 active:scale-95"
-          }`}
+            }`}
         >
           <PowerOff size={14} />
           OFF
@@ -304,7 +302,7 @@ const SummaryMetric = ({ label, value, unit, icon: Icon, colorClass }) => (
 /**
  * StreetlightDashboard Component
  */
-const StreetlightDashboard = () => {
+const StreetlightDashboard = ({ hideLayout = false }) => {
   const [streetlights, setStreetlights] = useState([]);
   const [loading, setLoading] = useState(false);
   const [displayData, setDisplayData] = useState(() =>
@@ -387,52 +385,54 @@ const StreetlightDashboard = () => {
   }, [displayData]);
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-300 p-6 md:p-10 selection:bg-blue-500 selection:text-white">
+    <div className={`min-h-screen ${hideLayout ? 'bg-transparent p-4' : 'bg-[#020617] text-slate-300 p-6 md:p-10'} selection:bg-blue-500 selection:text-white`}>
       <div className="max-w-7xl mx-auto">
         {/* Real-time Header */}
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase italic">
-                Control Panel
-              </h1>
-              <div className="flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1], opacity: [1, 0.6, 1] }}
-                  transition={{ repeat: Infinity, duration: 1.5 }}
-                  className="w-1.5 h-1.5 rounded-full bg-emerald-500"
-                />
-                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">
-                  Live Monitoring
-                </span>
+        {!hideLayout && (
+          <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase italic">
+                  Control Panel
+                </h1>
+                <div className="flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+                  <motion.div
+                    animate={{ scale: [1, 1.2, 1], opacity: [1, 0.6, 1] }}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                    className="w-1.5 h-1.5 rounded-full bg-emerald-500"
+                  />
+                  <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">
+                    Live Monitoring
+                  </span>
+                </div>
+              </div>
+              <p className="text-slate-500 text-sm font-medium">
+                Smart City Infrastructure • Streetlight Telemetry Hub
+              </p>
+            </div>
+
+            <div className="bg-[#0f172a] border border-slate-800 px-4 py-2 rounded-xl flex items-center gap-3">
+              <ShieldCheck
+                className={
+                  stats.health === "OPTIMAL"
+                    ? "text-emerald-400"
+                    : "text-amber-400"
+                }
+                size={20}
+              />
+              <div>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                  Global Status
+                </p>
+                <p
+                  className={`text-sm font-black tracking-tight ${stats.health === "OPTIMAL" ? "text-emerald-400" : "text-amber-400"}`}
+                >
+                  {stats.health}
+                </p>
               </div>
             </div>
-            <p className="text-slate-500 text-sm font-medium">
-              Smart City Infrastructure • Streetlight Telemetry Hub
-            </p>
-          </div>
-
-          <div className="bg-[#0f172a] border border-slate-800 px-4 py-2 rounded-xl flex items-center gap-3">
-            <ShieldCheck
-              className={
-                stats.health === "OPTIMAL"
-                  ? "text-emerald-400"
-                  : "text-amber-400"
-              }
-              size={20}
-            />
-            <div>
-              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-                Global Status
-              </p>
-              <p
-                className={`text-sm font-black tracking-tight ${stats.health === "OPTIMAL" ? "text-emerald-400" : "text-amber-400"}`}
-              >
-                {stats.health}
-              </p>
-            </div>
-          </div>
-        </header>
+          </header>
+        )}
 
         {/* Top Summary Section */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">

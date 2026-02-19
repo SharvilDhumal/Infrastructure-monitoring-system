@@ -34,7 +34,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-content">
         <div className="navbar-left">
-          <h2 className="navbar-title">Infravision.AI Dashboard</h2>
+          <h2 className="navbar-title">Infrastructure Monitoring System Admin dashboard</h2>
         </div>
         <div className="navbar-right">
           <div className="navbar-notification">
@@ -46,12 +46,15 @@ const Navbar = () => {
             </button>
           </div>
           <div className="navbar-profile" ref={dropdownRef}>
-            <button 
+            <button
               className="profile-btn"
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
               aria-label="Profile"
             >
-              <div className="profile-avatar">AD</div>
+              <div className="profile-info">
+                <span className="profile-name">Admin Officer</span>
+                <div className="profile-avatar">AD</div>
+              </div>
             </button>
             {showProfileDropdown && (
               <div className="profile-dropdown">

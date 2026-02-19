@@ -49,12 +49,12 @@ const IssueDonutChart = ({ data = { high: 0, medium: 0, low: 0 } }) => {
             </Pie>
             <Tooltip
               contentStyle={{
-                backgroundColor: '#1E293B',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '8px',
-                backdropFilter: 'blur(8px)'
+                backgroundColor: '#ffffff',
+                border: '1px solid #e2e8f0',
+                borderRadius: '4px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
               }}
-              itemStyle={{ color: '#E5E7EB' }}
+              itemStyle={{ color: '#1e293b' }}
             />
           </PieChart>
         </ResponsiveContainer>

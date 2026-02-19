@@ -6,14 +6,14 @@ const AIInsightsCard = ({ loading = false }) => {
     const insights = [
         {
             id: 1,
-            type: 'prediction',
+            type: 'Prediction',
             message: 'Highway Bridge #3 showing unusual vibration patterns. Maintenance suggested within 48h.',
             priority: 'high',
             icon: TrendingUp
         },
         {
             id: 2,
-            type: 'optimization',
+            type: 'Optimization',
             message: 'Network load balanced across Sector 7 lighting nodes. Efficiency increased by 12%.',
             priority: 'medium',
             icon: Zap
@@ -21,91 +21,114 @@ const AIInsightsCard = ({ loading = false }) => {
     ];
 
     return (
-        <div className="bg-[#111827]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-[0_0_40px_rgba(34,211,238,0.1)] relative overflow-hidden group h-full">
-            {/* Background Brain Animation Shell */}
-            <div className="absolute -right-8 -top-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                <BrainCircuit size={160} className="text-cyan-400" />
-            </div>
-
+        <div
+            className="ai-insights-card-professional"
+            style={{
+                background: '#ffffff',
+                border: '1px solid #e2e8f0',
+                borderRadius: '4px',
+                padding: '32px',
+                height: '100%',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                position: 'relative',
+                overflow: 'hidden'
+            }}
+        >
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-cyan-400/10 flex items-center justify-center border border-cyan-400/30 shadow-[0_0_20px_rgba(34,211,238,0.3)] relative">
-                    <Sparkles size={24} className="text-cyan-400" />
-                    {loading && (
-                        <motion.div
-                            className="absolute inset-0 rounded-2xl border-2 border-cyan-400"
-                            animate={{ opacity: [0, 1, 0], scale: [1, 1.2, 1] }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                        />
-                    )}
+                <div style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '4px',
+                    background: '#f1f5f9',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#002147',
+                    border: '1px solid #e2e8f0'
+                }}>
+                    <Sparkles size={24} />
                 </div>
                 <div>
-                    <h2 className="text-xl font-black text-white tracking-tighter uppercase italic">Neural <span className="text-cyan-400">Intelligence</span></h2>
-                    <p className="text-[10px] text-gray-500 uppercase tracking-[.3em] font-black">Co-Processor Active</p>
+                    <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        AI Intelligence Results
+                    </h2>
+                    <p style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                        Neural Co-Processor Active
+                    </p>
                 </div>
             </div>
 
-            <div className="space-y-5">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {loading ? (
-                    <>
-                        {[1, 2].map((i) => (
-                            <div key={i} className="p-4 rounded-xl border border-white/5 bg-white/[0.02] space-y-3 relative overflow-hidden">
-                                <div className="h-4 w-3/4 bg-white/5 rounded animate-pulse" />
-                                <div className="h-4 w-1/2 bg-white/5 rounded animate-pulse" />
-                                <div className="flex gap-2">
-                                    <div className="h-4 w-12 bg-white/5 rounded-full animate-pulse" />
-                                    <div className="h-4 w-24 bg-white/5 rounded-full animate-pulse" />
-                                </div>
-                                <motion.div
-                                    className="absolute inset-y-0 left-0 w-1 bg-cyan-400"
-                                    animate={{ y: [-50, 150] }}
-                                    transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                                />
-                            </div>
-                        ))}
-                    </>
+                    <div style={{ height: '200px', width: '100%', background: '#f8fafc', borderRadius: '4px' }} />
                 ) : (
-                    insights.map((insight, index) => (
-                        <motion.div
+                    insights.map((insight) => (
+                        <div
                             key={insight.id}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.2 }}
-                            className={`p-5 rounded-2xl border ${insight.priority === 'high'
-                                ? 'bg-rose-500/5 border-rose-500/20'
-                                : 'bg-white/5 border-white/10 shadow-lg'
-                                } relative overflow-hidden group/item cursor-pointer hover:bg-white/10 transition-colors border-l-4 ${insight.priority === 'high' ? 'border-l-rose-500' : 'border-l-indigo-500'}`}
+                            style={{
+                                padding: '20px',
+                                background: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '4px',
+                                borderLeft: `4px solid ${insight.priority === 'high' ? '#dc3545' : '#002147'}`,
+                                display: 'flex',
+                                gap: '16px'
+                            }}
                         >
-                            <div className="flex gap-4">
-                                <div className={`mt-0.5 p-2 rounded-lg bg-white/5 ${insight.priority === 'high' ? 'text-rose-400' : 'text-indigo-400'}`}>
-                                    <insight.icon size={18} />
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-sm text-gray-200 leading-relaxed font-medium">
-                                        {insight.message}
-                                    </p>
-                                    <div className="flex items-center gap-3 mt-4">
-                                        <span className={`text-[9px] px-2.5 py-1 rounded-full font-black uppercase tracking-tighter ${insight.priority === 'high' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/20' : 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/20'
-                                            }`}>
-                                            {insight.type}
-                                        </span>
-                                        <span className="text-[9px] text-gray-500 font-bold uppercase tracking-widest">v4.1 Neural Node</span>
-                                    </div>
-                                </div>
-                                <div className="self-center">
-                                    <ChevronRight size={18} className="text-gray-600 group-hover/item:text-cyan-400 transition-colors" />
+                            <div style={{
+                                color: insight.priority === 'high' ? '#dc3545' : '#002147',
+                                flexShrink: 0
+                            }}>
+                                <insight.icon size={20} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <p style={{ fontSize: '14px', fontWeight: '500', color: '#334155', lineHeight: '1.5' }}>
+                                    {insight.message}
+                                </p>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '12px' }}>
+                                    <span style={{
+                                        fontSize: '11px',
+                                        fontWeight: '700',
+                                        color: insight.priority === 'high' ? '#dc3545' : '#002147',
+                                        textTransform: 'uppercase'
+                                    }}>
+                                        {insight.type}
+                                    </span>
+                                    <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '600' }}>v4.1 System Node</span>
                                 </div>
                             </div>
-                        </motion.div>
+                            <ChevronRight size={18} style={{ alignSelf: 'center', color: '#cbd5e1' }} />
+                        </div>
                     ))
                 )}
             </div>
 
-            <button className="w-full mt-8 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black text-gray-500 hover:text-white hover:bg-white/10 transition-all uppercase tracking-[0.2em] relative overflow-hidden group">
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                    Open Cognitive Report <ChevronRight size={14} />
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/10 to-cyan-500/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            <button style={{
+                width: '100%',
+                marginTop: '32px',
+                padding: '12px',
+                background: 'transparent',
+                border: '1px solid #e2e8f0',
+                borderRadius: '4px',
+                fontSize: '13px',
+                fontWeight: '700',
+                color: '#64748b',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                cursor: 'pointer'
+            }}>
+                View Full Intelligence Report
             </button>
+
+            <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '100%',
+                height: '4px',
+                background: '#002147',
+                opacity: 0.8
+            }} />
         </div>
     );
 };

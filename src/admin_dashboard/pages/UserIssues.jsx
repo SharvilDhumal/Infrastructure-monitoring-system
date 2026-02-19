@@ -7,7 +7,7 @@ const UserIssues = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const API_URL = 'http://localhost:5000/api/issues';
+    const API_URL = 'http://localhost:5001/api/issues';
     const token = sessionStorage.getItem('token');
 
     const fetchIssues = async () => {
@@ -17,7 +17,7 @@ const UserIssues = () => {
             console.log('Attempting to fetch issues from:', API_URL);
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
             const response = await axios.get(API_URL, { headers });
-            
+
             // Backend returns { success: true, issues: [...] }
             const issuesData = response.data.issues || response.data;
             console.log('Issues fetched successfully:', issuesData.length, 'issues found');
@@ -51,7 +51,7 @@ const UserIssues = () => {
         }
     };
 
-    if (loading) return <div className="loading">Loading premium dashboard experiences...</div>;
+    if (loading) return <div className="loading">Loading infrastructure reports...</div>;
     if (error) return <div className="error-message">{error}</div>;
 
     return (

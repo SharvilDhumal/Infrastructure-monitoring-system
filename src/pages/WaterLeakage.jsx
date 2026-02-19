@@ -6,14 +6,12 @@ import {
   AlertTriangle,
   Clock,
   CheckCircle2,
-  LayoutDashboard,
-  Waves,
-  Zap
+  Waves
 } from 'lucide-react';
 
 const API_URL = 'http://localhost:5001/latest';
 
-function WaterLeakage() {
+function WaterLeakage({ hideLayout = false }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -51,40 +49,37 @@ function WaterLeakage() {
   const isLeakDetected = data?.leak === true;
 
   return (
-    <div className={`min-h-screen transition-colors duration-700 ${isLeakDetected ? 'bg-red-950' : 'bg-[#0a0f1e]'}`}>
-      {/* Background Decor */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full"></div>
-        <div className="absolute top-[40%] -right-[10%] w-[30%] h-[50%] bg-purple-600/10 blur-[120px] rounded-full"></div>
-      </div>
+    <div className={`min-h-screen transition-colors duration-700 ${hideLayout ? 'bg-transparent' : (isLeakDetected ? 'bg-red-950' : 'bg-[#0a0f1e]')}`}>
 
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 py-8">
+      <div className={`relative z-10 max-w-[1400px] mx-auto ${hideLayout ? 'px-4 py-4' : 'px-6 py-8'}`}>
         {/* Header */}
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-white/5">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-blue-600/20 rounded-xl border border-blue-500/30">
-              <Waves className="text-blue-400" size={24} />
+        {!hideLayout && (
+          <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-white/5">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-blue-600/20 rounded-xl border border-blue-500/30">
+                <Waves className="text-blue-400" size={24} />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-white tracking-tight">AquaGuard <span className="text-blue-500 underline decoration-blue-500/30 underline-offset-4">IoT</span></h1>
+                <p className="text-sm text-slate-400 font-medium">Real-time Water Monitoring System</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-white tracking-tight">AquaGuard <span className="text-blue-500 underline decoration-blue-500/30 underline-offset-4">IoT</span></h1>
-              <p className="text-sm text-slate-400 font-medium">Real-time Water Monitoring System</p>
-            </div>
-          </div>
 
-          <div className="flex items-center gap-6 bg-slate-900/40 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10">
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${isLeakDetected ? 'bg-red-500 animate-pulse ring-4 ring-red-500/20' : 'bg-emerald-500 ring-4 ring-emerald-500/20'}`}></div>
-              <span className={`text-xs font-bold uppercase tracking-wider ${isLeakDetected ? 'text-red-400' : 'text-emerald-400'}`}>
-                {isLeakDetected ? 'Critical Alert' : 'System Healthy'}
-              </span>
+            <div className="flex items-center gap-6 bg-slate-900/40 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10">
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${isLeakDetected ? 'bg-red-500 animate-pulse ring-4 ring-red-500/20' : 'bg-emerald-500 ring-4 ring-emerald-500/20'}`}></div>
+                <span className={`text-xs font-bold uppercase tracking-wider ${isLeakDetected ? 'text-red-400' : 'text-emerald-400'}`}>
+                  {isLeakDetected ? 'Critical Alert' : 'System Healthy'}
+                </span>
+              </div>
+              <div className="h-4 w-[1px] bg-white/10"></div>
+              <div className="flex items-center gap-2 text-slate-400">
+                <Clock size={14} />
+                <span className="text-xs font-medium">{data?.time || '--:--:--'}</span>
+              </div>
             </div>
-            <div className="h-4 w-[1px] bg-white/10"></div>
-            <div className="flex items-center gap-2 text-slate-400">
-              <Clock size={14} />
-              <span className="text-xs font-medium">{data?.time || '--:--:--'}</span>
-            </div>
-          </div>
-        </header>
+          </header>
+        )}
 
         {/* Leak Alert Banner */}
         {isLeakDetected && (
@@ -118,7 +113,7 @@ function WaterLeakage() {
             title="Outlet Line B"
             value={data?.flow2 || 0}
             unit="L/min"
-            icon={<Zap className="text-cyan-400" size={20} />}
+            icon={<Activity className="text-cyan-400" size={20} />} // Changed Zap to Activity for consistency with imports
             color="cyan"
             description="Garden irrigation"
           />
@@ -150,7 +145,7 @@ function WaterLeakage() {
           <div className="lg:col-span-2 bg-[#12182b]/50 backdrop-blur-xl border border-white/5 p-6 rounded-[2.5rem] shadow-sm">
             <div className="flex items-center justify-between mb-8">
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <LayoutDashboard size={20} className="text-blue-500" />
+                <Activity size={20} className="text-blue-500" />
                 Live Flow Analytics
               </h3>
               <div className="flex gap-2">
@@ -160,7 +155,6 @@ function WaterLeakage() {
             </div>
 
             <div className="h-[240px] w-full flex items-end gap-1 px-2">
-              {/* Simplified Animated Bar Graph as Placeholder */}
               {[40, 65, 45, 80, 55, 90, 40, 60, 35, 75, 45, 85, 50, 70, 40].map((h, i) => (
                 <div key={i} className="flex-1 group relative flex flex-col items-center gap-2 h-full justify-end">
                   <div
@@ -195,9 +189,11 @@ function WaterLeakage() {
           </div>
         </div>
 
-        <footer className="mt-12 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-slate-600">
-          Powered by IoT Grid Core v2.4.0 • Encrypted Signal Link
-        </footer>
+        {!hideLayout && (
+          <footer className="mt-12 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-slate-600">
+            Powered by IoT Grid Core v2.4.0 • Encrypted Signal Link
+          </footer>
+        )}
       </div>
     </div>
   );
@@ -212,7 +208,7 @@ function StatCard({ title, value, unit, icon, description, color }) {
   };
 
   return (
-    <div className="group bg-[#12182b]/50 backdrop-blur-xl border border-white/5 hover:border-white/10 p-5 rounded-[2rem] transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/20">
+    <div className="group relative bg-[#12182b]/50 backdrop-blur-xl border border-white/5 hover:border-white/10 p-5 rounded-[2rem] transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/20">
       <div className="flex items-center justify-between mb-4">
         <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{title}</span>
         <div className="p-2 bg-slate-800/50 rounded-lg border border-white/5 group-hover:scale-110 transition-transform">
@@ -233,8 +229,8 @@ function StatCard({ title, value, unit, icon, description, color }) {
 function StatusCard({ title, isLeak, description }) {
   return (
     <div className={`group relative overflow-hidden p-5 rounded-[2rem] border transition-all hover:-translate-y-1 ${isLeak
-        ? 'bg-red-500/10 border-red-500/30 shadow-lg shadow-red-950/20'
-        : 'bg-[#12182b]/50 border-emerald-500/20 border-white/5 hover:border-emerald-500/30'
+      ? 'bg-red-500/10 border-red-500/30 shadow-lg shadow-red-950/20'
+      : 'bg-[#12182b]/50 border-emerald-500/20 border-white/5 hover:border-emerald-500/30'
       }`}>
       <div className="flex items-center justify-between mb-4">
         <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{title}</span>
@@ -245,8 +241,8 @@ function StatusCard({ title, isLeak, description }) {
 
       <div className="mb-2">
         <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${isLeak
-            ? 'bg-red-500 text-white animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]'
-            : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+          ? 'bg-red-500 text-white animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]'
+          : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
           }`}>
           {isLeak ? 'Leakage !!' : 'All Clear'}
         </span>

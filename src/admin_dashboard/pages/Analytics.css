@@ -36,13 +36,11 @@
 
 /* Chart Section: Full Width */
 .analytics-section.chart-section.full-width {
-  background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: var(--border-radius);
+  background: #ffffff;
+  border-radius: 4px;
   padding: 32px;
-  border: 1px solid var(--card-border);
-  box-shadow: var(--card-glow);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .chart-card-header {
@@ -79,9 +77,9 @@
 }
 
 .period-btn-mini.active {
-  background: var(--accent-indigo);
+  background: var(--sidebar-bg);
   color: white;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Severity Section: Centered */
@@ -100,23 +98,23 @@
 }
 
 .analytics-card {
-  background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  border-radius: var(--border-radius);
+  background: #ffffff;
+  border-radius: 4px;
   padding: 32px;
-  border: 1px solid var(--card-border);
-  box-shadow: var(--card-glow);
-  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
 }
 
 .analytics-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(99, 102, 241, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
 }
 
 .analytics-card.glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
+  background: #ffffff;
+  /* Replaced glass effect with solid white */
 }
 
 .analytics-grid {
@@ -161,7 +159,7 @@
 
 .breakdown-bar {
   height: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  background: #f1f5f9;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -184,8 +182,9 @@
   align-items: center;
   gap: 16px;
   padding: 12px;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
 }
 
 .issue-rank {
