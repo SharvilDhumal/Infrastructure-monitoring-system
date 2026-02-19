@@ -1,0 +1,566 @@
+.pothole-detection-container {
+  --bg-app: #02040a;
+  --bg-panel: #0b101b;
+  --bg-card: #0f1623;
+  --border-subtle: #1e293b;
+  --border-glow: #2563eb;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --accent-primary: #3b82f6;
+  --accent-cyan: #06b6d4;
+  --accent-success: #10b981;
+  --accent-danger: #f59e0b;
+  --accent-critical: #ef4444;
+
+  --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.15);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --font-family: 'Inter', system-ui, sans-serif;
+  
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  overflow: hidden;
+}
+
+.pothole-detection-container aside.sidebar {
+  width: 260px;
+  background-color: var(--bg-app);
+  border-right: 1px solid var(--border-subtle);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.pothole-detection-container .logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding-left: 8px;
+}
+
+.pothole-detection-container .nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pothole-detection-container .nav-item {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+}
+
+.pothole-detection-container .nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+}
+
+.pothole-detection-container .nav-item.active {
+  background-color: rgba(6, 182, 212, 0.08);
+  color: var(--accent-cyan);
+  border-color: rgba(6, 182, 212, 0.2);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.05);
+}
+
+.pothole-detection-container main.main {
+  flex: 1;
+  padding: 32px 40px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: radial-gradient(circle at top right, #0f1623 0%, #02040a 40%);
+}
+
+.pothole-detection-container .dashboard-header {
+  margin-bottom: 20px;
+}
+
+.pothole-detection-container .breadcrumb {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-success);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pothole-detection-container .breadcrumb::before {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: var(--accent-success);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-success);
+}
+
+.pothole-detection-container .page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+
+.pothole-detection-container .page-subtitle {
+  color: var(--text-secondary);
+  margin-top: 8px;
+  font-size: 1rem;
+}
+
+.pothole-detection-container .status-bar {
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.pothole-detection-container .status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--accent-success);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.pothole-detection-container .pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-success);
+  border-radius: 50%;
+  animation: pothole-pulse 2s infinite;
+}
+
+.pothole-detection-container .status-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.pothole-detection-container .issue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+.pothole-detection-container .issue-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.pothole-detection-container .issue-card:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.pothole-detection-container .card-image-wrapper {
+  position: relative;
+  height: 220px;
+  background: #000;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.pothole-detection-container .card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+  transition: opacity 0.3s;
+}
+
+.pothole-detection-container .issue-card:hover .card-image {
+  opacity: 1;
+}
+
+.pothole-detection-container .status-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pothole-detection-container .status-badge.unsolved {
+  border-color: var(--accent-critical);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+}
+
+.pothole-detection-container .status-badge.solved {
+  border-color: var(--accent-success);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+
+.pothole-detection-container .card-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.pothole-detection-container .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.pothole-detection-container .issue-id {
+  font-family: monospace;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.pothole-detection-container .confidence-display {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.pothole-detection-container .confidence-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+.pothole-detection-container .card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.pothole-detection-container .meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.pothole-detection-container .icon-muted {
+  color: var(--text-muted);
+}
+
+.pothole-detection-container .resolve-btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  color: var(--accent-primary);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+}
+
+.pothole-detection-container .resolve-btn:hover {
+  background: var(--accent-primary);
+  color: white;
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+}
+
+.pothole-detection-container .modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 4, 10, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pothole-detection-container .modal-container {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+  max-width: 450px;
+  width: 100%;
+  padding: 24px;
+}
+
+.pothole-detection-container .modal-header {
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pothole-detection-container .modal-title {
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.pothole-detection-container .form-group {
+  margin-bottom: 16px;
+}
+
+.pothole-detection-container .form-label {
+  display: block;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.pothole-detection-container .form-input {
+  width: 100%;
+  padding: 10px;
+  background: var(--bg-app);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s;
+}
+
+.pothole-detection-container .form-input:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.1);
+}
+
+.pothole-detection-container .modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.pothole-detection-container .btn-primary,
+.pothole-detection-container .btn-secondary {
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pothole-detection-container .empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--bg-card);
+  border: 1px dashed var(--border-subtle);
+  color: var(--text-muted);
+  border-radius: var(--radius-lg);
+  min-height: 300px;
+}
+
+.pothole-detection-container .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.pothole-detection-container .stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pothole-detection-container .stat-title {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.pothole-detection-container .stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.pothole-detection-container .stat-icon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  opacity: 0.1;
+  transform: scale(1.2);
+}
+
+.pothole-detection-container .table-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  overflow-x: auto;
+}
+
+.pothole-detection-container .report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.pothole-detection-container .report-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.pothole-detection-container .download-btn {
+  background: var(--accent-cyan);
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: filter 0.2s;
+}
+
+.pothole-detection-container .styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.pothole-detection-container .styled-table th {
+  text-align: left;
+  padding: 16px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+}
+
+.pothole-detection-container .styled-table td {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.pothole-detection-container .status-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.pothole-detection-container .status-cell.unsolved {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--accent-critical);
+}
+
+.pothole-detection-container .status-cell.solved {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--accent-success);
+}
+
+@keyframes pothole-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.pothole-detection-container .animate-fade-in {
+  animation: pothole-fadeIn 0.4s ease-out;
+}
+
+@keyframes pothole-fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pothole-detection-container .close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}

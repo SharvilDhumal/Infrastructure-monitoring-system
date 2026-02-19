@@ -25,6 +25,7 @@ import Profile from "./pages/Profile";
 import StreetlightDashboard from "./components/StreetlightDashboard";
 import AdminDashboard from "./admin_dashboard/App";
 import WaterLeakage from "./pages/WaterLeakage";
+import PotholeDetection from "./pages/PotholeDetection";
 
 // Home page
 const Home = () => {
@@ -106,6 +107,7 @@ const App = () => {
         <Route path="/streetlights" element={<StreetlightDashboard />} />
         <Route path="/main-dashboard/*" element={<AdminDashboard />} />
         <Route path="/water-leakage" element={<WaterLeakage />} />
+        <Route path="/pothole" element={<PotholeDetection />} />
       </Routes>
 
       {/* Cursor outline */}
