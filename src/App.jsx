@@ -24,6 +24,7 @@ import NoAccountFound from "./features/auth/NoAccountFound";
 import Profile from "./pages/Profile";
 import StreetlightDashboard from "./components/StreetlightDashboard";
 import AdminDashboard from "./admin_dashboard/App";
+import WaterLeakage from "./pages/WaterLeakage";
 
 // Home page
 const Home = () => {
@@ -104,6 +105,7 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/streetlights" element={<StreetlightDashboard />} />
         <Route path="/main-dashboard/*" element={<AdminDashboard />} />
+        <Route path="/water-leakage" element={<WaterLeakage />} />
       </Routes>
 
       {/* Cursor outline */}

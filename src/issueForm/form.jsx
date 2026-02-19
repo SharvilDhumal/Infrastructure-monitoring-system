@@ -84,10 +84,9 @@ const ReportFormPage = () => {
     e.preventDefault();
     
     // Check authentication
-    const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
+    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 
-    if (!token || !user) {
+    if (!token) {
       toast.error('Login first to report an issue');
       return;
     }
