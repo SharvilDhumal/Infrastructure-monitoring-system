@@ -26,6 +26,7 @@ import StreetlightDashboard from "./components/StreetlightDashboard";
 import AdminDashboard from "./admin_dashboard/App";
 import WaterLeakage from "./pages/WaterLeakage";
 import PotholeDetection from "./pages/PotholeDetection";
+import Bridge from "./pages/Bridge";
 
 // Home page
 const Home = () => {
@@ -70,11 +71,13 @@ const App = () => {
       position.current.y += (mouse.current.y - position.current.y) * 0.1;
 
       if (dotRef.current && outlineRef.current) {
-        dotRef.current.style.transform = `translate3d(${mouse.current.x - 6
-          }px, ${mouse.current.y - 6}px, 0)`;
+        dotRef.current.style.transform = `translate3d(${
+          mouse.current.x - 6
+        }px, ${mouse.current.y - 6}px, 0)`;
 
-        outlineRef.current.style.transform = `translate3d(${position.current.x - 20
-          }px, ${position.current.y - 20}px, 0)`;
+        outlineRef.current.style.transform = `translate3d(${
+          position.current.x - 20
+        }px, ${position.current.y - 20}px, 0)`;
       }
 
       requestAnimationFrame(animate);
@@ -94,6 +97,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/report" element={<Report />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/bridge" element={<Bridge />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />
