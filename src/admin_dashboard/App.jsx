@@ -13,7 +13,7 @@ import LiveMonitoring from './pages/LiveMonitoring'
 import PotholeDetection from '../pages/PotholeDetection'
 import WaterLeakage from '../pages/WaterLeakage'
 import Bridge from '../pages/Bridge'
-import StreetlightDashboard from '../components/StreetlightDashboard'
+import StreetlightDashboard from '../modules/streetlight/StreetlightDashboard'
 import "leaflet/dist/leaflet.css";
 import './App.css'
 import './index.css'

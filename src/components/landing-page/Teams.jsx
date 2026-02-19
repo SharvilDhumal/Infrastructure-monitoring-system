@@ -1,6 +1,6 @@
 import React from "react";
 import Title from "./Title";
-import { teamData } from "../assets/assets";
+import { teamData } from "../../assets/assets";
 import { motion } from "framer-motion";
 
 const Teams = () => {

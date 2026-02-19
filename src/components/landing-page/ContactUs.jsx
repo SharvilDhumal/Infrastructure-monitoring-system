@@ -1,5 +1,5 @@
 import React from "react";
-import assets from "../assets/assets";
+import assets from "../../assets/assets";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import GlobeCanvas from "./GlobeCanvas";

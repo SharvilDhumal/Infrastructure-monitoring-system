@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/landing-page/Navbar";
 import ReportFormPage from "../issueForm/form";
 import { Toaster } from "react-hot-toast";
 

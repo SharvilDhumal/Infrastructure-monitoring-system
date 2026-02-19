@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import assets from "../assets/assets";
+import assets from "../../assets/assets";
 import { motion } from "framer-motion";
-import { useTheme } from "../context/ThemeContext";
+import { useTheme } from "../../context/ThemeContext";
 
 const NAV_ITEMS = [
   ["Features", "#features"],
