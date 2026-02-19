@@ -1,0 +1,159 @@
+.critical-issues-section {
+  background: #ffffff;
+  padding: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background-color: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.section-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 4px 12px;
+  border-radius: 4px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.issues-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.issues-table th {
+  padding: 16px 24px;
+  background: #fdfdfd;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.issues-table td {
+  padding: 16px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.issues-table tr:hover td {
+  background-color: #fcfdfe;
+}
+
+.issue-type-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.type-icon {
+  font-size: 20px;
+}
+
+.type-text {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.severity-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 2px;
+  text-transform: uppercase;
+  width: 80px;
+  text-align: center;
+}
+
+.confidence-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.confidence-track {
+  width: 60px;
+  height: 6px;
+  background: #f1f5f9;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.confidence-fill {
+  height: 100%;
+  background: var(--accent-blue);
+}
+
+.confidence-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-table {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.btn-table.primary {
+  background-color: var(--accent-primary);
+  color: white;
+}
+
+.btn-table.primary:hover {
+  background-color: #001a38;
+}
+
+.btn-table.secondary {
+  background-color: white;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.btn-table.secondary:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.issues-empty {
+  padding: 60px 24px;
+  text-align: center;
+  color: #94a3b8;
+}

@@ -1,0 +1,293 @@
+.analytics {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 32px;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+/* 3-Section Vertical Layout */
+.analytics-issue-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+/* KPI Section: 50/50 on Desktop */
+.analytics-section.kpi-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* Chart Section: Full Width */
+.analytics-section.chart-section.full-width {
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 32px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chart-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.card-section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.period-selector-mini {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
+}
+
+.period-btn-mini {
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.period-btn-mini.active {
+  background: var(--sidebar-bg);
+  color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Severity Section: Centered */
+.analytics-section.severity-section {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Secondary Grid */
+.analytics-secondary-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.analytics-card {
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 32px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.analytics-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+.analytics-card.glass-card {
+  background: #ffffff;
+  /* Replaced glass effect with solid white */
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* Asset Breakdown Styling */
+.asset-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.breakdown-item {
+  margin-bottom: 20px;
+}
+
+.breakdown-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.breakdown-asset {
+  font-weight: 600;
+}
+
+.breakdown-health {
+  font-weight: 700;
+  color: var(--accent-green);
+}
+
+.breakdown-stats {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.breakdown-bar {
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.breakdown-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s ease-out;
+}
+
+/* Top Issues Styling */
+.top-issues-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.top-issue-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+}
+
+.issue-rank {
+  font-weight: 800;
+  color: var(--text-secondary);
+  width: 30px;
+}
+
+.issue-info {
+  flex: 1;
+}
+
+.issue-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.issue-count {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.issue-trend {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* Efficiency Metrics */
+.efficiency-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.efficiency-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.efficiency-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.efficiency-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* AI Performance */
+.ai-performance {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.performance-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.performance-label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.performance-bar {
+  height: 6px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.performance-fill {
+  height: 100%;
+}
+
+.performance-value {
+  font-size: 14px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.text-green {
+  color: var(--accent-green);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+
+  .analytics-secondary-grid,
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .analytics-section.kpi-section {
+    grid-template-columns: 1fr;
+  }
+}
