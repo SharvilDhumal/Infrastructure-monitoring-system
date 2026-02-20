@@ -6,21 +6,6 @@ const AIAnalysis = () => {
 
   const aiInsights = [
     {
-      id: 1,
-      type: 'pattern',
-      title: 'Recurring Pothole Pattern Detected',
-      description: 'AI analysis has identified a recurring pattern of pothole formation along the Main Street corridor. The pattern correlates strongly with heavy traffic volume (peak hours) and recent weather patterns (freeze-thaw cycles). Historical data suggests this pattern has been consistent over the past 6 months.',
-      confidence: 92,
-      priority: 'high',
-      recommendations: [
-        'Schedule preventive maintenance for Main Street corridor',
-        'Consider traffic management during peak hours',
-        'Implement enhanced monitoring for this zone'
-      ],
-      affectedAssets: ['Roads: 12 segments', 'Traffic flow: High impact'],
-      timestamp: '15 min ago'
-    },
-    {
       id: 2,
       type: 'risk',
       title: 'Elevated Risk: Bridge Infrastructure',

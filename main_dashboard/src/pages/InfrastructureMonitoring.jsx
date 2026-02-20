@@ -24,7 +24,6 @@ const InfrastructureMonitoring = () => {
       resolved: 18,
       severity: { high: 5, medium: 12, low: 7 },
       recentIssues: [
-        { id: 1, location: 'Main St & 5th Ave', issue: 'Pothole', severity: 'critical', detected: '5 min ago' },
         { id: 2, location: 'Highway 101', issue: 'Crack formation', severity: 'warning', detected: '1 hour ago' },
         { id: 3, location: 'Park Boulevard', issue: 'Surface degradation', severity: 'warning', detected: '2 hours ago' }
       ]

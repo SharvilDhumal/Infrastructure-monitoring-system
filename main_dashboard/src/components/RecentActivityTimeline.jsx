@@ -4,15 +4,6 @@ import './RecentActivityTimeline.css'
 const RecentActivityTimeline = () => {
   const activities = [
     {
-      id: 1,
-      type: 'issue',
-      action: 'New issue detected',
-      description: 'Pothole on Main Street',
-      timestamp: '2 min ago',
-      icon: '🚧',
-      color: 'var(--accent-red)'
-    },
-    {
       id: 2,
       type: 'assignment',
       action: 'Issue assigned',
@@ -60,9 +51,9 @@ const RecentActivityTimeline = () => {
       </div>
       <div className="timeline">
         {recentActivities.map((activity, index) => (
-          <TimelineItem 
-            key={activity.id} 
-            activity={activity} 
+          <TimelineItem
+            key={activity.id}
+            activity={activity}
             isLast={index === recentActivities.length - 1}
           />
         ))}

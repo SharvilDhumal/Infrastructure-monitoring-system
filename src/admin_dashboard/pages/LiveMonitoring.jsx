@@ -65,7 +65,7 @@ const LiveMonitoring = () => {
                             <p className="module-description">{module.description}</p>
                             <button
                                 className="open-dashboard-btn"
-                                onClick={() => navigate(module.path)}
+                                onClick={() => window.open(module.path, '_blank')}
                             >
                                 Open Dashboard <ArrowRight size={16} />
                             </button>

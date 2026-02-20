@@ -1,21 +1,6 @@
 // Shared issues data - synchronized across map and critical issues list
 export const issuesData = [
   {
-    id: 1,
-    type: 'Pothole',
-    title: 'Pothole Detected - Main Street',
-    severity: 'critical',
-    location: 'Mumbai, Maharashtra',
-    exactLocation: 'Main St & 5th Ave',
-    aiConfidence: 94,
-    detectionTime: '5 min ago',
-    timestamp: '5 min ago',
-    lat: 19.0760,
-    lng: 72.8777,
-    image: '🚧',
-    description: 'Large pothole detected in northbound lane'
-  },
-  {
     id: 2,
     type: 'Street Light Malfunction',
     title: 'Street Light Malfunction',

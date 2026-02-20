@@ -6,20 +6,6 @@ const IncidentsMaintenance = () => {
 
   const incidents = [
     {
-      id: 1,
-      title: 'Pothole Detected - Main Street',
-      type: 'road',
-      severity: 'critical',
-      status: 'assigned',
-      assignedTo: 'Team Alpha',
-      location: 'Main St & 5th Ave',
-      detected: '2024-01-15 10:30',
-      priority: 'high',
-      description: 'Large pothole detected in northbound lane. Requires immediate attention.',
-      aiConfidence: 94,
-      estimatedResolution: '2 hours'
-    },
-    {
       id: 2,
       title: 'Street Light Malfunction',
       type: 'lighting',
@@ -91,8 +77,8 @@ const IncidentsMaintenance = () => {
     }
   ]
 
-  const filteredIncidents = selectedFilter === 'all' 
-    ? incidents 
+  const filteredIncidents = selectedFilter === 'all'
+    ? incidents
     : incidents.filter(incident => incident.status === selectedFilter)
 
   const statusCounts = {
@@ -198,18 +184,18 @@ const IncidentCard = ({ incident }) => {
           </div>
         </div>
         <div className="incident-badges">
-          <span 
+          <span
             className="severity-badge"
-            style={{ 
+            style={{
               backgroundColor: `${getSeverityColor(incident.severity)}20`,
               color: getSeverityColor(incident.severity)
             }}
           >
             {incident.severity}
           </span>
-          <span 
+          <span
             className="status-badge"
-            style={{ 
+            style={{
               backgroundColor: `${getStatusColor(incident.status)}20`,
               color: getStatusColor(incident.status)
             }}

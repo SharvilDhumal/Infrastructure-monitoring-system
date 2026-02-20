@@ -4,15 +4,6 @@ import './AIInsightsPanel.css'
 const AIInsightsPanel = () => {
   const insights = [
     {
-      id: 1,
-      type: 'pattern',
-      title: 'Recurring Pothole Pattern Detected',
-      description: 'AI analysis indicates a pattern of pothole formation along Main Street corridor, correlating with heavy traffic volume and recent weather patterns. Recommend preventive maintenance schedule.',
-      confidence: 92,
-      priority: 'high',
-      timestamp: '15 min ago'
-    },
-    {
       id: 2,
       type: 'risk',
       title: 'Elevated Risk: Bridge Infrastructure',
@@ -69,9 +60,9 @@ const AIInsightsPanel = () => {
       </div>
       <div className="insights-list">
         {insights.map((insight) => (
-          <InsightItem 
-            key={insight.id} 
-            insight={insight} 
+          <InsightItem
+            key={insight.id}
+            insight={insight}
             getPriorityColor={getPriorityColor}
             getTypeIcon={getTypeIcon}
           />
@@ -92,9 +83,9 @@ const InsightItem = ({ insight, getPriorityColor, getTypeIcon }) => {
         <div className="insight-header-content">
           <h3 className="insight-title">{insight.title}</h3>
           <div className="insight-meta">
-            <span 
+            <span
               className="insight-priority"
-              style={{ 
+              style={{
                 backgroundColor: `${priorityColor}15`,
                 color: priorityColor
               }}

@@ -27,6 +27,10 @@ const Sidebar = () => {
           <span className="nav-icon">📢</span>
           <span>User Issues</span>
         </NavLink>
+        <NavLink to="/pothole" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+          <span className="nav-icon">🕳️</span>
+          <span>Pothole Detection</span>
+        </NavLink>
         <NavLink to="/analytics" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
           <span className="nav-icon">📈</span>
           <span>Analytics</span>

@@ -8,14 +8,14 @@
 
 .operations-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
   gap: 12px;
   margin-bottom: 24px;
 }
 
 .stat-box {
   text-align: center;
-  padding: 16px;
+  padding: 12px 8px;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 4px;
@@ -35,11 +35,12 @@
 }
 
 .stat-label {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-secondary);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
+  word-break: break-word;
 }
 
 .workflow-section {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './PotholeDetection.css';
 import {
   LayoutDashboard,
@@ -81,9 +81,11 @@ const PotholeDetection = ({ hideLayout = false }) => {
   // -------------------- Auto PDF Report --------------------
   const generatePDF = () => {
     try {
+      // Initialize jsPDF
       const doc = new jsPDF();
       const date = new Date().toLocaleDateString();
 
+      // Title
       doc.setFontSize(20);
       doc.text("Infravision - Pothole Detection Report", 14, 22);
 
@@ -91,6 +93,7 @@ const PotholeDetection = ({ hideLayout = false }) => {
       doc.text(`Generated: ${date}`, 14, 30);
       doc.text(`Total Issues: ${detections.length}`, 14, 36);
 
+      // Table Data
       const tableColumn = ["ID", "Status", "Confidence", "Detected At", "Solved By", "Resolved At"];
       const tableRows = [];
 
@@ -106,13 +109,14 @@ const PotholeDetection = ({ hideLayout = false }) => {
         tableRows.push(ticketData);
       });
 
+      // Generate Table using functional approach
       autoTable(doc, {
         head: [tableColumn],
         body: tableRows,
         startY: 45,
         theme: 'grid',
         styles: { fontSize: 8 },
-        headStyles: { fillColor: [6, 182, 212] }
+        headStyles: { fillColor: [6, 182, 212] } // Cyan color
       });
 
       doc.save(`Infravision_Report_${date.replace(/\//g, '-')}.pdf`);
@@ -126,59 +130,57 @@ const PotholeDetection = ({ hideLayout = false }) => {
   const unsolvedIssues = detections.filter(item => item.status === "unsolved");
   const solvedIssues = detections.filter(item => item.status === "solved");
 
+  // Helper for date formatting
   const formatDate = (dateStr) => {
     if (!dateStr) return 'N/A';
     return dateStr.replace('_', ' ').replace(/(\d{4})(\d{2})(\d{2}) (\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5');
   };
 
   return (
-    <div className={`pothole-detection-container ${hideLayout ? 'hide-internal-sidebar' : ''}`}>
-      {/* Sidebar - Hidden if in Admin context */}
-      {!hideLayout && (
-        <aside className="sidebar">
-          <div className="logo">
-            <Zap size={24} color="#06b6d4" fill="#06b6d4" />
-            INFRA<span style={{ color: '#06b6d4' }}>VISION</span>
-          </div>
-          <ul className="nav-list">
-            <li
-              className={`nav-item ${activeSection === 'unsolved' ? 'active' : ''}`}
-              onClick={() => setActiveSection('unsolved')}
-            >
-              <AlertTriangle size={18} />
-              Live Alerts
-              {unsolvedIssues.length > 0 && <span style={{ marginLeft: 'auto', fontSize: '0.8em', color: '#ef4444' }}>●</span>}
-            </li>
-            <li
-              className={`nav-item ${activeSection === 'solved' ? 'active' : ''}`}
-              onClick={() => setActiveSection('solved')}
-            >
-              <CheckCircle size={18} />
-              Resolved
-            </li>
-            <li
-              className={`nav-item ${activeSection === 'report' ? 'active' : ''}`}
-              onClick={() => setActiveSection('report')}
-            >
-              <FileText size={18} />
-              Reports
-            </li>
-          </ul>
-        </aside>
-      )}
+    <div className="container">
+      {/* Sidebar */}
+      <aside className="sidebar">
+        <div className="logo">
+          <Zap size={24} color="#06b6d4" fill="#06b6d4" />
+          INFRA<span style={{ color: '#06b6d4' }}>VISION</span>
+        </div>
+        <ul className="nav-list">
+          <li
+            className={`nav-item ${activeSection === 'unsolved' ? 'active' : ''}`}
+            onClick={() => setActiveSection('unsolved')}
+          >
+            <AlertTriangle size={18} />
+            Live Alerts
+            {unsolvedIssues.length > 0 && <span style={{ marginLeft: 'auto', fontSize: '0.8em', color: '#ef4444' }}>●</span>}
+          </li>
+          <li
+            className={`nav-item ${activeSection === 'solved' ? 'active' : ''}`}
+            onClick={() => setActiveSection('solved')}
+          >
+            <CheckCircle size={18} />
+            Resolved
+          </li>
+          <li
+            className={`nav-item ${activeSection === 'report' ? 'active' : ''}`}
+            onClick={() => setActiveSection('report')}
+          >
+            <FileText size={18} />
+            Reports
+          </li>
+        </ul>
+      </aside>
 
       {/* Main Content */}
-      <main className="main" style={hideLayout ? { padding: '24px' } : {}}>
-        {/* Dashboard Header - Hidden if in Admin context */}
-        {!hideLayout && (
-          <header className="dashboard-header">
-            <div className="breadcrumb">
-              Smart Infrastructure • Road Network
-            </div>
-            <h1 className="page-title">Real-time Pothole Detection</h1>
-            <p className="page-subtitle">Live camera feed analysis and maintenance tracking dashboard.</p>
-          </header>
-        )}
+      <main className="main">
+
+        {/* Dashboard Header */}
+        <header className="dashboard-header">
+          <div className="breadcrumb">
+            Smart Infrastructure • Road Network
+          </div>
+          <h1 className="page-title">Real-time Pothole Detection</h1>
+          <p className="page-subtitle">Live camera feed analysis and maintenance tracking dashboard.</p>
+        </header>
 
         {/* System Status Bar */}
         <div className="status-bar">
@@ -295,9 +297,10 @@ const PotholeDetection = ({ hideLayout = false }) => {
           </section>
         )}
 
-        {/* Monthly Report */}
+        {/* Monthly Report - ENHANCED */}
         {activeSection === 'report' && (
           <section className="animate-fade-in">
+            {/* Stats Grid */}
             <div className="stats-grid">
               <div className="stat-card">
                 <div className="stat-title">Total Issues Detected</div>
@@ -316,6 +319,7 @@ const PotholeDetection = ({ hideLayout = false }) => {
               </div>
             </div>
 
+            {/* Detailed Table */}
             <div className="table-container">
               <div className="report-header">
                 <h2 className="report-title">Detailed Detection Log</h2>
@@ -400,3 +404,4 @@ const PotholeDetection = ({ hideLayout = false }) => {
 }
 
 export default PotholeDetection;
+

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Bell, User, LogOut } from 'lucide-react'
 import './Navbar.css'
 
 const Navbar = () => {
@@ -34,12 +35,12 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-content">
         <div className="navbar-left">
-          <h2 className="navbar-title">Infrastructure Monitoring System Admin dashboard</h2>
+          <h2 className="navbar-title">Infrastructure Manager <span style={{ fontWeight: 400, color: '#64748b' }}>| Admin Ops</span></h2>
         </div>
         <div className="navbar-right">
           <div className="navbar-notification">
             <button className="notification-btn" aria-label="Notifications">
-              <span className="notification-icon">🔔</span>
+              <Bell size={18} className="notification-icon" />
               {unreadNotifications > 0 && (
                 <span className="notification-badge">{unreadNotifications}</span>
               )}
@@ -59,12 +60,12 @@ const Navbar = () => {
             {showProfileDropdown && (
               <div className="profile-dropdown">
                 <button className="dropdown-item">
-                  <span className="dropdown-icon">👤</span>
-                  Profile
+                  <User size={16} className="dropdown-icon" />
+                  Profile Account
                 </button>
                 <button className="dropdown-item" onClick={handleLogout}>
-                  <span className="dropdown-icon">🚪</span>
-                  Logout
+                  <LogOut size={16} className="dropdown-icon text-red-500" />
+                  Sign Out
                 </button>
               </div>
             )}

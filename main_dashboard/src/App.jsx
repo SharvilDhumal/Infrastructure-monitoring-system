@@ -9,6 +9,7 @@ import IncidentsMaintenance from './pages/IncidentsMaintenance'
 import Analytics from './pages/Analytics'
 import Settings from './pages/Settings'
 import UserIssues from './pages/UserIssues'
+import PotholeDashboard from './pages/PotholeDashboard'
 import './App.css'
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/user-issues" element={<UserIssues />} />
+            <Route path="/pothole" element={<PotholeDashboard />} />
           </Routes>
         </main>
       </div>

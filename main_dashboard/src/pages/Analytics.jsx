@@ -25,7 +25,6 @@ const Analytics = () => {
   ]
 
   const topIssues = [
-    { type: 'Potholes', count: 234, trend: '+12%' },
     { type: 'Street Light Failures', count: 189, trend: '-8%' },
     { type: 'Water Leaks', count: 156, trend: '+5%' },
     { type: 'Surface Degradation', count: 134, trend: '-3%' },

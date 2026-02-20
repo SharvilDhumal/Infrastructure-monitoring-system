@@ -39,9 +39,9 @@ function WaterLeakage({ hideLayout = false }) {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950 text-slate-200">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 text-slate-800">
         <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4"></div>
-        <p className="font-medium animate-pulse text-slate-400 text-sm tracking-widest uppercase">Initializing Dashboard...</p>
+        <p className="font-medium animate-pulse text-slate-500 text-sm tracking-widest uppercase">Initializing Dashboard...</p>
       </div>
     );
   }
@@ -49,7 +49,7 @@ function WaterLeakage({ hideLayout = false }) {
   const isLeakDetected = data?.leak === true;
 
   return (
-    <div className={`min-h-screen transition-colors duration-700 ${hideLayout ? 'bg-transparent' : (isLeakDetected ? 'bg-red-950' : 'bg-[#0a0f1e]')}`}>
+    <div className={`min-h-screen transition-colors duration-700 ${isLeakDetected ? 'bg-red-50' : 'bg-slate-50'}`}>
 
       <div className={`relative z-10 max-w-[1400px] mx-auto ${hideLayout ? 'px-4 py-4' : 'px-6 py-8'}`}>
         {/* Header */}
@@ -60,12 +60,12 @@ function WaterLeakage({ hideLayout = false }) {
                 <Waves className="text-blue-400" size={24} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white tracking-tight">AquaGuard <span className="text-blue-500 underline decoration-blue-500/30 underline-offset-4">IoT</span></h1>
-                <p className="text-sm text-slate-400 font-medium">Real-time Water Monitoring System</p>
+                <h1 className="text-2xl font-bold text-slate-900 tracking-tight">AquaGuard <span className="text-blue-500 underline decoration-blue-500/30 underline-offset-4">IoT</span></h1>
+                <p className="text-sm text-slate-600 font-medium">Real-time Water Monitoring System</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-6 bg-slate-900/40 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10">
+            <div className="flex items-center gap-6 bg-white shadow-sm px-4 py-2.5 rounded-2xl border border-slate-200">
               <div className="flex items-center gap-2">
                 <div className={`w-2 h-2 rounded-full ${isLeakDetected ? 'bg-red-500 animate-pulse ring-4 ring-red-500/20' : 'bg-emerald-500 ring-4 ring-emerald-500/20'}`}></div>
                 <span className={`text-xs font-bold uppercase tracking-wider ${isLeakDetected ? 'text-red-400' : 'text-emerald-400'}`}>
@@ -142,9 +142,9 @@ function WaterLeakage({ hideLayout = false }) {
 
         {/* Analytics Placeholder */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-[#12182b]/50 backdrop-blur-xl border border-white/5 p-6 rounded-[2.5rem] shadow-sm">
+          <div className="lg:col-span-2 bg-white border border-slate-200 p-6 rounded-[2.5rem] shadow-sm">
             <div className="flex items-center justify-between mb-8">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                 <Activity size={20} className="text-blue-500" />
                 Live Flow Analytics
               </h3>
@@ -175,15 +175,15 @@ function WaterLeakage({ hideLayout = false }) {
             </div>
           </div>
 
-          <div className="bg-[#12182b]/50 backdrop-blur-xl border border-white/5 p-8 rounded-[2.5rem] flex flex-col justify-center items-center text-center">
+          <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] shadow-sm flex flex-col justify-center items-center text-center">
             <div className={`mb-6 p-6 rounded-full ${isLeakDetected ? 'bg-red-500/10 ring-4 ring-red-500/5' : 'bg-blue-500/10 ring-4 ring-blue-500/5'}`}>
               <CheckCircle2 size={48} className={isLeakDetected ? 'text-red-500' : 'text-blue-500'} />
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">Automated Shutoff</h3>
-            <p className="text-slate-400 text-sm leading-relaxed mb-8 px-4">
+            <h3 className="text-xl font-bold text-slate-900 mb-2">Automated Shutoff</h3>
+            <p className="text-slate-600 text-sm leading-relaxed mb-8 px-4">
               System is configured to auto-shutoff main valve if flow &gt; 100L or moisture thresholds are breached.
             </p>
-            <button className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-white font-bold transition-all hover:scale-[1.02] active:scale-[0.98]">
+            <button className="w-full py-4 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-2xl text-slate-700 font-bold transition-all hover:scale-[1.02] active:scale-[0.98]">
               Reset Alarm Config
             </button>
           </div>
@@ -208,15 +208,15 @@ function StatCard({ title, value, unit, icon, description, color }) {
   };
 
   return (
-    <div className="group relative bg-[#12182b]/50 backdrop-blur-xl border border-white/5 hover:border-white/10 p-5 rounded-[2rem] transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/20">
+    <div className="group relative bg-white border border-slate-200 p-5 rounded-[2rem] transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200">
       <div className="flex items-center justify-between mb-4">
         <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{title}</span>
-        <div className="p-2 bg-slate-800/50 rounded-lg border border-white/5 group-hover:scale-110 transition-transform">
+        <div className="p-2 bg-slate-50 rounded-lg border border-slate-100 group-hover:scale-110 transition-transform">
           {icon}
         </div>
       </div>
       <div className="flex items-baseline gap-1 mb-2">
-        <span className="text-3xl font-black text-white">{value}</span>
+        <span className="text-3xl font-black text-slate-800">{value}</span>
         <span className="text-xs font-bold text-slate-500 uppercase">{unit}</span>
       </div>
       <p className="text-[10px] text-slate-500 font-medium">{description}</p>
@@ -229,8 +229,8 @@ function StatCard({ title, value, unit, icon, description, color }) {
 function StatusCard({ title, isLeak, description }) {
   return (
     <div className={`group relative overflow-hidden p-5 rounded-[2rem] border transition-all hover:-translate-y-1 ${isLeak
-      ? 'bg-red-500/10 border-red-500/30 shadow-lg shadow-red-950/20'
-      : 'bg-[#12182b]/50 border-emerald-500/20 border-white/5 hover:border-emerald-500/30'
+      ? 'bg-red-50 border-red-200 shadow-lg shadow-red-100'
+      : 'bg-white border-emerald-200 hover:border-emerald-300 shadow-md shadow-slate-100'
       }`}>
       <div className="flex items-center justify-between mb-4">
         <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{title}</span>

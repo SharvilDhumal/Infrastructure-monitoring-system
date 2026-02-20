@@ -1,6 +1,7 @@
 {
   "name": "infravision-ai-dashboard",
   "version": "1.0.0",
+  "type": "module",
   "description": "AI-powered infrastructure monitoring dashboard",
   "private": true,
   "dependencies": {
@@ -23,28 +24,3 @@
     "preview": "vite preview"
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

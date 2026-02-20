@@ -12,7 +12,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="sidebar">
+    <aside className="admin-sidebar">
       <div className="sidebar-header">
         <h1 className="sidebar-logo">IMS Admin</h1>
         <p className="sidebar-tagline">Infrastructure Management</p>

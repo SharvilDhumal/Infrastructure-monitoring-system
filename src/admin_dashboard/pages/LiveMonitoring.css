@@ -1,5 +1,7 @@
 .live-monitoring-container {
     padding: 24px;
+    height: 100vh;
+    overflow-y: auto;
 }
 
 .live-monitoring-header {

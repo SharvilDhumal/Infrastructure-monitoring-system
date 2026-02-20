@@ -93,9 +93,9 @@ const StreetlightCard = ({ data, index, onToggle }) => {
             icon: <Wifi size={14} />,
           }
           : {
-            color: "text-slate-400",
-            bg: "bg-slate-700/30",
-            border: "border-slate-700",
+            color: "text-slate-500",
+            bg: "bg-slate-100",
+            border: "border-slate-200",
             label: "STANDBY",
             icon: <Radio size={14} />,
           };
@@ -107,7 +107,7 @@ const StreetlightCard = ({ data, index, onToggle }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
       whileHover={{ y: -4, scale: 1.01 }}
-      className={`relative group bg-[#0f172a] border ${statusConfig.border} rounded-2xl p-5 shadow-xl transition-all duration-300`}
+      className={`relative group bg-white border ${statusConfig.border} rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300`}
     >
       {/* Background Glow for Active Lights */}
       {isRelayOn && !isStale && (
@@ -118,7 +118,7 @@ const StreetlightCard = ({ data, index, onToggle }) => {
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-3">
           <div
-            className={`p-3 rounded-xl transition-colors ${isRelayOn ? "bg-emerald-500/20 text-emerald-400" : "bg-slate-800 text-slate-500"}`}
+            className={`p-3 rounded-xl transition-colors ${isRelayOn ? "bg-emerald-500/20 text-emerald-500" : "bg-slate-100 text-slate-500"}`}
           >
             <Lightbulb
               size={22}
@@ -130,7 +130,7 @@ const StreetlightCard = ({ data, index, onToggle }) => {
             />
           </div>
           <div>
-            <h3 className="text-white font-semibold flex items-center gap-2 tracking-tight">
+            <h3 className="text-slate-900 font-semibold flex items-center gap-2 tracking-tight">
               Streetlight {index + 1}
               {isStale && (
                 <motion.span
@@ -157,7 +157,7 @@ const StreetlightCard = ({ data, index, onToggle }) => {
 
       {/* Primary Metrics Grid */}
       <div className="grid grid-cols-2 gap-3 mb-6">
-        <div className="bg-slate-800/40 p-3 rounded-xl border border-slate-700/30 group-hover:border-slate-700/60 transition-colors">
+        <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 group-hover:border-slate-300 transition-colors">
           <div className="flex items-center gap-1.5 text-slate-500 mb-1">
             <Zap size={12} />
             <span className="text-[10px] font-bold uppercase tracking-widest">
@@ -165,7 +165,7 @@ const StreetlightCard = ({ data, index, onToggle }) => {
             </span>
           </div>
           <div className="flex items-baseline gap-1">
-            <span className="text-lg font-mono font-bold text-white leading-none">
+            <span className="text-lg font-mono font-bold text-slate-900 leading-none">
               {(data.voltage || 0).toFixed(1)}
             </span>
             <span className="text-[10px] text-slate-500 font-bold uppercase">
@@ -175,7 +175,7 @@ const StreetlightCard = ({ data, index, onToggle }) => {
         </div>
 
         <div
-          className={`p-3 rounded-xl border transition-colors ${isOverload ? "bg-amber-500/5 border-amber-500/30" : "bg-slate-800/40 border-slate-700/30 group-hover:border-slate-700/60"}`}
+          className={`p-3 rounded-xl border transition-colors ${isOverload ? "bg-amber-50 border-amber-300" : "bg-slate-50 border-slate-200 group-hover:border-slate-300"}`}
         >
           <div className="flex items-center gap-1.5 text-slate-500 mb-1">
             <Activity size={12} />
@@ -185,7 +185,7 @@ const StreetlightCard = ({ data, index, onToggle }) => {
           </div>
           <div className="flex items-baseline gap-1">
             <span
-              className={`text-lg font-mono font-bold leading-none ${isOverload ? "text-amber-400" : "text-white"}`}
+              className={`text-lg font-mono font-bold leading-none ${isOverload ? "text-amber-500" : "text-slate-900"}`}
             >
               {(data.current || 0).toFixed(2)}
             </span>
@@ -195,7 +195,7 @@ const StreetlightCard = ({ data, index, onToggle }) => {
           </div>
         </div>
 
-        <div className="bg-slate-800/40 p-3 rounded-xl border border-slate-700/30 col-span-2 group-hover:border-slate-700/60 transition-colors flex items-center justify-between">
+        <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 col-span-2 group-hover:border-slate-300 transition-colors flex items-center justify-between">
           <div>
             <div className="flex items-center gap-1.5 text-slate-500 mb-1">
               <Power size={12} />
@@ -204,7 +204,7 @@ const StreetlightCard = ({ data, index, onToggle }) => {
               </span>
             </div>
             <div className="flex items-baseline gap-1">
-              <span className="text-xl font-mono font-bold text-white leading-none">
+              <span className="text-xl font-mono font-bold text-slate-900 leading-none">
                 {(data.power || 0).toFixed(1)}
               </span>
               <span className="text-xs text-slate-500 font-bold uppercase tracking-tight">
@@ -218,7 +218,7 @@ const StreetlightCard = ({ data, index, onToggle }) => {
               Relay State
             </span>
             <div
-              className={`w-8 h-4 rounded-full relative transition-colors ${isRelayOn ? "bg-emerald-500" : "bg-slate-700"}`}
+              className={`w-8 h-4 rounded-full relative transition-colors ${isRelayOn ? "bg-emerald-500" : "bg-slate-300"}`}
             >
               <div
                 className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${isRelayOn ? "left-[1.125rem]" : "left-0.5"}`}
@@ -234,8 +234,8 @@ const StreetlightCard = ({ data, index, onToggle }) => {
           onClick={() => onToggle(index + 1, "on")}
           disabled={isRelayOn && !isStale}
           className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${isRelayOn && !isStale
-              ? "bg-emerald-500/10 text-emerald-500/50 cursor-not-allowed border border-emerald-500/10"
-              : "bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 border border-emerald-500/30 active:scale-95"
+            ? "bg-emerald-500/10 text-emerald-500/50 cursor-not-allowed border border-emerald-500/10"
+            : "bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 border border-emerald-500/30 active:scale-95"
             }`}
         >
           <Power size={14} />
@@ -245,8 +245,8 @@ const StreetlightCard = ({ data, index, onToggle }) => {
           onClick={() => onToggle(index + 1, "off")}
           disabled={!isRelayOn && !isStale}
           className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${!isRelayOn && !isStale
-              ? "bg-rose-500/10 text-rose-500/50 cursor-not-allowed border border-rose-500/10"
-              : "bg-rose-600/20 text-rose-400 hover:bg-rose-600/30 border border-rose-500/30 active:scale-95"
+            ? "bg-rose-500/10 text-rose-500/50 cursor-not-allowed border border-rose-500/10"
+            : "bg-rose-600/20 text-rose-400 hover:bg-rose-600/30 border border-rose-500/30 active:scale-95"
             }`}
         >
           <PowerOff size={14} />
@@ -255,7 +255,7 @@ const StreetlightCard = ({ data, index, onToggle }) => {
       </div>
 
       {/* Footer Meta */}
-      <div className="flex items-center justify-between pt-4 border-t border-slate-800/80">
+      <div className="flex items-center justify-between pt-4 border-t border-slate-100">
         <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
           <Clock size={12} className="text-slate-600" />
           <RelativeTime timestamp={data.timestamp} />
@@ -277,8 +277,8 @@ const StreetlightCard = ({ data, index, onToggle }) => {
  * SummaryMetric Card
  */
 const SummaryMetric = ({ label, value, unit, icon: Icon, colorClass }) => (
-  <div className="bg-[#0f172a] border border-slate-800 p-4 rounded-2xl flex items-center gap-4">
-    <div className={`p-3 rounded-xl bg-slate-800/50 ${colorClass}`}>
+  <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-2xl flex items-center gap-4">
+    <div className={`p-3 rounded-xl bg-slate-50 ${colorClass}`}>
       <Icon size={20} />
     </div>
     <div>
@@ -286,7 +286,7 @@ const SummaryMetric = ({ label, value, unit, icon: Icon, colorClass }) => (
         {label}
       </p>
       <div className="flex items-baseline gap-1">
-        <span className="text-xl font-bold text-white leading-none">
+        <span className="text-xl font-bold text-slate-900 leading-none">
           {value}
         </span>
         {unit && (
@@ -385,14 +385,14 @@ const StreetlightDashboard = ({ hideLayout = false }) => {
   }, [displayData]);
 
   return (
-    <div className={`min-h-screen ${hideLayout ? 'bg-transparent p-4' : 'bg-[#020617] text-slate-300 p-6 md:p-10'} selection:bg-blue-500 selection:text-white`}>
+    <div className={`min-h-screen ${hideLayout ? 'p-4' : 'p-6 md:p-10'} bg-slate-50 text-slate-700 selection:bg-blue-500 selection:text-white`}>
       <div className="max-w-7xl mx-auto">
         {/* Real-time Header */}
         {!hideLayout && (
           <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase italic">
+                <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tighter uppercase italic">
                   Control Panel
                 </h1>
                 <div className="flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
@@ -411,7 +411,7 @@ const StreetlightDashboard = ({ hideLayout = false }) => {
               </p>
             </div>
 
-            <div className="bg-[#0f172a] border border-slate-800 px-4 py-2 rounded-xl flex items-center gap-3">
+            <div className="bg-white border border-slate-200 shadow-sm px-4 py-2 rounded-xl flex items-center gap-3">
               <ShieldCheck
                 className={
                   stats.health === "OPTIMAL"
@@ -440,32 +440,32 @@ const StreetlightDashboard = ({ hideLayout = false }) => {
             label="Connected"
             value={stats.total}
             icon={BarChart3}
-            colorClass="text-blue-400"
+            colorClass="text-blue-500"
           />
           <SummaryMetric
             label="Operational"
             value={stats.online}
             icon={Wifi}
-            colorClass="text-emerald-400"
+            colorClass="text-emerald-500"
           />
           <SummaryMetric
             label="Fault Detected"
             value={stats.faulty}
             icon={WifiOff}
-            colorClass="text-rose-400"
+            colorClass="text-rose-500"
           />
           <SummaryMetric
             label="Total Power"
             value={stats.power.toFixed(1)}
             unit="W"
             icon={TrendingUp}
-            colorClass="text-amber-400"
+            colorClass="text-amber-500"
           />
         </section>
 
         {/* Asset Grid */}
-        <div className="flex items-center justify-between mb-6 pb-2 border-b border-slate-800">
-          <h2 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">
+        <div className="flex items-center justify-between mb-6 pb-2 border-b border-slate-200">
+          <h2 className="text-sm font-black text-slate-500 uppercase tracking-[0.2em]">
             Active Deployment
           </h2>
           <span className="text-[10px] text-slate-600 font-mono italic">

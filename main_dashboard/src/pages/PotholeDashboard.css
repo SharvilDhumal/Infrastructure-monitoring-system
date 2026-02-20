@@ -1,0 +1,24 @@
+.pothole-dashboard-container {
+  width: 100%;
+  height: 100vh; /* Adjust if Navbar takes up space */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent double scrollbars */
+  margin: -32px -40px; /* Offset the main padding in App.css if applied */
+}
+
+/* Specific offsets for the layout of main_dashboard */
+@media (min-width: 768px) {
+    .pothole-dashboard-container {
+         height: calc(100vh - 70px); /* 70px rough estimate for Navbar height */
+         margin: 0; 
+    }
+}
+
+
+.pothole-iframe {
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
