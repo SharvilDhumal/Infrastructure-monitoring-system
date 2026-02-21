@@ -113,15 +113,15 @@ The heart of InfraVision lies in its **Live Monitoring** capabilities. The Admin
   5. The analytics page provides historical data to predict pipeline deterioration before a failure occurs.
 
 ### 4. Bridge Structural Health Monitoring
-* **Purpose**: Preventing catastrophic structural failures by monitoring stress and environmental factors.
+* **Purpose**: Preventing catastrophic structural failures by utilizing AI to monitor surface cracks and rust propagation.
 * **Flow & Functionality**:
   1. Admins open the Bridge Dashboard.
-  2. This is the most data-intensive module, pulling information from strain gauges, accelerometers, and load cells installed on key bridges.
-  3. The dashboard tracks real-time data:
-     - **Vibration/Frequency Analysis**: To ensure the bridge isn't resonating dangerously due to wind or traffic.
-     - **Load Stress**: Monitoring the weight of vehicles crossing.
-     - **Material Fatigue**: Tracking microscopic expansions and contractions.
-  4. If thresholds are exceeded (e.g., severe vibration during a storm), the system immediately logs a critical warning, prompting a physical engineering inspection.
+  2. The system integrates visual data from cameras and drones inspecting key bridge structures.
+  3. The dashboard tracks real-time AI computer vision data:
+     - **Crack Detection**: Using AI to identify and measure the length and severity of structural cracks.
+     - **Rust & Corrosion Analysis**: Monitoring the spread of rust on critical metal supports and cables.
+     - **Structural Fatigue**: Aggregating crack and rust data to calculate an overall health score.
+  4. If danger thresholds are exceeded (e.g., rapid crack propagation or severe rust), the system immediately logs a critical warning, prompting an immediate physical engineering inspection.
 
 ---
 
