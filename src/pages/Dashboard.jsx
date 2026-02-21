@@ -15,41 +15,42 @@ const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('dashboard');
     const [filter, setFilter] = useState('all');
     const [user, setUser] = useState(null);
-    
+    const [isChartDrawerOpen, setIsChartDrawerOpen] = useState(false);
+
     // Mock data - In a real app, this would come from an API
     const [issues, setIssues] = useState([
-        { 
-            id: 1, 
-            title: 'Large Pothole on Main St', 
-            location: 'Main St & 5th Ave', 
-            status: 'Pending', 
-            createdAt: '2024-02-10T10:00:00Z', 
+        {
+            id: 1,
+            title: 'Large Pothole on Main St',
+            location: 'Main St & 5th Ave',
+            status: 'Pending',
+            createdAt: '2024-02-10T10:00:00Z',
             description: 'A large pothole that is causing traffic delays and potential damage to vehicles.',
             imageUrl: 'https://images.unsplash.com/photo-1515162816999-a0ca60b0ec86?auto=format&fit=crop&q=80&w=200'
         },
-        { 
-            id: 2, 
-            title: 'Broken Street Light', 
-            location: 'Oak Avenue', 
-            status: 'Resolved', 
+        {
+            id: 2,
+            title: 'Broken Street Light',
+            location: 'Oak Avenue',
+            status: 'Resolved',
             createdAt: '2024-02-08T15:30:00Z',
             description: 'Street light has been flickering and is now completely out.',
             imageUrl: 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&q=80&w=200'
         },
-        { 
-            id: 3, 
-            title: 'Bridge Crack Detected', 
-            location: 'East River Bridge', 
-            status: 'Approved', 
+        {
+            id: 3,
+            title: 'Bridge Crack Detected',
+            location: 'East River Bridge',
+            status: 'Approved',
             createdAt: '2024-02-11T09:15:00Z',
             description: 'Small structural crack visible on the pedestrian walkway.',
             imageUrl: 'https://images.unsplash.com/photo-1449034446853-66c86144b0ad?auto=format&fit=crop&q=80&w=200'
         },
-        { 
-            id: 4, 
-            title: 'Traffic Signal Error', 
-            location: 'Broadway', 
-            status: 'Rejected', 
+        {
+            id: 4,
+            title: 'Traffic Signal Error',
+            location: 'Broadway',
+            status: 'Rejected',
             createdAt: '2024-02-09T12:00:00Z',
             description: 'Lights are stuck on red in all directions.',
             imageUrl: 'https://images.unsplash.com/photo-1513366811225-248796678225?auto=format&fit=crop&q=80&w=200'
@@ -75,112 +76,136 @@ const Dashboard = () => {
         resolved: issues.filter(i => i.status === 'Resolved').length,
     };
 
-    const filteredIssues = filter === 'all' 
-        ? issues 
+    const filteredIssues = filter === 'all'
+        ? issues
         : issues.filter(i => i.status === filter);
 
     return (
-        <div className="min-h-screen bg-[#05070a] flex">
-            <Sidebar 
-                user={user} 
-                activeTab={activeTab} 
-                setActiveTab={setActiveTab} 
-                onLogout={handleLogout} 
+        <div className="min-h-screen bg-gray-50 flex font-sans">
+            <Sidebar
+                user={user}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                onLogout={handleLogout}
             />
 
-            <main className="flex-1 ml-72 p-10">
-                {/* Header */}
-                <header className="flex justify-between items-center mb-12">
-                    <div>
-                        <h1 className="text-4xl font-bold text-white tracking-tight mb-2">
-                             Welcome back, <span className="bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">{user?.name?.split(' ')[0] || 'User'}</span>
-                        </h1>
-                        <p className="text-gray-500 font-medium">Here's what's happening with your reported issues.</p>
-                    </div>
-                    
-                    <div className="flex items-center gap-4">
-                        <div className="relative group hidden lg:block">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-blue-400 transition-colors" size={18} />
-                            <input 
-                                type="text" 
-                                placeholder="Search issues..." 
-                                className="bg-white/5 border border-white/5 rounded-2xl py-3 pl-12 pr-6 text-white w-64 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:bg-white/10 transition-all"
-                            />
-                        </div>
-                        <button className="p-3 bg-white/5 text-gray-400 rounded-2xl border border-white/5 hover:bg-white/10 hover:text-white transition-all relative">
-                            <Bell size={20} />
-                            <span className="absolute top-3 right-3 w-2 h-2 bg-blue-500 rounded-full border-2 border-[#05070a]" />
-                        </button>
-                    </div>
-                </header>
-
-                <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
-                    <div className="xl:col-span-2">
-                        {/* Stats Overview */}
-                        <div className="mb-10">
-                            <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-xl font-bold text-white tracking-tight">Status Overview</h2>
-                                <button className="text-blue-400 text-sm font-semibold hover:underline">View detailed analytics</button>
+            <main className="flex-1 md:ml-64 p-6 md:p-10 w-full max-w-7xl mx-auto">
+                {activeTab === 'dashboard' ? (
+                    <>
+                        {/* Header */}
+                        <header className="mb-8 border-b border-gray-200 pb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                            <div>
+                                <h1 className="text-3xl font-bold text-[#002147] tracking-tight mb-2">
+                                    Welcome, {user?.name?.split(' ')[0] || 'Citizen'}
+                                </h1>
+                                <p className="text-gray-600 font-medium text-lg">Manage and track your reported infrastructure issues.</p>
                             </div>
-                            <DashboardStats stats={stats} />
-                        </div>
+                            <button
+                                onClick={() => setIsChartDrawerOpen(true)}
+                                className="px-6 py-3 bg-white border border-gray-300 text-[#002147] hover:bg-gray-50 font-bold rounded-lg shadow-sm transition-colors"
+                            >
+                                View Resolution Stats
+                            </button>
+                        </header>
 
-                        {/* Reported Issues */}
-                        <div>
-                            <div className="flex items-center justify-between mb-8">
-                                <h2 className="text-xl font-bold text-white tracking-tight">My Reported Issues</h2>
-                                <button
-                                    onClick={() => navigate('/report')}
-                                    className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all duration-300 shadow-lg shadow-blue-500/20 active:scale-95"
-                                >
-                                    <Plus size={18} />
-                                    New Report
-                                </button>
+                        <div className="flex flex-col gap-8">
+                            {/* Stats Overview */}
+                            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                                <h2 className="text-xl font-bold text-[#002147] mb-6 border-b border-gray-100 pb-3">Issue Status Overview</h2>
+                                <DashboardStats stats={stats} />
                             </div>
 
-                            <IssueFilter currentFilter={filter} onFilterChange={setFilter} />
+                            {/* Reported Issues */}
+                            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                                <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6 border-b border-gray-100 pb-4">
+                                    <h2 className="text-xl font-bold text-[#002147]">My Reported Issues</h2>
+                                    <button
+                                        onClick={() => navigate('/report')}
+                                        className="flex items-center justify-center gap-2 w-full md:w-auto px-6 py-3 bg-[#002147] hover:bg-blue-900 text-white text-base font-bold rounded-lg transition-colors shadow-sm"
+                                        aria-label="Report a new infrastructure issue"
+                                    >
+                                        <Plus size={20} />
+                                        REPORT NEW ISSUE
+                                    </button>
+                                </div>
 
-                            <div className="space-y-4">
-                                <AnimatePresence mode="popLayout">
+                                <IssueFilter currentFilter={filter} onFilterChange={setFilter} />
+
+                                <div className="space-y-4 mt-6">
                                     {filteredIssues.length > 0 ? (
                                         filteredIssues.map((issue) => (
-                                            <motion.div
-                                                key={issue.id}
-                                                layout
-                                                initial={{ opacity: 0, x: -20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                exit={{ opacity: 0, scale: 0.95 }}
-                                                transition={{ duration: 0.3 }}
-                                            >
-                                                <IssueCard issue={issue} />
-                                            </motion.div>
+                                            <IssueCard key={issue.id} issue={issue} />
                                         ))
                                     ) : (
                                         <EmptyState />
                                     )}
-                                </AnimatePresence>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl mx-auto mt-8">
+                        <h2 className="text-2xl font-bold text-[#002147] mb-6 border-b border-gray-200 pb-4">Account Settings</h2>
+
+                        <div className="space-y-6">
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 mb-2">Full Name</label>
+                                <input type="text" className="w-full border border-gray-300 rounded-lg px-4 py-3 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue={user?.name || ''} />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
+                                <input type="email" className="w-full border border-gray-300 rounded-lg px-4 py-3 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue={user?.email || ''} readOnly />
+                                <p className="text-xs text-gray-500 mt-1">Email address cannot be changed currently.</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 mb-2">Phone Number</label>
+                                <input type="tel" className="w-full border border-gray-300 rounded-lg px-4 py-3 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="(555) 000-0000" />
+                            </div>
+
+                            <hr className="border-gray-200" />
+
+                            <div className="flex justify-end pt-2">
+                                <button className="px-8 py-3 bg-[#002147] text-white font-bold rounded-lg hover:bg-blue-900 transition-colors shadow-sm">
+                                    Save Changes
+                                </button>
                             </div>
                         </div>
                     </div>
-
-                    <div className="space-y-10">
-                        {/* Resolution Chart */}
-                        <ResolutionChart stats={stats} />
-                        
-                        {/* City Alerts / Recent Activity Card */}
-                        <div className="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-8 relative overflow-hidden group">
-                           <div className="absolute top-0 right-0 p-8 opacity-20 transform translate-x-4 -translate-y-4 group-hover:scale-110 transition-transform duration-500">
-                                <ShieldCheck size={120} />
-                           </div>
-                           <h3 className="text-2xl font-bold text-white mb-2 relative z-10">InfraVision AI</h3>
-                           <p className="text-blue-100 text-sm mb-6 relative z-10 max-w-[200px]">Our autonomous agents are currently analyzing City Sector 7 for drainage issues.</p>
-                           <button className="px-6 py-3 bg-white text-blue-600 font-bold rounded-xl text-sm relative z-10 hover:bg-blue-50 transition-colors">
-                               Learn More
-                           </button>
-                        </div>
-                    </div>
-                </div>
+                )}
             </main>
+
+            {/* Resolution Chart Drawer */}
+            <AnimatePresence>
+                {isChartDrawerOpen && (
+                    <div className="fixed inset-0 z-[100] flex justify-end">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsChartDrawerOpen(false)}
+                            className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm cursor-pointer"
+                        />
+                        <motion.div
+                            initial={{ x: '100%' }}
+                            animate={{ x: 0 }}
+                            exit={{ x: '100%' }}
+                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            className="relative w-full max-w-md bg-white h-full shadow-2xl border-l border-gray-200 p-6 flex flex-col overflow-y-auto"
+                        >
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className="text-2xl font-bold text-[#002147]">Stats Overview</h3>
+                                <button
+                                    onClick={() => setIsChartDrawerOpen(false)}
+                                    className="p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+                                </button>
+                            </div>
+                            <ResolutionChart stats={stats} />
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

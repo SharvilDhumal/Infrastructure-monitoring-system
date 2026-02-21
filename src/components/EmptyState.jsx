@@ -8,23 +8,23 @@ const EmptyState = () => {
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="flex flex-col items-center justify-center py-20 px-4 bg-white/[0.02] border border-dashed border-white/10 rounded-[2.5rem] text-center"
+      className="flex flex-col items-center justify-center py-16 px-6 bg-gray-50 border-2 border-dashed border-gray-300 rounded-2xl text-center"
     >
-      <div className="w-24 h-24 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 mb-6 shadow-[0_0_50px_rgba(59,130,246,0.1)] border border-blue-500/20">
-        <LayoutDashboard size={40} />
+      <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-gray-400 mb-6 border border-gray-200 shadow-sm">
+        <LayoutDashboard size={32} />
       </div>
-      
-      <h3 className="text-2xl font-bold text-white mb-2">No Issues Reported Yet</h3>
-      <p className="text-gray-400 max-w-sm mb-8">
+
+      <h3 className="text-2xl font-bold text-[#002147] mb-3">No Issues Reported Yet</h3>
+      <p className="text-gray-600 max-w-md mb-8 text-base">
         It looks like you haven't reported any infrastructure faults yet. Your city needs your help!
       </p>
-      
+
       <Link
         to="/report"
-        className="flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all duration-300 shadow-xl shadow-blue-600/20 active:scale-95 group"
+        className="flex items-center justify-center gap-2 px-6 py-3 bg-[#002147] hover:bg-blue-900 text-white font-bold rounded-lg transition-all duration-300 shadow-sm active:scale-95 text-base w-full md:w-auto"
       >
-        <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
-        Report Your First Issue
+        <Plus size={20} />
+        Report an Issue
       </Link>
     </motion.div>
   );

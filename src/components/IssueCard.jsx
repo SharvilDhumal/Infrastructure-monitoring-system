@@ -41,52 +41,53 @@ const IssueCard = ({ issue }) => {
     const styles = getStatusStyles(issue.status);
 
     return (
-        <motion.div 
-            whileHover={{ y: -4, backgroundColor: 'rgba(255, 255, 255, 0.08)' }}
-            className="group bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-5 transition-all duration-300 cursor-pointer overflow-hidden relative"
+        <motion.div
+            whileHover={{ y: -2, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }}
+            className="group bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-5 transition-all duration-300 cursor-pointer overflow-hidden relative shadow-sm"
         >
-            <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 duration-300 text-blue-500">
-                <ChevronRight size={24} />
+            <div className="absolute top-0 right-0 p-5 opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 duration-300 text-gray-400">
+                <ChevronRight size={20} />
             </div>
 
-            <div className="flex items-center gap-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
                 {issue.imageUrl ? (
-                    <div className="relative w-24 h-24 flex-shrink-0">
+                    <div className="relative w-full sm:w-32 h-40 sm:h-24 flex-shrink-0">
                         <img
                             src={issue.imageUrl}
                             alt={issue.title}
-                            className="w-full h-full rounded-2xl object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500"
+                            className="w-full h-full rounded-lg object-cover border border-gray-100 transition-all duration-500"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                 ) : (
-                    <div className="w-24 h-24 rounded-2xl bg-white/5 flex items-center justify-center text-gray-600 border border-dashed border-white/10">
-                        <MapPin size={32} />
+                    <div className="w-full sm:w-24 h-24 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 border border-gray-200">
+                        <MapPin size={28} />
                     </div>
                 )}
-                
-                <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-2">
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${styles.bg} ${styles.text} ${styles.border}`}>
+
+                <div className="flex-1 min-w-0 pr-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#002147] transition-colors truncate">
+                            {issue.title}
+                        </h3>
+                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide border ${styles.bg} ${styles.text} ${styles.border}`}>
                             {styles.icon}
                             {issue.status}
                         </span>
-                        <div className="flex items-center text-gray-500 text-xs font-medium">
-                            <Clock size={12} className="mr-1" />
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row sm:items-center text-sm text-gray-500 font-medium gap-3 mb-2">
+                        <div className="flex items-center">
+                            <MapPin size={14} className="mr-1.5" />
+                            <span className="truncate max-w-[200px]">{issue.location}</span>
+                        </div>
+                        <div className="hidden sm:block w-1 h-1 rounded-full bg-gray-300"></div>
+                        <div className="flex items-center">
+                            <Clock size={14} className="mr-1.5" />
                             {new Date(issue.createdAt).toLocaleDateString()}
                         </div>
                     </div>
 
-                    <h3 className="text-lg font-bold text-white mb-1 group-hover:text-blue-400 transition-colors truncate">
-                        {issue.title}
-                    </h3>
-
-                    <div className="flex items-center text-gray-400 text-sm mb-3">
-                        <MapPin size={14} className="mr-1.5 text-blue-500/50" />
-                        <span className="truncate">{issue.location}</span>
-                    </div>
-
-                    <p className="text-gray-500 text-sm line-clamp-1 group-hover:text-gray-400 transition-colors">
+                    <p className="text-gray-600 text-sm line-clamp-2 mt-2 leading-relaxed">
                         {issue.description}
                     </p>
                 </div>

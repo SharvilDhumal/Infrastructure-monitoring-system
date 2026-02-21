@@ -8,18 +8,18 @@ const ResolutionChart = ({ stats }) => {
   const rejected = stats?.rejected || 0;
 
   const data = [
-    { name: 'Resolved', value: resolved, color: '#3b82f6' },
-    { name: 'Unresolved', value: (approved + pending + rejected), color: '#1e293b' },
+    { name: 'Resolved', value: resolved, color: '#002147' },
+    { name: 'Unresolved', value: (approved + pending + rejected), color: '#e5e7eb' },
   ];
 
   const total = data.reduce((acc, curr) => acc + curr.value, 0);
   const percentage = total > 0 ? Math.round((resolved / total) * 100) : 0;
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-md relative overflow-hidden group">
+    <div className="bg-white border border-gray-200 rounded p-8 relative overflow-hidden shadow-sm">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-bold text-white tracking-tight">Resolution Overview</h3>
-        <div className="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full text-xs font-bold border border-blue-500/20">
+        <h3 className="text-2xl font-bold text-[#002147] tracking-tight">Resolution Overview</h3>
+        <div className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold border border-blue-200">
           LIVE STATUS
         </div>
       </div>
@@ -42,27 +42,27 @@ const ResolutionChart = ({ stats }) => {
                 <Cell key={`cell-${index}`} fill={entry.color} className="transition-all duration-300 hover:opacity-80 cursor-pointer" />
               ))}
             </Pie>
-            <Tooltip 
-              contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#fff' }}
-              itemStyle={{ color: '#fff' }}
+            <Tooltip
+              contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '4px', color: '#111827' }}
+              itemStyle={{ color: '#111827', fontWeight: 600 }}
             />
           </PieChart>
         </ResponsiveContainer>
-        
+
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span className="text-4xl font-bold text-white">{percentage}%</span>
-          <span className="text-gray-500 text-xs font-medium uppercase tracking-widest mt-1">Resolved</span>
+          <span className="text-4xl font-bold text-[#002147]">{percentage}%</span>
+          <span className="text-gray-500 text-sm font-bold uppercase tracking-widest mt-1">Resolved</span>
         </div>
       </div>
 
-      <div className="mt-6 space-y-3">
+      <div className="mt-8 space-y-4">
         {data.map((item) => (
-          <div key={item.name} className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-              <span className="text-gray-400 text-sm font-medium">{item.name}</span>
+          <div key={item.name} className="flex items-center justify-between pb-3 border-b border-gray-100 last:border-0 last:pb-0">
+            <div className="flex items-center gap-3">
+              <div className="w-4 h-4 rounded" style={{ backgroundColor: item.color }} />
+              <span className="text-gray-700 text-base font-medium">{item.name}</span>
             </div>
-            <span className="text-white text-sm font-bold">{item.value}</span>
+            <span className="text-[#002147] text-lg font-bold">{item.value}</span>
           </div>
         ))}
       </div>

@@ -11,41 +11,27 @@ const IssueFilter = ({ currentFilter, onFilterChange }) => {
   ];
 
   return (
-    <div className="flex items-center gap-4 mb-6">
-      <div className="relative group">
-        <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-blue-400 transition-colors">
-          <Filter size={16} />
-        </div>
+    <div className="flex flex-col md:flex-row items-center gap-4 mb-6 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+      <label htmlFor="issue-filter" className="text-lg font-bold text-[#002147] w-full md:w-auto text-left flex items-center gap-2 m-0 p-0">
+        <Filter size={20} />
+        Filter By:
+      </label>
+      <div className="relative w-full md:w-64">
         <select
+          id="issue-filter"
           value={currentFilter}
           onChange={(e) => onFilterChange(e.target.value)}
-          className="bg-white/5 border border-white/10 text-white text-sm rounded-xl py-3 pl-11 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:bg-white/10 transition-all appearance-none cursor-pointer"
+          className="w-full bg-white border-2 border-gray-300 text-gray-800 font-bold text-base rounded-lg py-2 pl-4 pr-10 focus:outline-none focus:border-[#002147] focus:ring-1 focus:ring-[#002147] appearance-none cursor-pointer transition-colors"
         >
           {filters.map((f) => (
-            <option key={f.id} value={f.id} className="bg-gray-900 text-white">
+            <option key={f.id} value={f.id} className="text-base text-gray-800 font-medium">
               {f.label}
             </option>
           ))}
         </select>
-        <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-500">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+        <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-500">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"></path></svg>
         </div>
-      </div>
-      
-      <div className="hidden sm:flex flex-wrap gap-2">
-        {filters.map((f) => (
-          <button
-            key={f.id}
-            onClick={() => onFilterChange(f.id)}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${
-              currentFilter === f.id
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
-                : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/5'
-            }`}
-          >
-            {f.label}
-          </button>
-        ))}
       </div>
     </div>
   );
