@@ -147,3 +147,123 @@
 .dropdown-icon {
   font-size: 16px;
 }
+
+/* Notification Drawer */
+.notification-drawer {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: -80px;
+  /* Offset roughly to align properly */
+  width: 320px;
+  background: var(--card-bg);
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  z-index: 1001;
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top right;
+}
+
+.notification-drawer.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.drawer-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.close-drawer-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.close-drawer-btn:hover {
+  color: var(--text-primary);
+}
+
+.drawer-content {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.notification-item.unread .notification-title {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.notification-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-red);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.notification-title {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 4px 0;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.drawer-footer {
+  padding: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
+}
+
+.mark-all-read-btn {
+  background: none;
+  border: none;
+  color: var(--accent-indigo);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.mark-all-read-btn:hover {
+  color: var(--accent-violet);
+}

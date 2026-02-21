@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
 import Navbar from './components/Navbar'
@@ -13,11 +13,24 @@ import PotholeDashboard from './pages/PotholeDashboard'
 import './App.css'
 
 function App() {
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        setIsSidebarCollapsed(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <Router>
-      <div className="app">
+      <div className={`app ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
         <Navbar />
-        <Sidebar />
+        <Sidebar collapsed={isSidebarCollapsed} />
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Overview />} />

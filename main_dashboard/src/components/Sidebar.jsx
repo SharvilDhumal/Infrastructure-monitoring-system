@@ -2,9 +2,9 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import './Sidebar.css'
 
-const Sidebar = () => {
+const Sidebar = ({ collapsed }) => {
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header">
         <h1 className="sidebar-logo">Infravision.AI</h1>
         <p className="sidebar-tagline">Infrastructure Monitoring</p>

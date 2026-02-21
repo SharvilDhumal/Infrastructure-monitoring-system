@@ -169,3 +169,126 @@
   color: #002147;
   padding-left: 24px;
 }
+
+/* Notification Drawer */
+.notification-drawer {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: -60px;
+  /* Offset to align */
+  width: 340px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  z-index: 1001;
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top right;
+}
+
+.notification-drawer.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  background: #fafafa;
+}
+
+.drawer-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.close-drawer-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.2s ease;
+  padding: 4px;
+}
+
+.close-drawer-btn:hover {
+  color: var(--accent-red);
+}
+
+.drawer-content {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  background-color: #f8fafc;
+}
+
+.notification-item.unread .notification-title {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.notification-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-red);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.notification-title {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 4px 0;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.drawer-footer {
+  padding: 12px 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  text-align: center;
+  background: #fafafa;
+}
+
+.mark-all-read-btn {
+  background: none;
+  border: none;
+  color: var(--accent-indigo);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.mark-all-read-btn:hover {
+  color: #002147;
+  text-decoration: underline;
+}

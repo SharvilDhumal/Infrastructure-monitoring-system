@@ -215,247 +215,230 @@ const ReportFormPage = () => {
 
   if (isSubmitted) {
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="max-w-md mx-auto bg-white dark:bg-white/5 backdrop-blur-2xl p-8 rounded-3xl border border-gray-200 dark:border-white/10 text-center shadow-2xl relative overflow-hidden"
-      >
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-emerald-500" />
-        <div className="mb-6 flex justify-center">
-          <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
-            <CheckCircle2 size={40} />
+      <div className="min-h-[calc(100vh-80px)] w-full bg-white flex items-center justify-center py-12 px-4">
+        <div className="max-w-2xl w-full mx-auto bg-white p-8 md:p-12 border border-gray-200 border-t-4 border-t-[#002147] shadow-sm text-center">
+          <div className="mb-6 flex justify-center">
+            <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center text-green-700 border border-green-200">
+              <CheckCircle2 size={40} />
+            </div>
           </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Report Successfully Submitted</h2>
+          <p className="text-gray-700 text-lg mb-8 max-w-lg mx-auto leading-relaxed">
+            Thank you for your report. Your infrastructure fault has been recorded and an incident tracking number has been generated. Our relevant department has been notified.
+          </p>
+          <button
+            onClick={handleBack}
+            className="inline-flex py-4 px-8 bg-[#002147] hover:bg-[#003366] text-white text-lg font-medium rounded transition-colors"
+          >
+            Submit Another Report
+          </button>
         </div>
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">Submission Received</h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-8">
-          Your infrastructure report has been recorded. Our response team will be notified immediately.
-        </p>
-        <button
-          onClick={handleBack}
-          className="w-full py-4 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group"
-        >
-          Submit New Report
-          <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-        </button>
-      </motion.div>
+      </div>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className="max-w-2xl mx-auto"
-    >
-      <div className="text-center mb-10">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
-          Report <span className="bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">Infrastructure</span> Fault
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400 text-lg max-w-lg mx-auto">
-          Help us maintain your city. Provide details about the issue and we'll handle the rest.
-        </p>
-      </div>
+    <div className="min-h-screen w-full bg-white flex flex-col items-center py-12 px-4">
+      <div className="max-w-3xl w-full mx-auto">
+        <div className="mb-10 border-b border-gray-200 pb-6 text-center md:text-left">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#002147] mb-3 tracking-tight">
+            Infrastructure Fault Report Form
+          </h1>
+          <p className="text-gray-700 text-lg max-w-2xl">
+            Please use this official form to report issues regarding public infrastructure. Provide accurate details to ensure a prompt response.
+          </p>
+        </div>
 
-      <div className="bg-white dark:bg-white/5 backdrop-blur-2xl p-8 md:p-10 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl overflow-hidden relative">
-        {/* Decorative elements */}
-        <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/10 blur-[80px] rounded-full" />
-        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-indigo-500/10 blur-[80px] rounded-full" />
+        <div className="bg-white p-6 md:p-10 border border-gray-300 shadow-sm relative rounded-md">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Image Upload */}
+            <div className="space-y-2">
+              <label className="text-gray-900 font-semibold flex items-center gap-2">
+                <Camera size={18} /> Evidence Image
+              </label>
+              <div
+                onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+                onDragLeave={() => setDragActive(false)}
+                onDrop={(e) => { e.preventDefault(); setDragActive(false); handleFile(e.dataTransfer.files[0]); }}
+                className={`relative h-64 border-2 border-dashed transition-all duration-300 group overflow-hidden bg-gray-50 ${dragActive ? 'border-[#002147] bg-[#002147]/5' :
+                  errors.image ? 'border-red-500 bg-red-50' :
+                    formData.imagePreview ? 'border-gray-300' : 'border-gray-300 hover:border-gray-400'
+                  }`}
+              >
+                {/* Hidden Canvas for capture */}
+                <canvas ref={canvasRef} className="hidden" />
 
-        <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
-          {/* Image Upload */}
-          <div className="space-y-2">
-            <label className="text-gray-700 dark:text-gray-400 font-medium ml-1 flex items-center gap-2">
-              <Camera size={18} /> Evidence Image
-            </label>
-            <div
-              onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
-              onDragLeave={() => setDragActive(false)}
-              onDrop={(e) => { e.preventDefault(); setDragActive(false); handleFile(e.dataTransfer.files[0]); }}
-              className={`relative h-64 border-2 border-dashed rounded-3xl transition-all duration-300 group overflow-hidden ${dragActive ? 'border-blue-500 bg-blue-500/10' :
-                errors.image ? 'border-red-500/50 bg-red-500/5' :
-                  formData.imagePreview ? 'border-gray-200 dark:border-white/20' : 'border-gray-200 dark:border-white/10 hover:border-blue-400/50 dark:hover:border-white/30 hover:bg-gray-50 dark:hover:bg-white/5 '
-                }`}
-            >
-              {/* Hidden Canvas for capture */}
-              <canvas ref={canvasRef} className="hidden" />
-
-              {!isCameraOpen && (
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
-                />
-              )}
-
-              <AnimatePresence mode="wait">
-                {isCameraOpen ? (
-                  <motion.div
-                    key="camera"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="absolute inset-0 bg-black flex flex-col items-center justify-center"
-                  >
-                    <video
-                      ref={videoCallbackRef}
-                      autoPlay
-                      playsInline
-                      muted
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute bottom-4 flex gap-4 z-30">
-                      <button
-                        type="button"
-                        onClick={capturePhoto}
-                        className="p-4 bg-white text-blue-600 rounded-full shadow-lg hover:scale-110 transition-transform"
-                        title="Capture Photo"
-                      >
-                        <Camera size={24} />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={stopCamera}
-                        className="p-4 bg-red-600 text-white rounded-full shadow-lg hover:scale-110 transition-transform"
-                        title="Close Camera"
-                      >
-                        <X size={24} />
-                      </button>
-                    </div>
-                  </motion.div>
-                ) : formData.imagePreview ? (
-                  <motion.div
-                    key="preview"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="absolute inset-0 p-4"
-                  >
-                    <img
-                      src={formData.imagePreview}
-                      alt="Preview"
-                      className="w-full h-full object-cover rounded-2xl"
-                    />
-                    <button
-                      type="button"
-                      onClick={(e) => { e.stopPropagation(); setFormData(prev => ({ ...prev, image: null, imagePreview: null })); }}
-                      className="absolute top-6 right-6 p-2 bg-black/60 hover:bg-black/80 text-white rounded-full transition-colors z-30 backdrop-blur-md border border-white/10"
-                    >
-                      <X size={20} />
-                    </button>
-                    <div className="absolute bottom-6 left-6 right-6 p-3 bg-black/40 backdrop-blur-md rounded-xl text-white text-xs font-medium border border-white/10 truncate">
-                      {formData.image?.name || 'Captured Photo'}
-                    </div>
-                  </motion.div>
-                ) : (
-                  <div key="upload" className="h-full flex flex-col items-center justify-center text-center p-6 bg-transparent">
-                    <div className="flex gap-4 mb-4">
-                      <div className="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500 dark:text-blue-400 group-hover:scale-110 transition-transform duration-300 shadow-xl border border-blue-500/20">
-                        <Upload size={28} />
-                      </div>
-                      <button
-                        type="button"
-                        onClick={(e) => { e.stopPropagation(); startCamera(); }}
-                        className="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-500 dark:text-indigo-400 hover:scale-110 transition-transform duration-300 shadow-xl border border-indigo-500/20 z-30"
-                      >
-                        <Camera size={28} />
-                      </button>
-                    </div>
-                    <p className="text-gray-900 dark:text-white font-semibold text-lg mb-1">Click/Drag to upload or use Camera</p>
-                    <p className="text-gray-500 text-sm">Clear captures help us respond faster</p>
-                  </div>
+                {!isCameraOpen && (
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+                  />
                 )}
-              </AnimatePresence>
-            </div>
-            {errors.image && <p className="text-red-400 text-xs mt-1 flex items-center gap-1 ml-1"><AlertCircle size={12} /> {errors.image}</p>}
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Fault Type */}
-            <div className="space-y-2">
-              <label htmlFor="faultType" className="text-gray-700 dark:text-gray-400 font-medium ml-1 flex items-center gap-2">
-                <AlertCircle size={18} /> Type of Issue
-              </label>
-              <div className="relative">
-                <select
-                  id="faultType"
-                  name="faultType"
-                  value={formData.faultType}
-                  onChange={handleChange}
-                  className={`w-full bg-gray-50 dark:bg-white/5 border rounded-2xl py-4 px-5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer hover:bg-gray-100 dark:hover:bg-white/10 ${errors.faultType ? 'border-red-500/50' : 'border-gray-200 dark:border-white/10'
-                    }`}
-                >
-                  <option value="" className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">Select a category</option>
-                  {FAULT_TYPES.map(type => (
-                    <option key={type.id} value={type.id} className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">{type.label}</option>
-                  ))}
-                </select>
-                <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
+                <AnimatePresence mode="wait">
+                  {isCameraOpen ? (
+                    <motion.div
+                      key="camera"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute inset-0 bg-black flex flex-col items-center justify-center"
+                    >
+                      <video
+                        ref={videoCallbackRef}
+                        autoPlay
+                        playsInline
+                        muted
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute bottom-4 flex gap-4 z-30">
+                        <button
+                          type="button"
+                          onClick={capturePhoto}
+                          className="p-4 bg-white text-blue-600 rounded-full shadow-lg hover:scale-110 transition-transform"
+                          title="Capture Photo"
+                        >
+                          <Camera size={24} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={stopCamera}
+                          className="p-4 bg-red-600 text-white rounded-full shadow-lg hover:scale-110 transition-transform"
+                          title="Close Camera"
+                        >
+                          <X size={24} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  ) : formData.imagePreview ? (
+                    <motion.div
+                      key="preview"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute inset-0 p-4"
+                    >
+                      <img
+                        src={formData.imagePreview}
+                        alt="Preview"
+                        className="w-full h-full object-cover rounded-2xl"
+                      />
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); setFormData(prev => ({ ...prev, image: null, imagePreview: null })); }}
+                        className="absolute top-6 right-6 p-2 bg-black/60 hover:bg-black/80 text-white rounded-full transition-colors z-30 backdrop-blur-md border border-white/10"
+                      >
+                        <X size={20} />
+                      </button>
+                      <div className="absolute bottom-6 left-6 right-6 p-3 bg-black/40 backdrop-blur-md rounded-xl text-white text-xs font-medium border border-white/10 truncate">
+                        {formData.image?.name || 'Captured Photo'}
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <div key="upload" className="h-full flex flex-col items-center justify-center text-center p-6">
+                      <div className="flex gap-4 mb-4">
+                        <div className="w-14 h-14 bg-gray-200 flex items-center justify-center text-gray-700 shadow-sm border border-gray-300">
+                          <Upload size={24} />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); startCamera(); }}
+                          className="w-14 h-14 bg-[#002147] flex items-center justify-center text-white hover:bg-[#003366] transition-colors shadow-sm border border-[#002147] z-30"
+                        >
+                          <Camera size={24} />
+                        </button>
+                      </div>
+                      <p className="text-gray-900 font-medium mb-1">Click/Drag to upload or use Camera</p>
+                      <p className="text-gray-600 text-sm">Clear images help authorities respond faster.</p>
+                    </div>
+                  )}
+                </AnimatePresence>
               </div>
-              {errors.faultType && <p className="text-red-400 text-xs mt-1 flex items-center gap-1 ml-1"><AlertCircle size={12} /> {errors.faultType}</p>}
+              {errors.image && <p className="text-red-400 text-xs mt-1 flex items-center gap-1 ml-1"><AlertCircle size={12} /> {errors.image}</p>}
             </div>
 
-            {/* Location */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Fault Type */}
+              <div className="space-y-2">
+                <label htmlFor="faultType" className="text-gray-900 font-semibold flex items-center gap-2">
+                  <AlertCircle size={18} /> Type of Issue
+                </label>
+                <div className="relative">
+                  <select
+                    id="faultType"
+                    name="faultType"
+                    value={formData.faultType}
+                    onChange={handleChange}
+                    className={`w-full bg-white border py-3 px-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#002147] focus:border-[#002147] appearance-none cursor-pointer ${errors.faultType ? 'border-red-500' : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                  >
+                    <option value="">Select a category</option>
+                    {FAULT_TYPES.map(type => (
+                      <option key={type.id} value={type.id}>{type.label}</option>
+                    ))}
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                    <ChevronRight size={16} className="rotate-90" />
+                  </div>
+                </div>
+                {errors.faultType && <p className="text-red-600 text-sm mt-1">{errors.faultType}</p>}
+              </div>
+
+              {/* Location */}
+              <div className="space-y-2">
+                <label htmlFor="location" className="text-gray-900 font-semibold flex items-center gap-2">
+                  <MapPin size={18} /> Incident Location
+                </label>
+                <input
+                  type="text"
+                  id="location"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  placeholder="Where is the fault?"
+                  className={`w-full bg-white border py-3 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#002147] focus:border-[#002147] ${errors.location ? 'border-red-500' : 'border-gray-300 hover:border-gray-400'
+                    }`}
+                />
+                {errors.location && <p className="text-red-600 text-sm mt-1">{errors.location}</p>}
+              </div>
+            </div>
+
+            {/* Description */}
             <div className="space-y-2">
-              <label htmlFor="location" className="text-gray-700 dark:text-gray-400 font-medium ml-1 flex items-center gap-2">
-                <MapPin size={18} /> Incident Location
+              <label htmlFor="description" className="text-gray-900 font-semibold flex items-center gap-2">
+                <MessageSquare size={18} /> Detailed Description
               </label>
-              <input
-                type="text"
-                id="location"
-                name="location"
-                value={formData.location}
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
                 onChange={handleChange}
-                placeholder="Where is the fault?"
-                className={`w-full bg-gray-50 dark:bg-white/5 border rounded-2xl py-4 px-5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:bg-gray-100 dark:hover:bg-white/10 ${errors.location ? 'border-red-500/50' : 'border-gray-200 dark:border-white/10'
+                rows="4"
+                placeholder="Provide specific details about the issue..."
+                className={`w-full bg-white border py-3 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#002147] focus:border-[#002147] resize-none ${errors.description ? 'border-red-500' : 'border-gray-300 hover:border-gray-400'
                   }`}
               />
-              {errors.location && <p className="text-red-400 text-xs mt-1 flex items-center gap-1 ml-1"><AlertCircle size={12} /> {errors.location}</p>}
+              {errors.description && <p className="text-red-600 text-sm mt-1">{errors.description}</p>}
             </div>
-          </div>
 
-          {/* Description */}
-          <div className="space-y-2">
-            <label htmlFor="description" className="text-gray-700 dark:text-gray-400 font-medium ml-1 flex items-center gap-2">
-              <MessageSquare size={18} /> Detailed Description
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              rows="4"
-              placeholder="Tell us what's wrong..."
-              className={`w-full bg-gray-50 dark:bg-white/5 border rounded-[1.5rem] py-4 px-5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:bg-gray-100 dark:hover:bg-white/10 resize-none ${errors.description ? 'border-red-500/50' : 'border-gray-200 dark:border-white/10'
-                }`}
-            />
-            {errors.description && <p className="text-red-400 text-xs mt-1 flex items-center gap-1 ml-1"><AlertCircle size={12} /> {errors.description}</p>}
-          </div>
-
-          {/* Submit Button */}
-          <motion.button
-            whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(59, 130, 246, 0.4)" }}
-            whileTap={{ scale: 0.98 }}
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-5 px-8 rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 relative overflow-hidden group disabled:opacity-70 disabled:hover:scale-100"
-          >
-            {isLoading ? (
-              <div className="w-6 h-6 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-            ) : (
-              <>
-                <CheckCircle2 size={24} className="group-hover:rotate-12 transition-transform" />
-                Submit Infrastructure Report
-              </>
-            )}
-          </motion.button>
-        </form>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-[#002147] hover:bg-[#003366] text-white font-medium py-4 px-8 transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+              ) : (
+                'Submit Official Report'
+              )}
+            </button>
+          </form>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

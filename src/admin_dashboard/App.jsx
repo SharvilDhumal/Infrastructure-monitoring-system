@@ -22,15 +22,27 @@ import { Maximize2, Minimize2 } from 'lucide-react'
 
 function AdminDashboard() {
   const [isFullscreen, setIsFullscreen] = React.useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        setIsSidebarCollapsed(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
   };
 
   return (
-    <div className={`app ${isFullscreen ? 'is-fullscreen' : ''}`}>
+    <div className={`app ${isFullscreen ? 'is-fullscreen' : ''} ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       {!isFullscreen && <Navbar />}
-      {!isFullscreen && <Sidebar />}
+      {!isFullscreen && <Sidebar collapsed={isSidebarCollapsed} />}
 
       <button
         className="fullscreen-toggle-btn"

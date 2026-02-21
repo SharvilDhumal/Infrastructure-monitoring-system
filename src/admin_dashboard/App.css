@@ -17,6 +17,11 @@
   box-sizing: border-box;
 }
 
+.app.sidebar-collapsed .main-content {
+  margin-left: 80px;
+  width: calc(100% - 80px);
+}
+
 .app.is-fullscreen .main-content {
   margin-left: 0 !important;
   width: 100% !important;
