@@ -54,6 +54,7 @@ const Profile = () => {
             setStats({
                 approved: s.approved || 0,
                 pending: s.pending || 0,
+                inProgress: s.inProgress || 0,
                 resolved: s.resolved || 0,
                 total: s.total || 0
             });

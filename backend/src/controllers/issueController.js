@@ -44,6 +44,7 @@ exports.getUserIssues = async (req, res) => {
             approved: issues.filter(i => i.status === 'Approved').length,
             pending: issues.filter(i => i.status === 'Pending').length,
             rejected: issues.filter(i => i.status === 'Rejected').length,
+            inProgress: issues.filter(i => i.status === 'In Progress').length,
             resolved: issues.filter(i => i.status === 'Resolved').length,
         };
 

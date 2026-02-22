@@ -29,11 +29,12 @@ const DashboardStats = ({ stats }) => {
   const cards = [
     { label: 'Approved', count: stats?.approved || 0, icon: ShieldCheck, color: 'from-emerald-400 to-teal-500' },
     { label: 'Pending', count: stats?.pending || 0, icon: Clock, color: 'from-amber-400 to-orange-500' },
+    { label: 'In Progress', count: stats?.inProgress || 0, icon: Clock, color: 'from-indigo-400 to-purple-500' },
     { label: 'Resolved', count: stats?.resolved || 0, icon: CheckCircle2, color: 'from-blue-400 to-indigo-500' },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
       {cards.map((card, index) => (
         <StatCard key={card.label} {...card} delay={index * 0.1} />
       ))}

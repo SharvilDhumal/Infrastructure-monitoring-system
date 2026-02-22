@@ -11,6 +11,12 @@ const IssueCard = ({ issue }) => {
                 border: 'border-emerald-500/20',
                 icon: <CheckCircle2 size={14} className="mr-1.5" />
             };
+            case 'In Progress': return {
+                bg: 'bg-indigo-500/10',
+                text: 'text-indigo-500',
+                border: 'border-indigo-500/20',
+                icon: <Clock size={14} className="mr-1.5" />
+            };
             case 'Pending': return {
                 bg: 'bg-amber-500/10',
                 text: 'text-amber-400',
@@ -71,7 +77,7 @@ const IssueCard = ({ issue }) => {
                         </h3>
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide border ${styles.bg} ${styles.text} ${styles.border}`}>
                             {styles.icon}
-                            {issue.status}
+                            {issue.status === 'In Progress' ? 'Work in Progress' : issue.status === 'Resolved' ? 'Issue Solved' : issue.status}
                         </span>
                     </div>
 

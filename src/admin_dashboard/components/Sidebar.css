@@ -105,8 +105,8 @@
 }
 
 .nav-item:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
 }
 
 .nav-item.active {

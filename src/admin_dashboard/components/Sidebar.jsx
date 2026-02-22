@@ -12,33 +12,26 @@ const Sidebar = ({ collapsed }) => {
       </div>
       <nav className="sidebar-nav">
         <NavLink to="/main-dashboard" end className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-          <span className="nav-icon">📊</span>
           <span>Dashboard Overview</span>
         </NavLink>
         <NavLink to="/main-dashboard/infrastructure" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-          <span className="nav-icon">🏗️</span>
           <span>Infrastructure Assets</span>
         </NavLink>
 
         <NavLink to="/main-dashboard/live-monitoring" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-          <span className="nav-icon">👁️</span>
           <span>Live Monitoring</span>
         </NavLink>
 
         <NavLink to="/main-dashboard/incidents" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-          <span className="nav-icon">🔧</span>
           <span>Incidents & Maintenance</span>
         </NavLink>
         <NavLink to="/main-dashboard/user-issues" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-          <span className="nav-icon">📢</span>
           <span>Public Reports</span>
         </NavLink>
         <NavLink to="/main-dashboard/analytics" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-          <span className="nav-icon">📈</span>
           <span>Analytics & Reports</span>
         </NavLink>
         <NavLink to="/main-dashboard/settings" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-          <span className="nav-icon">⚙️</span>
           <span>System Settings</span>
         </NavLink>
       </nav>

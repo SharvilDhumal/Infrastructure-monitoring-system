@@ -6,7 +6,8 @@ const IssueFilter = ({ currentFilter, onFilterChange }) => {
     { id: 'all', label: 'All Issues' },
     { id: 'Pending', label: 'Pending' },
     { id: 'Approved', label: 'Approved' },
-    { id: 'Resolved', label: 'Resolved' },
+    { id: 'In Progress', label: 'Work in Progress' },
+    { id: 'Resolved', label: 'Issue Solved' },
     { id: 'Rejected', label: 'Rejected' },
   ];
 

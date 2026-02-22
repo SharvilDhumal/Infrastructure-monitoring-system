@@ -101,6 +101,8 @@ const UserIssues = () => {
                                     <span className={`status-badge ${issue.status.toLowerCase()}`}>
                                         {issue.status === 'Pending' && '⏳ '}
                                         {issue.status === 'Approved' && '✅ '}
+                                        {issue.status === 'In Progress' && '🚧 '}
+                                        {issue.status === 'Resolved' && '🎉 '}
                                         {issue.status === 'Rejected' && '❌ '}
                                         {issue.status}
                                     </span>
@@ -116,7 +118,7 @@ const UserIssues = () => {
                                 </td>
                                 <td>
                                     <div className="action-buttons">
-                                        {issue.status === 'Pending' ? (
+                                        {issue.status === 'Pending' && (
                                             <>
                                                 <button
                                                     className="btn-approve"
@@ -131,9 +133,28 @@ const UserIssues = () => {
                                                     Reject
                                                 </button>
                                             </>
-                                        ) : (
+                                        )}
+                                        {issue.status === 'Approved' && (
+                                            <button
+                                                className="btn-approve"
+                                                style={{ backgroundColor: '#0ea5e9', borderColor: '#0ea5e9' }}
+                                                onClick={() => handleStatusUpdate(issue._id, 'In Progress')}
+                                            >
+                                                Start Work
+                                            </button>
+                                        )}
+                                        {issue.status === 'In Progress' && (
+                                            <button
+                                                className="btn-approve"
+                                                style={{ backgroundColor: '#10b981', borderColor: '#10b981' }}
+                                                onClick={() => handleStatusUpdate(issue._id, 'Resolved')}
+                                            >
+                                                Finish Work
+                                            </button>
+                                        )}
+                                        {(issue.status === 'Resolved' || issue.status === 'Rejected') && (
                                             <div className="action-done">
-                                                <span>Moderated</span>
+                                                <span>{issue.status}</span>
                                             </div>
                                         )}
                                     </div>

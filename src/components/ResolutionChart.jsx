@@ -5,14 +5,16 @@ const ResolutionChart = ({ stats }) => {
   const resolved = stats?.resolved || 0;
   const approved = stats?.approved || 0;
   const pending = stats?.pending || 0;
+  const inProgress = stats?.inProgress || 0;
   const rejected = stats?.rejected || 0;
-  const total = resolved + approved + pending + rejected;
+  const total = resolved + approved + pending + inProgress + rejected;
 
-  const percentage = total > 0 ? Math.round(((resolved + approved) / total) * 100) : 0;
+  const percentage = total > 0 ? Math.round(((resolved + approved + inProgress) / total) * 100) : 0;
 
   const data = [
     { name: 'Resolved', value: resolved, color: '#002147' },
     { name: 'Approved', value: approved, color: '#3b82f6' },
+    { name: 'In Progress', value: inProgress, color: '#8b5cf6' },
     { name: 'Pending', value: pending, color: '#f59e0b' },
     { name: 'Rejected', value: rejected, color: '#ef4444' },
   ].filter(d => d.value > 0);
@@ -63,6 +65,7 @@ const ResolutionChart = ({ stats }) => {
       <div className="mt-8 space-y-4">
         {[
           { name: 'Resolved', value: resolved, color: '#002147' },
+          { name: 'In Progress', value: inProgress, color: '#8b5cf6' },
           { name: 'Approved', value: approved, color: '#3b82f6' },
           { name: 'Pending Review', value: pending, color: '#f59e0b' },
           { name: 'Rejected', value: rejected, color: '#ef4444' },
