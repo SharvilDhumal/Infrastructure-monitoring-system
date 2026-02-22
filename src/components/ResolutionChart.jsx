@@ -6,14 +6,19 @@ const ResolutionChart = ({ stats }) => {
   const approved = stats?.approved || 0;
   const pending = stats?.pending || 0;
   const rejected = stats?.rejected || 0;
+  const total = resolved + approved + pending + rejected;
+
+  const percentage = total > 0 ? Math.round(((resolved + approved) / total) * 100) : 0;
 
   const data = [
     { name: 'Resolved', value: resolved, color: '#002147' },
-    { name: 'Unresolved', value: (approved + pending + rejected), color: '#e5e7eb' },
-  ];
+    { name: 'Approved', value: approved, color: '#3b82f6' },
+    { name: 'Pending', value: pending, color: '#f59e0b' },
+    { name: 'Rejected', value: rejected, color: '#ef4444' },
+  ].filter(d => d.value > 0);
 
-  const total = data.reduce((acc, curr) => acc + curr.value, 0);
-  const percentage = total > 0 ? Math.round((resolved / total) * 100) : 0;
+  // If no data yet, show empty state slice
+  const chartData = data.length > 0 ? data : [{ name: 'No Issues', value: 1, color: '#e5e7eb' }];
 
   return (
     <div className="bg-white border border-gray-200 rounded p-8 relative overflow-hidden shadow-sm">
@@ -28,17 +33,17 @@ const ResolutionChart = ({ stats }) => {
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={data}
+              data={chartData}
               cx="50%"
               cy="50%"
               innerRadius={70}
               outerRadius={90}
-              paddingAngle={8}
+              paddingAngle={data.length > 1 ? 8 : 0}
               dataKey="value"
               stroke="none"
               cornerRadius={10}
             >
-              {data.map((entry, index) => (
+              {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} className="transition-all duration-300 hover:opacity-80 cursor-pointer" />
               ))}
             </Pie>
@@ -51,12 +56,17 @@ const ResolutionChart = ({ stats }) => {
 
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <span className="text-4xl font-bold text-[#002147]">{percentage}%</span>
-          <span className="text-gray-500 text-sm font-bold uppercase tracking-widest mt-1">Resolved</span>
+          <span className="text-gray-500 text-sm font-bold uppercase tracking-widest mt-1">Actioned</span>
         </div>
       </div>
 
       <div className="mt-8 space-y-4">
-        {data.map((item) => (
+        {[
+          { name: 'Resolved', value: resolved, color: '#002147' },
+          { name: 'Approved', value: approved, color: '#3b82f6' },
+          { name: 'Pending Review', value: pending, color: '#f59e0b' },
+          { name: 'Rejected', value: rejected, color: '#ef4444' },
+        ].map((item) => (
           <div key={item.name} className="flex items-center justify-between pb-3 border-b border-gray-100 last:border-0 last:pb-0">
             <div className="flex items-center gap-3">
               <div className="w-4 h-4 rounded" style={{ backgroundColor: item.color }} />
@@ -65,6 +75,10 @@ const ResolutionChart = ({ stats }) => {
             <span className="text-[#002147] text-lg font-bold">{item.value}</span>
           </div>
         ))}
+        <div className="flex items-center justify-between pt-1 mt-1 border-t-2 border-gray-200">
+          <span className="text-gray-900 text-base font-bold">Total Submitted</span>
+          <span className="text-[#002147] text-lg font-bold">{total}</span>
+        </div>
       </div>
     </div>
   );

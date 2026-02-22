@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,7 +11,8 @@ import {
     CheckCircle2,
     Clock,
     XCircle,
-    LayoutDashboard
+    LayoutDashboard,
+    RefreshCw
 } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import DashboardStats from '../components/DashboardStats';
@@ -34,39 +35,21 @@ const Profile = () => {
         total: 0
     });
     const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     const [isChartDrawerOpen, setIsChartDrawerOpen] = useState(false);
 
-    useEffect(() => {
-        const checkAuth = async () => {
-            const storedUser = sessionStorage.getItem('user');
-            const token = sessionStorage.getItem('token');
+    const getToken = () =>
+        sessionStorage.getItem('token') || localStorage.getItem('token');
 
-            if (!token || !storedUser) {
-                navigate('/login');
-                return;
-            }
-
-            setUser(JSON.parse(storedUser));
-            fetchUserIssues(token);
-        };
-
-        checkAuth();
-    }, [navigate]);
-
-    const fetchUserIssues = async (token) => {
+    const fetchUserIssues = useCallback(async (token, silent = false) => {
+        if (!silent) setLoading(true);
+        else setRefreshing(true);
         try {
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-
-            const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api/issues/user';
-
-            const response = await axios.get(API_URL, config);
+            const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5001') + '/api/issues/user';
+            const response = await axios.get(API_URL, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
             setIssues(response.data.issues);
-
-            // Format stats to match DashboardStats requirements
             const s = response.data.stats;
             setStats({
                 approved: s.approved || 0,
@@ -82,7 +65,49 @@ const Profile = () => {
             }
         } finally {
             setLoading(false);
+            setRefreshing(false);
         }
+    }, [navigate]);
+
+    useEffect(() => {
+        const token = getToken();
+        const storedUser = sessionStorage.getItem('user') || localStorage.getItem('user');
+
+        if (!token || !storedUser) {
+            navigate('/login');
+            return;
+        }
+
+        setUser(JSON.parse(storedUser));
+        fetchUserIssues(token);
+
+        // Re-fetch silently when user switches back to this browser tab
+        // (e.g. they submitted on /report in another tab, or navigated with browser back)
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                const t = getToken();
+                if (t) fetchUserIssues(t, true);
+            }
+        };
+
+        // Re-fetch when user navigates back via browser (popstate)
+        const handleFocus = () => {
+            const t = getToken();
+            if (t) fetchUserIssues(t, true);
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('focus', handleFocus);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('focus', handleFocus);
+        };
+    }, [navigate, fetchUserIssues]);
+
+    const handleManualRefresh = () => {
+        const t = getToken();
+        if (t) fetchUserIssues(t, true);
     };
 
     const handleLogout = () => {
@@ -123,12 +148,22 @@ const Profile = () => {
                                 </h1>
                                 <p className="text-gray-600 font-medium text-lg">Manage and track your reported infrastructure issues.</p>
                             </div>
-                            <button
-                                onClick={() => setIsChartDrawerOpen(true)}
-                                className="px-6 py-3 bg-white border border-gray-300 text-[#002147] hover:bg-gray-50 font-bold rounded-lg shadow-sm transition-colors"
-                            >
-                                View Resolution Stats
-                            </button>
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={handleManualRefresh}
+                                    disabled={refreshing}
+                                    title="Refresh issues"
+                                    className="p-3 bg-white border border-gray-300 text-[#002147] hover:bg-gray-50 font-bold rounded-lg shadow-sm transition-colors disabled:opacity-50"
+                                >
+                                    <RefreshCw size={18} className={refreshing ? 'animate-spin' : ''} />
+                                </button>
+                                <button
+                                    onClick={() => setIsChartDrawerOpen(true)}
+                                    className="px-6 py-3 bg-white border border-gray-300 text-[#002147] hover:bg-gray-50 font-bold rounded-lg shadow-sm transition-colors"
+                                >
+                                    View Resolution Stats
+                                </button>
+                            </div>
                         </header>
 
                         <div className="flex flex-col gap-8">

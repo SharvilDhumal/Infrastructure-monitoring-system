@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import {
@@ -26,6 +27,7 @@ const FAULT_TYPES = [
 ];
 
 const ReportFormPage = () => {
+  const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
     image: null,
@@ -174,7 +176,7 @@ const ReportFormPage = () => {
     setIsLoading(true);
 
     try {
-      const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api/issues';
+      const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5001') + '/api/issues';
 
       const response = await axios.post(API_URL, {
         title: formData.faultType, // Using faultType as title for now, or could combine
@@ -190,7 +192,9 @@ const ReportFormPage = () => {
 
       if (response.data.success) {
         setIsSubmitted(true);
-        toast.success('Report submitted successfully!');
+        toast.success('Report submitted successfully! Redirecting to your profile...');
+        // Navigate to profile after 2 seconds so user sees their new issue
+        setTimeout(() => navigate('/profile'), 2000);
       }
     } catch (error) {
       console.error('Submission error:', error);
