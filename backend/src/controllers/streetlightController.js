@@ -1,6 +1,8 @@
 const axios = require('axios');
 const Streetlight = require('../models/Streetlight');
 
+let lastEspIp = process.env.ESP32_IP || '10.39.59.88';
+
 // POST /api/streetlight-data
 exports.receiveData = async (req, res) => {
     try {
@@ -9,6 +11,17 @@ exports.receiveData = async (req, res) => {
         if (!streetlightId) {
             return res.status(400).json({ message: 'streetlightId is required' });
         }
+
+        const clientIp = req.ip || req.connection.remoteAddress;
+        // Strip IPv6 prefix if present (e.g., ::ffff:)
+        const cleanIp = clientIp.includes(':') ? clientIp.split(':').pop() : clientIp;
+
+        if (cleanIp && cleanIp !== '127.0.0.1' && cleanIp !== '::1') {
+            lastEspIp = cleanIp;
+        }
+
+        console.log(`[DEBUG] Received data from ESP32 at IP: ${cleanIp} for Streetlight ID: ${streetlightId}`);
+        console.log(`[DEBUG] Current control IP set to: ${lastEspIp}`);
 
         // Calculate power: P = V * I
         const power = (voltage || 0) * (current || 0);
@@ -79,17 +92,21 @@ exports.toggleRelay = async (req, res) => {
             return res.status(400).json({ message: 'id and state are required' });
         }
 
-        // Use the ESP32's actual IP 10.39.59.88 instead of streetlight.local
-        const esp32Url = `http://10.39.59.88/relay?ch=${id}&state=${state}`;
+        // Use the confirmed IP from incoming data or falling back to .env
+        const esp32Url = `http://${lastEspIp}/relay?ch=${id}&state=${state}`;
 
-        console.log(`Forwarding relay command to ESP32: ${esp32Url}`);
+        console.log(`[DEBUG] Forwarding relay command to ESP32 at: ${esp32Url}`);
 
         try {
-            const response = await axios.get(esp32Url, { timeout: 5000 });
+            const response = await axios.get(esp32Url, { timeout: 3000 });
             res.json({ message: `Relay ${id} turned ${state} successfully`, espResponse: response.data });
         } catch (espError) {
-            console.error('Error communicatng with ESP32:', espError.message);
-            res.status(502).json({ message: 'Failed to communicate with ESP32. Is it online and reachable at streetlight.local?', error: espError.message });
+            console.error(`[ERROR] Communication failure with ESP32 at ${esp32Url}:`, espError.message);
+            res.status(502).json({
+                message: `Failed to communicate with ESP32 at ${lastEspIp}.`,
+                error: espError.message,
+                details: `Tried URL: ${esp32Url}`
+            });
         }
     } catch (error) {
         console.error('Error in toggleRelay:', error);

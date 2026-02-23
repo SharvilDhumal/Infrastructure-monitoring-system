@@ -319,7 +319,7 @@ const StreetlightDashboard = ({ hideLayout = false }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/latest");
+      const response = await axios.get("http://localhost:5001/api/latest");
       if (Array.isArray(response.data)) setStreetlights(response.data);
     } catch (e) {
       console.error(e);
@@ -348,7 +348,7 @@ const StreetlightDashboard = ({ hideLayout = false }) => {
       `Turning ${state.toUpperCase()} Streetlight ${channel}...`,
     );
     try {
-      await axios.post("http://localhost:5000/api/toggle-relay", {
+      await axios.post("http://localhost:5001/api/toggle-relay", {
         id: channel,
         state,
       });
