@@ -1,0 +1,59 @@
+InfraVision AI - Project Presentation Content
+================================================
+
+Slide 1: Title Slide
+- Title: InfraVision AI
+- Subtitle: Smart Infrastructure Monitoring & Management System
+- Presented by: [Your Name/Team Name]
+- Date: February 13, 2026
+
+Slide 2: Introduction
+- Objective: To provide a centralized platform for monitoring urban infrastructure.
+- Problem Statement: Traditional infrastructure monitoring is manual, slow, and lacks real-time data.
+- Solution: A community-driven reporting system combined with IoT-based monitoring for smarter city management.
+
+Slide 3: Project Architecture
+- Frontend: Developed using React.js for a dynamic, responsive user interface.
+- Backend: Node.js and Express.js providing a robust 
+RESTful API.
+- Database: MongoDB (NoSQL) for flexible data storage and management.
+- IoT Integration: ESP32-based sensors for real-time hardware monitoring (e.g., streetlights).
+
+Slide 4: Module 1 - Authentication & Security
+- Secure Login/Signup for users.
+- Specialized Admin Portal with privileged access.
+- Google OAuth Integration for seamless third-party authentication.
+- Session Isolation: Support for multiple account logins across different browser tabs using sessionStorage.
+
+Slide 5: Module 2 - Infrastructure Reporting
+- Community-Driven Module: Citizens can report issues like potholes, bridge cracks, or road damage.
+- Details Captured: Title, description, GPS location, and visual proof (image uploads).
+- Real-time Status Tracking: Users can see if their reports are Pending, Approved, or Resolved.
+
+Slide 6: Module 3 - Smart Streetlight Monitoring
+- IoT Module: Real-time monitoring of streetlight connectivity and status.
+- Hardware: Integration with ESP32 controllers.
+- Power Efficiency: Automated tracking of streetlight health to reduce maintenance downtime.
+
+Slide 7: Module 4 - Admin Dashboard & Moderation
+- Unified Command Center for city administrators.
+- Moderation Workflow: Admin reviews user-reported issues and updates status (Approve/Reject).
+- Analytics: Visualized data on infrastructure health and resolution rates.
+
+Slide 8: Module 5 - Live Detection Map
+- Spatial Visualization: Interactive map using Leaflet.js.
+- Real-time Markers: Visual representation of all active infrastructure issues across the city.
+- Targeted Response: Allows authorities to prioritize repairs based on geographic density of reports.
+
+Slide 9: Key Features
+- High Performance: Optimized frontend with Framer Motion for smooth animations.
+- Scalability: Microservices-ready backend architecture.
+- Real-time Updates: Synchronized data between reporting and monitoring modules.
+- Premium UI/UX: Modern SaaS-style aesthetic for better user engagement.
+
+Slide 10: Conclusion & Future Scope
+- Summary: A comprehensive tool for modern smart city initiatives.
+- Future Scope:
+    - Integration of AI for automated image-based damage detection.
+    - Expansion of IoT sensors to water management and waste levels.
+    - Mobile application for even easier reporting on the go.

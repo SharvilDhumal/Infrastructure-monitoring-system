@@ -1,0 +1,78 @@
+.incidents-maintenance {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.status-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.status-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--card-bg);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--border-radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.status-filter:hover {
+  background: var(--sidebar-bg);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.status-filter.active {
+  background: var(--sidebar-bg);
+  color: white;
+  border-color: var(--sidebar-bg);
+}
+
+.filter-count {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status-filter:hover .filter-count,
+.status-filter.active .filter-count {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.incidents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.no-issues {
+  padding: 48px;
+  text-align: center;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  color: var(--text-secondary);
+  font-style: italic;
+  border: 1px dashed var(--card-border);
+}
+
+.no-issues {
+  padding: 48px;
+  text-align: center;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  color: var(--text-secondary);
+  font-style: italic;
+  border: 1px dashed var(--card-border);
+}

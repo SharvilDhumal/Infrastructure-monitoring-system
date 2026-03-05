@@ -1,0 +1,40 @@
+.velocity-chart-card {
+    width: 100%;
+    background: var(--bg-card, #ffffff);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color, #e2e8f0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.velocity-chart-header {
+    margin-bottom: 1.5rem;
+}
+
+.velocity-chart-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.velocity-chart-container {
+    width: 100%;
+    height: 300px;
+}
+
+/* Customizing Recharts Tooltip via CSS if needed, but mostly handled in props */
+.recharts-tooltip-label {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.recharts-default-tooltip {
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+}

@@ -1,0 +1,280 @@
+﻿
+> infravision-ai-dashboard@1.0.0 build
+> vite build
+
+node.exe : X [ERROR] "
+@vitejs/plugin-react" 
+resolved to an ESM 
+file. ESM file cannot 
+be loaded by 
+`require`. See https:/
+/vite.dev/guide/troubl
+eshooting.html#this-pa
+ckage-is-esm-only for 
+more details. [plugin 
+externalize-deps]
+At line:1 char:1
++ & "C:\Program Files\
+nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (X [ERROR]    
+ "@vit...ternalize    
+-deps]:String) []    
+, RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+
+    ../node_modules/es
+build/lib/main.js:1225
+:27:
+      1225 Γöé        
+ let result = await 
+callback({
+           Γò╡        
+                    ^
+
+    at file:///C:/User
+s/User/OneDrive/Deskto
+p/FinalYearProject/Inf
+rastructure-monitoring
+-system/node_modules/v
+ite/dist/node/chunks/d
+ep-BK3b2jBa.js:66928:2
+3
+    at requestCallback
+s.on-resolve (C:\Users
+\User\OneDrive\Desktop
+\FinalYearProject\Infr
+astructure-monitoring-
+system\node_modules\es
+build\lib\main.js:1225
+:28)
+    at handleRequest (
+C:\Users\User\OneDrive
+\Desktop\FinalYearProj
+ect\Infrastructure-mon
+itoring-system\node_mo
+dules\esbuild\lib\main
+.js:647:17)
+    at 
+handleIncomingPacket (
+C:\Users\User\OneDrive
+\Desktop\FinalYearProj
+ect\Infrastructure-mon
+itoring-system\node_mo
+dules\esbuild\lib\main
+.js:672:7)
+    at 
+Socket.readFromStdout 
+(C:\Users\User\OneDriv
+e\Desktop\FinalYearPro
+ject\Infrastructure-mo
+nitoring-system\node_m
+odules\esbuild\lib\mai
+n.js:600:7)
+    at Socket.emit 
+(node:events:507:28)
+    at addChunk (node:
+internal/streams/reada
+ble:559:12)
+    at readableAddChun
+kPushByteMode (node:in
+ternal/streams/readabl
+e:510:3)
+    at Readable.push (
+node:internal/streams/
+readable:390:5)
+    at 
+Pipe.onStreamRead (nod
+e:internal/stream_base
+_commons:189:23)
+
+  This error came 
+from the "onResolve" 
+callback registered 
+here:
+
+    ../node_modules/es
+build/lib/main.js:1150
+:20:
+      1150 Γöé       
+let promise = setup({
+           Γò╡        
+             ^
+
+    at setup (file:///
+C:/Users/User/OneDrive
+/Desktop/FinalYearProj
+ect/Infrastructure-mon
+itoring-system/node_mo
+dules/vite/dist/node/c
+hunks/dep-BK3b2jBa.js:
+66890:18)
+    at handlePlugins (
+C:\Users\User\OneDrive
+\Desktop\FinalYearProj
+ect\Infrastructure-mon
+itoring-system\node_mo
+dules\esbuild\lib\main
+.js:1150:21)
+    at 
+buildOrContextImpl (C:
+\Users\User\OneDrive\D
+esktop\FinalYearProjec
+t\Infrastructure-monit
+oring-system\node_modu
+les\esbuild\lib\main.j
+s:873:5)
+    at 
+Object.buildOrContext 
+(C:\Users\User\OneDriv
+e\Desktop\FinalYearPro
+ject\Infrastructure-mo
+nitoring-system\node_m
+odules\esbuild\lib\mai
+n.js:699:5)
+    at C:\Users\User\O
+neDrive\Desktop\FinalY
+earProject\Infrastruct
+ure-monitoring-system\
+node_modules\esbuild\l
+ib\main.js:2023:15
+    at new Promise 
+(<anonymous>)
+    at Object.build (C
+:\Users\User\OneDrive\
+Desktop\FinalYearProje
+ct\Infrastructure-moni
+toring-system\node_mod
+ules\esbuild\lib\main.
+js:2022:25)
+    at build (C:\Users
+\User\OneDrive\Desktop
+\FinalYearProject\Infr
+astructure-monitoring-
+system\node_modules\es
+build\lib\main.js:1873
+:51)
+    at 
+bundleConfigFile (file
+:///C:/Users/User/OneD
+rive/Desktop/FinalYear
+Project/Infrastructure
+-monitoring-system/nod
+e_modules/vite/dist/no
+de/chunks/dep-BK3b2jBa
+.js:66845:24)
+
+  The plugin 
+"externalize-deps" 
+was triggered by this 
+import
+
+    
+vite.config.js:2:18:
+      2 Γöé import 
+react from 
+'@vitejs/plugin-react'
+        Γò╡           
+        
+~~~~~~~~~~~~~~~~~~~~~~
+
+[31mfailed to load 
+config from C:\Users\U
+ser\OneDrive\Desktop\F
+inalYearProject\Infras
+tructure-monitoring-sy
+stem\main_dashboard\vi
+te.config.js[39m
+[31merror during 
+build:
+Error: Build failed 
+with 1 error:
+../node_modules/esbuil
+d/lib/main.js:1225:27:
+ ERROR: [plugin: 
+externalize-deps] "@vi
+tejs/plugin-react" 
+resolved to an ESM 
+file. ESM file cannot 
+be loaded by 
+`require`. See https:/
+/vite.dev/guide/troubl
+eshooting.html#this-pa
+ckage-is-esm-only for 
+more details.
+    at 
+failureErrorWithLog (C
+:\Users\User\OneDrive\
+Desktop\FinalYearProje
+ct\Infrastructure-moni
+toring-system\node_mod
+ules\esbuild\lib\main.
+js:1472:15)
+    at C:\Users\User\O
+neDrive\Desktop\FinalY
+earProject\Infrastruct
+ure-monitoring-system\
+node_modules\esbuild\l
+ib\main.js:945:25
+    at 
+runOnEndCallbacks (C:\
+Users\User\OneDrive\De
+sktop\FinalYearProject
+\Infrastructure-monito
+ring-system\node_modul
+es\esbuild\lib\main.js
+:1315:45)
+    at 
+buildResponseToResult 
+(C:\Users\User\OneDriv
+e\Desktop\FinalYearPro
+ject\Infrastructure-mo
+nitoring-system\node_m
+odules\esbuild\lib\mai
+n.js:943:7)
+    at C:\Users\User\O
+neDrive\Desktop\FinalY
+earProject\Infrastruct
+ure-monitoring-system\
+node_modules\esbuild\l
+ib\main.js:970:16
+    at responseCallbac
+ks.<computed> (C:\User
+s\User\OneDrive\Deskto
+p\FinalYearProject\Inf
+rastructure-monitoring
+-system\node_modules\e
+sbuild\lib\main.js:622
+:9)
+    at 
+handleIncomingPacket (
+C:\Users\User\OneDrive
+\Desktop\FinalYearProj
+ect\Infrastructure-mon
+itoring-system\node_mo
+dules\esbuild\lib\main
+.js:677:12)
+    at 
+Socket.readFromStdout 
+(C:\Users\User\OneDriv
+e\Desktop\FinalYearPro
+ject\Infrastructure-mo
+nitoring-system\node_m
+odules\esbuild\lib\mai
+n.js:600:7)
+    at Socket.emit 
+(node:events:507:28)
+    at addChunk (node:
+internal/streams/reada
+ble:559:12)[39m

@@ -1,0 +1,64 @@
+﻿
+> infravision-ai-dashboard@1.0.0 build
+> vite build
+
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+node.exe : [baseline-b
+rowser-mapping] The 
+data in this module 
+is over two months 
+old.  To ensure 
+accurate Baseline 
+data, please update: 
+`npm i baseline-browse
+r-mapping@latest -D`
+At line:1 char:1
++ & "C:\Program Files\
+nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: ([baseline-   
+ brows...ping@late    
+st -D`:String) []    
+, RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+[32mΓ£ô[39m 982 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                     [39m[1m[2m  0.51 kB[22m[1m[22m[2m Γöé gzip:   0.31 kB[22m
+[2mdist/[22m[32massets/Bannerimg-CH60qhCi.jpg  [39m[1m[2m 99.65 kB[22m[1m[22m
+[2mdist/[22m[35massets/index-BdxR16I4.css      [39m[1m[2m 72.21 kB[22m[1m[22m[2m Γöé gzip:  15.70 kB[22m
+[2mdist/[22m[36massets/index-EJWkHAIU.js       [39m[1m[33m821.04 kB[39m[22m[2m Γöé gzip: 242.53 kB[22m
+[33m
+(!) Some chunks are 
+larger than 500 kB 
+after minification. 
+Consider:
+- Using dynamic 
+import() to 
+code-split the 
+application
+- Use build.rollupOpti
+ons.output.manualChunk
+s to improve 
+chunking: https://roll
+upjs.org/configuration
+-options/#output-manua
+lchunks
+- Adjust chunk size 
+limit for this 
+warning via build.chun
+kSizeWarningLimit.[39
+m
+[32mΓ£ô built in 6.19s[39m

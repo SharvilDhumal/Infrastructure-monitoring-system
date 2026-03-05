@@ -1,0 +1,748 @@
+:root {
+  --accent-cyan: #06b6d4;
+  --accent-indigo: #6366f1;
+}
+
+.infrastructure-monitoring {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.asset-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.asset-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+}
+
+.asset-tab:hover {
+  background: rgba(34, 211, 238, 0.05);
+  transform: translateY(-4px);
+  border-color: rgba(34, 211, 238, 0.3);
+  color: var(--accent-cyan);
+  box-shadow: var(--shadow-md);
+}
+
+.asset-tab.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.2) 100%);
+  color: var(--text-primary);
+  border-color: var(--accent-indigo);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+.asset-tab-icon {
+  font-size: 42px;
+  margin-bottom: 8px;
+}
+
+.asset-tab span:not(.asset-tab-icon) {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.section-title-container {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.issue-overview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.overview-section {
+  width: 100%;
+}
+
+/* Section 1: KPI Grid (2 Columns) */
+.kpi-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .kpi-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Section 2: Trend Chart Card */
+.chart-section {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--border-radius);
+  padding: 32px;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-glow);
+}
+
+.chart-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.period-selector-mini {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
+}
+
+.period-btn-mini {
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.period-btn-mini.active {
+  background: var(--accent-indigo);
+  color: white;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.period-btn-mini:hover:not(.active) {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+
+/* Section 3: Severity Donut Card */
+.severity-section {
+  display: flex;
+  justify-content: center;
+}
+
+
+
+
+.chart-wrapper {
+  display: flex;
+}
+
+
+.recent-issues-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--card-border);
+  margin-bottom: 24px;
+}
+
+/* Bridge-specific component spacing - ensure consistent 24px margin */
+.bridge-ai-visual-proof-card,
+.bridge-action-status-card,
+.defect-distribution-recent-issues-container {
+  margin-bottom: 24px;
+}
+
+/* Combined container for Defect Distribution and Recent Issues (Bridge tab only) */
+.defect-distribution-recent-issues-container {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.defect-distribution-wrapper {
+  flex: 0 0 40%;
+  min-width: 0;
+  /* Allows content to shrink */
+}
+
+.recent-issues-wrapper {
+  flex: 0 0 60%;
+  min-width: 0;
+  /* Allows content to shrink */
+}
+
+/* Remove margin from components when inside the combined container */
+.defect-distribution-wrapper .bridge-defect-distribution-card,
+.recent-issues-wrapper .recent-issues-card {
+  margin-bottom: 0;
+}
+
+/* Module-specific content */
+.module-specific-content {
+  margin-bottom: 24px;
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 1024px) {
+  .module-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Module cards styling */
+.module-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.module-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+/* Status cards grid */
+.status-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.status-card {
+  background: var(--main-bg);
+  border-radius: var(--border-radius-sm);
+  padding: 16px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.status-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.status-card-value {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.status-card-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.status-card-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+/* Risk zones and coverage cards */
+.risk-zone-card,
+.coverage-zone-card {
+  background: var(--main-bg);
+  border-radius: var(--border-radius-sm);
+  padding: 16px;
+  margin-bottom: 12px;
+  border-left: 4px solid;
+  transition: transform 0.2s ease;
+}
+
+.risk-zone-card:hover,
+.coverage-zone-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.risk-zone-header,
+.coverage-zone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.risk-zone-title,
+.coverage-zone-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.risk-level {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: white;
+}
+
+.risk-level-high {
+  background-color: var(--accent-red);
+}
+
+.risk-level-medium {
+  background-color: var(--accent-amber);
+}
+
+.risk-level-low {
+  background-color: var(--accent-green);
+}
+
+.safety-rating {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.safety-good {
+  background-color: var(--accent-green);
+  color: white;
+}
+
+.safety-fair {
+  background-color: var(--accent-amber);
+  color: white;
+}
+
+.safety-poor {
+  background-color: var(--accent-red);
+  color: white;
+}
+
+.risk-zone-details,
+.coverage-zone-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.detail-value {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* AI Visual Proof cards */
+.ai-proof-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.ai-proof-card {
+  background: var(--main-bg);
+  border-radius: var(--border-radius-sm);
+  padding: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.ai-proof-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.ai-proof-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ai-proof-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.ai-proof-confidence {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background-color: var(--accent-green);
+  color: white;
+}
+
+.ai-proof-confidence-high {
+  background-color: var(--accent-green);
+}
+
+.ai-proof-confidence-medium {
+  background-color: var(--accent-amber);
+}
+
+.ai-proof-confidence-low {
+  background-color: var(--accent-red);
+}
+
+.ai-proof-details {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.ai-proof-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.ai-proof-image {
+  font-size: 48px;
+  text-align: center;
+  margin: 12px 0;
+  padding: 20px;
+  background: var(--card-bg);
+  border-radius: var(--border-radius-sm);
+}
+
+.ai-proof-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* Chart containers */
+.chart-container {
+  height: 200px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.pressure-chart-container {
+  height: 180px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.pressure-chart-point {
+  position: relative;
+}
+
+.pressure-anomaly {
+  color: var(--accent-red);
+  font-weight: 700;
+}
+
+/* Defect distribution */
+.defect-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.defect-item:last-child {
+  border-bottom: none;
+}
+
+.defect-type {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.defect-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.defect-count {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Pressure timeline */
+.pressure-timeline {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.pressure-point {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.pressure-value {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.pressure-time {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.pressure-status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 8px;
+}
+
+.pressure-normal {
+  background-color: var(--accent-green);
+  color: white;
+}
+
+.pressure-warning {
+  background-color: var(--accent-amber);
+  color: white;
+}
+
+.pressure-critical {
+  background-color: var(--accent-red);
+  color: white;
+}
+
+.card-section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.issues-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr 1fr 1.5fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr 1fr 1.5fr;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.table-row:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: var(--border-radius-sm);
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.table-col {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.actions-cell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.severity-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+}
+
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  min-width: 100px;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 211, 238, 0.4);
+  background: rgba(15, 23, 42, 0.4);
+  color: var(--accent-cyan);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 8px;
+  transition: all 0.2s ease;
+}
+
+.action-link:hover {
+  background: rgba(34, 211, 238, 0.12);
+  color: var(--accent-indigo);
+  border-color: rgba(99, 102, 241, 0.6);
+  text-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .table-header {
+    display: none;
+  }
+
+  .table-col::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--text-secondary);
+    font-size: 12px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .asset-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions-cell {
+    flex-wrap: wrap;
+  }
+
+  .status-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-proof-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .module-card {
+    padding: 16px;
+  }
+
+  .defect-distribution-recent-issues-container {
+    flex-direction: column;
+  }
+
+  .defect-distribution-wrapper,
+  .recent-issues-wrapper {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .module-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-container {
+    height: 180px;
+  }
+
+  .ai-proof-card {
+    padding: 12px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .asset-icon-large {
+    font-size: 36px;
+  }
+}

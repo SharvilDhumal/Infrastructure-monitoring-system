@@ -1,0 +1,67 @@
+.app {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--main-bg);
+  box-sizing: border-box;
+}
+
+.main-content {
+  flex: 1;
+  padding: 32px;
+  padding-top: 96px;
+  /* Account for navbar + extra breathing room */
+  margin-left: 260px;
+  width: calc(100% - 260px);
+  min-height: 100vh;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.app.sidebar-collapsed .main-content {
+  margin-left: 80px;
+  width: calc(100% - 80px);
+}
+
+.app.is-fullscreen .main-content {
+  margin-left: 0 !important;
+  width: 100% !important;
+  padding: 0 !important;
+  padding-top: 0 !important;
+}
+
+.fullscreen-toggle-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background-color: #002147;
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fullscreen-toggle-btn:hover {
+  transform: scale(1.1);
+  background-color: #003366;
+}
+
+.fullscreen-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 1024px) {
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 16px;
+    padding-top: 80px;
+  }
+}

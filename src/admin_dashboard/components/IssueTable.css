@@ -1,0 +1,201 @@
+.issue-table-wrapper {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    width: 100%;
+}
+
+.issue-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    table-layout: fixed;
+}
+
+.issue-table th {
+    padding: 16px 20px;
+    background: #fdfdfd;
+    font-size: 12px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.issue-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.issue-table tr:hover {
+    background-color: #f8fafc;
+}
+
+.col-type {
+    width: 45%;
+}
+
+.col-severity {
+    width: 12%;
+}
+
+.col-time {
+    width: 18%;
+}
+
+.col-status {
+    width: 12%;
+}
+
+.col-actions {
+    width: 13%;
+}
+
+.type-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.type-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    border-radius: 6px;
+}
+
+.type-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.type-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.4;
+}
+
+.type-loc {
+    font-size: 12.5px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.table-badge {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.col-time {
+    font-size: 12.5px;
+    color: #475569;
+}
+
+.status-text {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.status-text.active {
+    color: var(--accent-red);
+}
+
+.status-text.resolved {
+    color: #64748b;
+}
+
+.action-buttons-inline {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+}
+
+.btn-circle.details {
+    color: #64748b;
+}
+
+.btn-circle.details:hover {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+    color: #1e293b;
+}
+
+.btn-circle.assign {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #2563eb;
+}
+
+.btn-circle.assign:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+}
+
+.btn-circle.resolve {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #16a34a;
+}
+
+.btn-circle.resolve:hover {
+    background: #16a34a;
+    border-color: #16a34a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.3);
+}
+
+.btn-circle.reopen {
+    color: #475569;
+    background: #f1f5f9;
+}
+
+.icon-img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    transition: filter 0.2s ease;
+}
+
+.btn-circle:hover .icon-img {
+    filter: brightness(0) invert(1);
+}
+
+.no-issues {
+    padding: 40px;
+    text-align: center;
+    color: #94a3b8;
+    font-style: italic;
+    background: white;
+    border-radius: 8px;
+    border: 1px dashed #e2e8f0;
+}
