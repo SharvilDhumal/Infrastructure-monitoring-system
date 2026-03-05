@@ -1,56 +1,63 @@
-import { useContext, useMemo } from 'react'
-import { IssuesContext } from '../context/IssuesContext'
+import { useState, useEffect, useCallback } from 'react'
+import { 
+  fetchAllIssues, 
+  getCriticalIssues, 
+  getAssignedIssues, 
+  assignTeamToIssue 
+} from '../services/issuesService'
 
 export const useIssues = () => {
-  const context = useContext(IssuesContext)
+  const [criticalIssues, setCriticalIssues] = useState([])
+  const [assignedIssues, setAssignedIssues] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  if (!context) {
-    throw new Error('useIssues must be used within an IssuesProvider')
-  }
-
-  const { allIssues, loading, error, refreshIssues, assignIssue, resolveIssue, reopenIssue } = context
-
-  const criticalIssues = useMemo(() =>
-    allIssues.filter(i =>
-      (i.severity?.toLowerCase() === 'critical' || i.severity?.toLowerCase() === 'high') &&
-      i.status === 'active'
-    ).slice(0, 10),
-    [allIssues])
-
-  const assignedIssues = useMemo(() =>
-    allIssues.filter(i => i.subStatus?.toLowerCase() === 'assigned'),
-    [allIssues])
-
-  const severityCounts = useMemo(() => {
-    const active = allIssues.filter(i => i.status === 'active');
-    return {
-      critical: active.filter(i => i.severity?.toLowerCase() === 'critical' || i.severity?.toLowerCase() === 'high').length,
-      warning: active.filter(i => i.severity?.toLowerCase() === 'medium' || i.severity?.toLowerCase() === 'warning').length,
-      normal: active.filter(i => i.severity?.toLowerCase() === 'low').length
+  const loadIssues = useCallback(async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      
+      // Fetch both critical and assigned issues in parallel
+      const [critical, assigned] = await Promise.all([
+        getCriticalIssues(4),
+        getAssignedIssues()
+      ])
+      
+      setCriticalIssues(critical)
+      setAssignedIssues(assigned)
+    } catch (err) {
+      console.error('Error loading issues:', err)
+      setError(err.message || 'Failed to load issues')
+    } finally {
+      setLoading(false)
     }
-  }, [allIssues])
+  }, [])
 
-  const workflowStats = useMemo(() => {
-    return {
-      detected: allIssues.length,
-      unassigned: allIssues.filter(i => !i.isAssigned && !i.isResolved).length,
-      assigned: allIssues.filter(i => i.isAssigned).length,
-      fixed: allIssues.filter(i => i.isResolved).length
+  const handleAssignTeam = useCallback(async (issueId, team, notes) => {
+    try {
+      setError(null)
+      // Update in backend/storage
+      await assignTeamToIssue(issueId, team, notes)
+      // Reload issues to reflect changes
+      await loadIssues()
+    } catch (err) {
+      console.error('Error assigning team:', err)
+      setError(err.message || 'Failed to assign team')
+      throw err
     }
-  }, [allIssues])
+  }, [loadIssues])
+
+  useEffect(() => {
+    loadIssues()
+  }, [loadIssues])
 
   return {
-    allIssues,
     criticalIssues,
     assignedIssues,
-    severityCounts,
-    workflowStats,
     loading,
     error,
-    refreshIssues,
-    assignIssue,
-    resolveIssue,
-    reopenIssue
+    refreshIssues: loadIssues,
+    assignTeam: handleAssignTeam
   }
 }
 

@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from datetime import datetime
 import os
 import uuid
-from pymongo import MongoClient
+import sqlite3
 
 from .yolo_inference import detect_pothole
 
@@ -23,20 +23,35 @@ app.add_middleware(
 # -------------------- Paths --------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
+DB_PATH = os.path.join(BASE_DIR, "pothole.db")
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Serve uploaded images
 app.mount("/uploads", StaticFiles(directory=UPLOAD_FOLDER), name="uploads")
 
-# -------------------- MongoDB Setup --------------------
-# Hardcoded URI as per user's environment/request context if .env is not easily accessible via relative path here, 
-# but I see it in c:\Users\User\OneDrive\Desktop\Infrastructure-monitoring-system-sharvil\backend\.env
-# Let's try to load it or use the one I found.
-MONGO_URI = "mongodb+srv://infravisonAI:InfravisionAI%402026@cluster0.cwovzrd.mongodb.net/auth-db"
-client = MongoClient(MONGO_URI)
-db = client["auth-db"]
-potholes_col = db["potholes"]
+# -------------------- Database Setup --------------------
+def init_db():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS issues (
+            id TEXT PRIMARY KEY,
+            image TEXT,
+            confidence REAL,
+            count INTEGER,
+            time TEXT,
+            status TEXT,
+            solver_name TEXT,
+            resolved_time TEXT
+        )
+    """)
+
+    conn.commit()
+    conn.close()
+
+init_db()
 
 # -------------------- Upload Endpoint (ESP32 Compatible) --------------------
 @app.post("/upload/")
@@ -49,57 +64,76 @@ async def upload_image(request: Request):
 
     upload_path = os.path.join(UPLOAD_FOLDER, filename)
 
-    # Temporarily save image
-    try:
-        # Save temp image
-        with open(upload_path, "wb") as f:
-            f.write(image_bytes)
+    # Temporarily save image for detection
+    with open(upload_path, "wb") as f:
+        f.write(image_bytes)
 
-        # Run detection
-        result = detect_pothole(upload_path)
+    # Run detection
+    result = detect_pothole(upload_path)
 
-        # 🔥 Only keep image if pothole detected
-        if result.get("count", 0) >= 1:
-            issue_data = {
-                "id": unique_id,
-                "image": f"uploads/{filename}",
-                "confidence": result.get("confidence", 0),
-                "count": result.get("count", 0),
-                "time": timestamp,
-                "status": "unsolved",
-                "solver_name": None,
-                "resolved_time": None
-            }
-            
-            potholes_col.insert_one(issue_data)
+    # 🔥 Only keep image if pothole detected
+    if result["count"] >= 1:
 
-            return {
-                "ai_result": result,
-                "message": "Pothole detected and saved"
-            }
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
 
-        else:
-            # ❌ No pothole → delete image
-            if os.path.exists(upload_path):
-                os.remove(upload_path)
+        cursor.execute("""
+            INSERT INTO issues (id, image, confidence, count, time, status, solver_name, resolved_time)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            unique_id,
+            f"uploads/{filename}",
+            result["confidence"],
+            result["count"],
+            timestamp,
+            "unsolved",
+            None,
+            None
+        ))
 
-            return {
-                "ai_result": result,
-                "message": "No pothole detected - image discarded"
-            }
-    except Exception as e:
-        print(f"Error during image upload or processing: {e}")
-        return {"status": "error", "message": str(e)}, 500
-    finally:
-        # Ensure the temporary image is removed if it still exists and no pothole was detected
-        if os.path.exists(upload_path) and result.get("count", 0) < 1:
-            os.remove(upload_path)
+        conn.commit()
+        conn.close()
+
+        return {
+            "ai_result": result,
+            "message": "Pothole detected and saved"
+        }
+
+    else:
+        # ❌ No pothole → delete image
+        os.remove(upload_path)
+
+        return {
+            "ai_result": result,
+            "message": "No pothole detected - image discarded"
+        }
+
 
 
 # -------------------- Get All Issues --------------------
 @app.get("/detections/")
 def get_detections():
-    issues = list(potholes_col.find({}, {"_id": 0}))
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM issues")
+    rows = cursor.fetchall()
+    conn.close()
+
+    issues = []
+
+    for row in rows:
+        issues.append({
+            "id": row[0],
+            "image": row[1],
+            "confidence": row[2],
+            "count": row[3],
+            "time": row[4],
+            "status": row[5],
+            "solver_name": row[6],
+            "resolved_time": row[7],
+        })
+
     return issues
 
 # -------------------- Solve Issue --------------------
@@ -109,16 +143,21 @@ class SolveRequest(BaseModel):
 
 @app.post("/solve/{issue_id}")
 def solve_issue(issue_id: str, data: SolveRequest):
-    result = potholes_col.update_one(
-        {"id": issue_id},
-        {"$set": {
-            "status": "solved",
-            "solver_name": data.solver_name,
-            "resolved_time": data.resolved_time
-        }}
-    )
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
 
-    if result.matched_count == 0:
-        return {"message": "Issue not found"}, 404
+    cursor.execute("""
+        UPDATE issues
+        SET status = ?, solver_name = ?, resolved_time = ?
+        WHERE id = ?
+    """, (
+        "solved",
+        data.solver_name,
+        data.resolved_time,
+        issue_id
+    ))
+
+    conn.commit()
+    conn.close()
 
     return {"message": "Issue marked as solved"}

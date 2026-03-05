@@ -18,6 +18,5 @@ app.use(passport.initialize());
 app.use('/api/auth', authRoutes);
 app.use('/auth', authRoutes);
 app.use('/api/issues', issueRoutes);
-app.use('/api/admin', issueRoutes);
 
 module.exports = app;

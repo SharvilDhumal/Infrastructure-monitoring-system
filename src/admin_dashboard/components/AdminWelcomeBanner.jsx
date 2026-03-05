@@ -1,7 +1,7 @@
 import React from 'react';
 import './AdminWelcomeBanner.css';
 
-const AdminWelcomeBanner = ({ userName = "Admin Officer", alertCount = 0 }) => {
+const AdminWelcomeBanner = ({ userName = "Admin Officer" }) => {
     const currentDate = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
@@ -25,7 +25,7 @@ const AdminWelcomeBanner = ({ userName = "Admin Officer", alertCount = 0 }) => {
                     </div>
                     <div className="stat-mini">
                         <span className="stat-dot amber"></span>
-                        <span className="stat-label">{alertCount} Pending Alerts</span>
+                        <span className="stat-label">5 Pending Alerts</span>
                     </div>
                 </div>
             </div>

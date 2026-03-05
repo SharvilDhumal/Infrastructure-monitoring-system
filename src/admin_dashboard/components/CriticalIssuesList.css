@@ -39,27 +39,14 @@
   width: 100%;
 }
 
-.critical-table {
+.issues-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  table-layout: fixed;
-  /* Ensures column widths are respected */
 }
 
-.critical-table th,
-.critical-table td {
+.issues-table th {
   padding: 16px 24px;
-  border-bottom: 1px solid #f1f5f9;
-  font-size: 14px;
-  color: #334155;
-  vertical-align: middle;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.critical-table th {
   background: #fdfdfd;
   font-size: 12px;
   font-weight: 700;
@@ -69,44 +56,15 @@
   border-bottom: 1px solid #e2e8f0;
 }
 
-/* Explicit Column Widths */
-.critical-table th:nth-child(1),
-.critical-table td:nth-child(1) {
-  width: 35%;
+.issues-table td {
+  padding: 16px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  color: #334155;
+  vertical-align: middle;
 }
 
-/* Issue Type */
-
-.critical-table th:nth-child(2),
-.critical-table td:nth-child(2) {
-  width: 15%;
-  text-align: center;
-}
-
-/* Severity */
-
-.critical-table th:nth-child(3),
-.critical-table td:nth-child(3) {
-  width: 20%;
-}
-
-/* Reported Time */
-
-.critical-table th:nth-child(4),
-.critical-table td:nth-child(4) {
-  width: 15%;
-}
-
-/* Confidence */
-
-.critical-table th:nth-child(5),
-.critical-table td:nth-child(5) {
-  width: 15%;
-}
-
-/* Actions */
-
-.critical-table tr:hover td {
+.issues-table tr:hover td {
   background-color: #fcfdfe;
 }
 

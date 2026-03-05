@@ -313,7 +313,7 @@ const RecentIssuesTable = ({ issues, onView, onAssign, assetIcon }) => {
               </span>
             </div>
             <div className="table-col">{issue.detected}</div>
-            <div className="table-col actions-cell">
+            <div className="table-col">
               <button
                 className="action-link"
                 onClick={() => onView({

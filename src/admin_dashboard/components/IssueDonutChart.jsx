@@ -29,8 +29,8 @@ const IssueDonutChart = ({ data = { high: 0, medium: 0, low: 0 } }) => {
   }
 
   return (
-    <div className="donut-card">
-      <div className="donut-container">
+    <div className="severity-donut-card">
+      <div className="donut-chart-container">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -58,9 +58,9 @@ const IssueDonutChart = ({ data = { high: 0, medium: 0, low: 0 } }) => {
             />
           </PieChart>
         </ResponsiveContainer>
-        <div className="donut-center-text">
-          <div className="center-label" style={{ color: 'var(--text-secondary)' }}>Total Active</div>
-          <div className="center-count" style={{ color: 'var(--text-primary)' }}>{total}</div>
+        <div className="donut-center-label">
+          <div className="label-text" style={{ color: 'var(--text-secondary)' }}>Total Active</div>
+          <div className="label-value" style={{ color: 'var(--text-primary)' }}>{total}</div>
         </div>
       </div>
       <div className="donut-legend">

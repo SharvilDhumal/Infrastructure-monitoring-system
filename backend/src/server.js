@@ -7,7 +7,6 @@ connectDB();
 
 app.use('/api/issues', require('./routes/issueRoutes'));
 app.use('/api', require('./routes/streetlightRoutes'));
-app.use('/api', require('./routes/dataRoutes'));
 
 const PORT = process.env.PORT || 5001;
 

@@ -1,16 +1,12 @@
 #include "esp_camera.h"
 #include <WiFi.h>
 #include <HTTPClient.h>
-#include "soc/soc.h"           // Required for brownout
-#include "soc/rtc_cntl_reg.h"  // Required for brownout
 
 // =====================
 // WiFi Credentials
 // =====================
-const char* ssid = "kavya";
+const char* ssid = "kavya";String serverUrl = "http://10.246.53.171:8000/upload/";
 const char* password = "1234567890";
-String serverUrl = "http://10.133.231.171:8000/upload/";
-
 
 // =====================
 // Backend Server
@@ -58,7 +54,7 @@ void startCamera() {
   config.pin_sccb_scl = SIOC_GPIO_NUM;
   config.pin_pwdn = PWDN_GPIO_NUM;
   config.pin_reset = RESET_GPIO_NUM;
-  config.xclk_freq_hz = 10000000; // Lowered from 20MHz to 10MHz for stability
+  config.xclk_freq_hz = 20000000;
   config.pixel_format = PIXFORMAT_JPEG;
 
   config.frame_size = FRAMESIZE_VGA;
@@ -110,8 +106,6 @@ void sendImage(camera_fb_t *fb) {
 // =====================
 
 void setup() {
-  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); // Disable brownout detector
-  
   Serial.begin(115200);
   delay(1000);
 

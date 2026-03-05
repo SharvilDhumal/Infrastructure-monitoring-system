@@ -1,56 +1,143 @@
 import React, { useState, useMemo } from 'react'
-import IssueTable from '../components/IssueTable'
-import AssignIssueModal from '../components/AssignIssueModal'
-import ResolveIssueModal from '../components/ResolveIssueModal'
-import IssueDetailsModal from '../components/IssueDetailsModal'
+import BridgeAIVisualProof from '../components/BridgeAIVisualProof'
+import BridgeDefectDistribution from '../components/BridgeDefectDistribution'
+import BridgeActionStatus from '../components/BridgeActionStatus'
+import ViewDetailsModal from '../components/ViewDetailsModal'
+import AssignTeamModal from '../components/AssignTeamModal'
 import KPICard from '../components/KPICard'
 import IssueTrendChart from '../components/IssueTrendChart'
-import SeverityDonutChart from '../components/IssueDonutChart'
+import SeverityDonutChart from '../components/IssueDonutChart' // Using extracted version
 import './InfrastructureMonitoring.css'
-import { useIssues } from '../hooks/useIssues'
 
 const InfrastructureMonitoring = () => {
-  const { allIssues, loading, error, assignIssue, resolveIssue, reopenIssue } = useIssues()
   const [selectedAsset, setSelectedAsset] = useState('roads')
   const [selectedIssue, setSelectedIssue] = useState(null)
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   const [showAssignModal, setShowAssignModal] = useState(false)
-  const [showResolveModal, setShowResolveModal] = useState(false)
   const [timePeriod, setTimePeriod] = useState('7d')
 
-  const assets = useMemo(() => {
-    const assetTypes = {
-      roads: { name: 'Roads', icon: '🛣️', types: ['Pothole'] },
-      streetlights: { name: 'Street Lights', icon: '💡', types: ['Street Light Malfunction', 'Streetlight'] },
-      water: { name: 'Water Systems', icon: '💧', types: ['Water Leak', 'Water Leakage'] },
-      bridges: { name: 'Bridges', icon: '🌉', types: ['Bridge Structural Anomaly', 'Bridge'] }
-    }
-
-    const result = {}
-    Object.keys(assetTypes).forEach(key => {
-      const typeInfo = assetTypes[key]
-      const filteredIssues = allIssues.filter(i =>
-        typeInfo.types.some(t => i.issueType?.toLowerCase().includes(t.toLowerCase()) || i.title?.toLowerCase().includes(t.toLowerCase()))
-      )
-
-      result[key] = {
-        name: typeInfo.name,
-        icon: typeInfo.icon,
-        detected: filteredIssues.length,
-        resolved: filteredIssues.filter(i => i.status === 'resolved').length,
-        severity: {
-          high: filteredIssues.filter(i => (i.severity?.toLowerCase() === 'critical' || i.severity?.toLowerCase() === 'high') && i.status === 'active').length,
-          medium: filteredIssues.filter(i => (i.severity?.toLowerCase() === 'medium' || i.severity?.toLowerCase() === 'warning') && i.status === 'active').length,
-          low: filteredIssues.filter(i => i.severity?.toLowerCase() === 'low' && i.status === 'active').length
+  const assets = {
+    roads: {
+      name: 'Roads',
+      icon: '🛣️',
+      detected: 24,
+      resolved: 18,
+      severity: { high: 5, medium: 12, low: 7 },
+      recentIssues: [
+        { id: 1, location: 'Main St & 5th Ave', issue: 'Pothole', severity: 'critical', detected: '5 min ago' },
+        { id: 2, location: 'Highway 101', issue: 'Crack formation', severity: 'warning', detected: '1 hour ago' },
+        { id: 3, location: 'Park Boulevard', issue: 'Surface degradation', severity: 'warning', detected: '2 hours ago' }
+      ]
+    },
+    streetlights: {
+      name: 'Street Lights',
+      icon: '💡',
+      detected: 142,
+      resolved: 116,
+      severity: { high: 12, medium: 45, low: 85 },
+      recentIssues: [
+        { id: 1, location: 'Park Boulevard', issue: 'Light #1247 not responding', severity: 'critical', detected: '12 min ago' },
+        { id: 2, location: 'River Road', issue: 'Dimming detected', severity: 'warning', detected: '45 min ago' },
+        { id: 3, location: 'Main Street', issue: 'Scheduled maintenance', severity: 'warning', detected: '3 hours ago' }
+      ]
+    },
+    water: {
+      name: 'Water Systems',
+      icon: '💧',
+      detected: 56,
+      resolved: 46,
+      severity: { high: 8, medium: 14, low: 34 },
+      recentIssues: [
+        { id: 1, location: 'River Road', issue: 'Potential water main leak', severity: 'critical', detected: '18 min ago' },
+        { id: 2, location: 'Downtown District', issue: 'Pressure fluctuation', severity: 'warning', detected: '1 hour ago' },
+        { id: 3, location: 'Industrial Zone', issue: 'Valve maintenance due', severity: 'warning', detected: '4 hours ago' }
+      ]
+    },
+    bridges: {
+      name: 'Bridges',
+      icon: '🌉',
+      detected: 12,
+      resolved: 7,
+      severity: { high: 3, medium: 5, low: 4 },
+      recentIssues: [
+        { id: 1, location: 'Highway Bridge #3', issue: 'Structural anomaly detected', severity: 'critical', detected: '25 min ago' },
+        { id: 2, location: 'River Crossing Bridge', issue: 'Sensor calibration needed', severity: 'warning', detected: '2 hours ago' },
+        { id: 3, location: 'Railway Overpass', issue: 'Routine inspection due', severity: 'warning', detected: '1 day ago' }
+      ],
+      aiVisualProofs: [
+        {
+          id: 1,
+          defectType: 'Crack',
+          severity: 'High',
+          confidence: 94,
+          title: 'Crack Detected - Highway Bridge #3',
+          location: 'Highway Bridge #3',
+          exactLocation: 'South abutment, column B',
+          detectionTime: '25 min ago',
+          timestamp: '25 min ago',
+          aiConfidence: 94,
+          lat: 13.0827,
+          lng: 80.2707,
+          image: '🌉'
         },
-        recentIssues: filteredIssues.slice(0, 10),
-        allFilteredIssues: filteredIssues
-      }
-    })
-    return result
-  }, [allIssues])
+        {
+          id: 2,
+          defectType: 'Corrosion',
+          severity: 'Medium',
+          confidence: 87,
+          title: 'Corrosion Detected - River Crossing Bridge',
+          location: 'River Crossing Bridge',
+          exactLocation: 'North span, beam support',
+          detectionTime: '2 hours ago',
+          timestamp: '2 hours ago',
+          aiConfidence: 87,
+          lat: 12.9716,
+          lng: 77.5946,
+          image: '🌉'
+        },
+        {
+          id: 3,
+          defectType: 'Spalling',
+          severity: 'Low',
+          confidence: 82,
+          title: 'Spalling Detected - Railway Overpass',
+          location: 'Railway Overpass',
+          exactLocation: 'East deck, section 4',
+          detectionTime: '1 day ago',
+          timestamp: '1 day ago',
+          aiConfidence: 82,
+          lat: 19.0760,
+          lng: 72.8777,
+          image: '🌉'
+        }
+      ],
+      defectDistribution: [
+        { type: 'Cracks', count: 12 },
+        { type: 'Corrosion', count: 8 },
+        { type: 'Spalling', count: 5 }
+      ],
+      actionStatus: [
+        {
+          id: 1,
+          defectType: 'Crack',
+          location: 'Highway Bridge #3 - Column B',
+          priority: 'High',
+          status: 'Unassigned',
+          title: 'Crack Detected - Highway Bridge #3',
+          exactLocation: 'South abutment, column B',
+          detectionTime: '25 min ago',
+          timestamp: '25 min ago',
+          aiConfidence: 94,
+          severity: 'critical',
+          lat: 13.0827,
+          lng: 80.2707,
+          image: '🌉'
+        }
+      ]
+    }
+  }
 
-  const currentAsset = assets[selectedAsset] || { name: 'Loading...', icon: '⌛', detected: 0, resolved: 0, severity: { high: 0, medium: 0, low: 0 }, recentIssues: [], allFilteredIssues: [] }
+  const currentAsset = assets[selectedAsset]
 
   const handleViewDetails = (issue) => {
     setSelectedIssue(issue)
@@ -62,34 +149,15 @@ const InfrastructureMonitoring = () => {
     setShowAssignModal(true)
   }
 
-  const handleResolveClick = (issue) => {
-    setSelectedIssue(issue)
-    setShowResolveModal(true)
+  const handleAssignTeam = async (issueId, team, notes) => {
+    console.log('Assigning team:', { issueId, team, notes })
+    handleCloseModals()
   }
 
-  const handleAssignConfirm = async (issueId, team) => {
-    await assignIssue(issueId, team)
+  const handleCloseModals = () => {
+    setShowDetailsModal(false)
     setShowAssignModal(false)
-  }
-
-  const handleResolveConfirm = (issueId, resolver) => {
-    resolveIssue(issueId, resolver)
-    setShowResolveModal(false)
-  }
-
-  if (loading && allIssues.length === 0) {
-    return (
-      <div className="dashboard-loading">
-        <div className="loading-spinner">
-          <div style={{ fontSize: '40px' }}>🏗️</div>
-        </div>
-        <p>Loading asset data...</p>
-      </div>
-    )
-  }
-
-  if (error) {
-    return <div className="overview-error">{error}</div>
+    setSelectedIssue(null)
   }
 
   return (
@@ -117,85 +185,190 @@ const InfrastructureMonitoring = () => {
       </div>
 
       <div className="issue-overview-section">
+        {/* Section 1: KPI Cards */}
         <div className="overview-section kpi-section">
           <KPICard
             type="total"
             title="Total Issues"
             value={currentAsset.detected}
-            subtext="Real-time count"
+            subtext="+12% vs previous period"
           />
           <KPICard
             type="resolved"
             title="Resolved"
             value={currentAsset.resolved}
-            subtext={`Resolution rate: ${currentAsset.detected > 0 ? Math.round((currentAsset.resolved / currentAsset.detected) * 100) : 0}%`}
+            subtext={`Resolution rate: ${Math.round((currentAsset.resolved / currentAsset.detected) * 100)}%`}
           />
         </div>
 
-        <div className="charts-combined-row">
-          <div className="overview-section chart-section trend-card">
-            <div className="chart-card-header">
-              <h3 className="card-section-title">Issue Trends</h3>
-              <div className="period-selector-mini">
-                {['7d', '30d', '90d'].map((p) => (
-                  <button
-                    key={p}
-                    className={`period-btn-mini ${timePeriod === p ? 'active' : ''}`}
-                    onClick={() => setTimePeriod(p)}
-                  >
-                    {p === '7d' ? '7 Days' : p === '30d' ? '30 Days' : '90 Days'}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="trend-chart-container">
-              <IssueTrendChart issues={currentAsset.allFilteredIssues} period={timePeriod} />
+        {/* Section 2: Trend Chart */}
+        <div className="overview-section chart-section full-width">
+          <div className="chart-card-header">
+            <h3 className="card-section-title">Issue Trends</h3>
+            <div className="period-selector-mini">
+              {['7d', '30d', '90d'].map((p) => (
+                <button
+                  key={p}
+                  className={`period-btn-mini ${timePeriod === p ? 'active' : ''}`}
+                  onClick={() => setTimePeriod(p)}
+                >
+                  {p === '7d' ? '7 Days' : p === '30d' ? '30 Days' : '90 Days'}
+                </button>
+              ))}
             </div>
           </div>
+          <div className="trend-chart-container">
+            <IssueTrendChart period={timePeriod} />
+          </div>
+        </div>
 
-          <div className="overview-section severity-section secondary-card">
-            <h3 className="card-section-title">Severity Distribution</h3>
-            <SeverityDonutChart data={currentAsset.severity} />
-          </div>
+        {/* Section 3: Severity Distribution */}
+        <div className="overview-section severity-section">
+          <SeverityDonutChart data={currentAsset.severity} />
         </div>
       </div>
 
-      <div className="recent-issues-container">
-        <h3 className="card-section-title">Recent Issues</h3>
-        <IssueTable
-          issues={currentAsset.recentIssues}
-          onAssign={handleAssignClick}
-          onResolve={handleResolveClick}
-          onViewDetails={handleViewDetails}
-        />
-      </div>
+      {/* Bridge-specific sections - only show for Bridge tab */}
+      {selectedAsset === 'bridges' && currentAsset.aiVisualProofs && (
+        <>
+          <BridgeAIVisualProof
+            visualProofs={currentAsset.aiVisualProofs}
+            onViewDetails={handleViewDetails}
+            onAssign={handleAssignClick}
+          />
+          <div className="defect-distribution-recent-issues-container">
+            <div className="defect-distribution-wrapper">
+              <BridgeDefectDistribution defectData={currentAsset.defectDistribution} />
+            </div>
+            <div className="recent-issues-wrapper">
+              <RecentIssuesTable
+                issues={currentAsset.recentIssues}
+                onView={handleViewDetails}
+                onAssign={handleAssignClick}
+                assetIcon={currentAsset.icon}
+              />
+            </div>
+          </div>
+          <BridgeActionStatus
+            actionItems={currentAsset.actionStatus}
+            onViewDetails={handleViewDetails}
+            onAssign={handleAssignClick}
+          />
+        </>
+      )}
 
+      {/* Recent Issues - only show for non-Bridge tabs */}
+      {selectedAsset !== 'bridges' && (
+        <RecentIssuesTable
+          issues={currentAsset.recentIssues}
+          onView={handleViewDetails}
+          onAssign={handleAssignClick}
+          assetIcon={currentAsset.icon}
+        />
+      )}
+
+      {/* Modals */}
       {showDetailsModal && (
-        <IssueDetailsModal
+        <ViewDetailsModal
           issue={selectedIssue}
-          onClose={() => setShowDetailsModal(false)}
+          onClose={handleCloseModals}
         />
       )}
 
       {showAssignModal && (
-        <AssignIssueModal
-          isOpen={showAssignModal}
+        <AssignTeamModal
           issue={selectedIssue}
-          onConfirm={handleAssignConfirm}
-          onClose={() => setShowAssignModal(false)}
-        />
-      )}
-
-      {showResolveModal && (
-        <ResolveIssueModal
-          isOpen={showResolveModal}
-          issue={selectedIssue}
-          onConfirm={handleResolveConfirm}
-          onClose={() => setShowResolveModal(false)}
+          onAssign={handleAssignTeam}
+          onClose={handleCloseModals}
         />
       )}
     </div>
   )
 }
 
+const RecentIssuesTable = ({ issues, onView, onAssign, assetIcon }) => {
+  return (
+    <div className="recent-issues-card">
+      <h3 className="card-section-title">Recent Issues</h3>
+      <div className="issues-table">
+        <div className="table-header">
+          <div className="table-col">Location</div>
+          <div className="table-col">Issue</div>
+          <div className="table-col">Severity</div>
+          <div className="table-col">Detected</div>
+          <div className="table-col">Actions</div>
+        </div>
+        {issues.map((issue) => (
+          <div key={issue.id} className="table-row">
+            <div className="table-col">{issue.location}</div>
+            <div className="table-col">{issue.issue}</div>
+            <div className="table-col">
+              <span
+                className={`severity-badge ${issue.severity}`}
+                style={{
+                  backgroundColor: issue.severity === 'critical' ? 'var(--accent-red)' : 'var(--accent-amber)',
+                  color: 'white'
+                }}
+              >
+                {issue.severity}
+              </span>
+            </div>
+            <div className="table-col">{issue.detected}</div>
+            <div className="table-col">
+              <button
+                className="action-link"
+                onClick={() => onView({
+                  ...issue,
+                  title: issue.issue,
+                  exactLocation: issue.location,
+                  detectionTime: issue.detected,
+                  timestamp: issue.detected,
+                  aiConfidence: 85,
+                  lat: 22.9734,
+                  lng: 78.6569,
+                  image: assetIcon
+                })}
+              >
+                View
+              </button>
+              <button
+                className="action-link"
+                onClick={() => onAssign({
+                  ...issue,
+                  title: issue.issue,
+                  exactLocation: issue.location,
+                  detectionTime: issue.detected,
+                  timestamp: issue.detected,
+                  aiConfidence: 85,
+                  lat: 22.9734,
+                  lng: 78.6569,
+                  image: assetIcon
+                })}
+              >
+                Assign
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default InfrastructureMonitoring
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

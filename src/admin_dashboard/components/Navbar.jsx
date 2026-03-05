@@ -58,10 +58,7 @@ const Navbar = () => {
   const notificationRef = useRef(null)
   const seenIdsRef = useRef(getSeenIds())
 
-  const isFetchingRef = useRef(false)
   const fetchIssues = useCallback(async () => {
-    if (isFetchingRef.current) return
-    isFetchingRef.current = true
     try {
       const res = await fetch(`${API_BASE}/api/issues`)
       if (!res.ok) return
@@ -79,16 +76,14 @@ const Navbar = () => {
       const unread = sorted.filter(issue => !seenIdsRef.current.has(issue._id))
       setUnreadCount(unread.length)
     } catch (err) {
-      // Silently ignore
-    } finally {
-      isFetchingRef.current = false
+      // Silently ignore — backend may not be running yet
     }
   }, [])
 
-  // Initial fetch + polling every 60s
+  // Initial fetch + polling every 20s
   useEffect(() => {
     fetchIssues()
-    const timer = setInterval(fetchIssues, 60_000)
+    const timer = setInterval(fetchIssues, POLL_INTERVAL)
     return () => clearInterval(timer)
   }, [fetchIssues])
 

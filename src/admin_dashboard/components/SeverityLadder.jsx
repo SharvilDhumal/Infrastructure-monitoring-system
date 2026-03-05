@@ -1,11 +1,12 @@
 import React from 'react'
+import { issuesData } from '../data/issuesData'
 import './SeverityLadder.css'
 
-const SeverityLadder = ({ counts }) => {
+const SeverityLadder = () => {
   const severityCounts = {
-    critical: counts?.critical || 0,
-    warning: counts?.warning || 0,
-    normal: counts?.normal || 0
+    critical: issuesData.filter(issue => issue.severity === 'critical').length,
+    warning: issuesData.filter(issue => issue.severity === 'warning').length,
+    normal: 0 // Assuming normal issues are resolved or not shown
   }
 
   const total = severityCounts.critical + severityCounts.warning + severityCounts.normal

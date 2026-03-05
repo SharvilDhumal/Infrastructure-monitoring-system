@@ -228,7 +228,7 @@ const PotholeDetection = ({ hideLayout = false }) => {
                       <div className="card-meta">
                         <div className="meta-row">
                           <MapPin size={16} className="icon-muted" />
-                          <span>{item.location || 'Automated Detection Area'}</span>
+                          <span>Sector 4 - Main Rd</span>
                         </div>
                         <div className="meta-row">
                           <Clock size={16} className="icon-muted" />

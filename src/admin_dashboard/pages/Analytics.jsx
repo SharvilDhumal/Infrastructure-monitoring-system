@@ -1,60 +1,36 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react'
 import KPICard from '../components/KPICard'
 import IssueTrendChart from '../components/IssueTrendChart'
 import IssueDonutChart from '../components/IssueDonutChart'
-import InfrastructureBarChart from '../components/InfrastructureBarChart'
 import './Analytics.css'
 
 const Analytics = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('7d')
-  const [analyticsData, setAnalyticsData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        setLoading(true)
-        const res = await axios.get('http://localhost:5001/api/admin/analytics')
-        setAnalyticsData(res.data.data)
-        setError(null)
-      } catch (err) {
-        console.error('Error fetching analytics:', err)
-        setError('Failed to load analytics data')
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchAnalytics()
-  }, [])
-
-  if (loading) {
-    return (
-      <div className="analytics-loading">
-        <div className="loading-spinner">Loading analytics...</div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return <div className="analytics-error">{error}</div>
-  }
-
-  if (!analyticsData) return null
 
   const metrics = {
-    totalIssues: analyticsData.totalIssues || 0,
-    resolvedIssues: analyticsData.resolvedIssues || 0,
-    avgResolutionTime: analyticsData.avgResolutionTime || '4.2 hours',
-    aiAccuracy: analyticsData.aiAccuracy || 94.2,
-    costSavings: analyticsData.costSavings || '$124,500',
-    preventiveActions: analyticsData.preventiveActions || 342,
-    severity: analyticsData.severityCounts || { critical: 0, high: 0, medium: 0, low: 0 }
+    totalIssues: 1247,
+    resolvedIssues: 1158,
+    avgResolutionTime: '4.2 hours',
+    aiAccuracy: 94.2,
+    costSavings: '$124,500',
+    preventiveActions: 342,
+    severity: { high: 145, medium: 412, low: 691 } // Aggregate severity for analytics
   }
 
-  const assetBreakdown = analyticsData.assetHealth || []
-  const topIssues = analyticsData.topIssueTypes || []
+  const assetBreakdown = [
+    { asset: 'Roads', issues: 523, resolved: 485, health: 92 },
+    { asset: 'Street Lights', issues: 342, resolved: 298, health: 78 },
+    { asset: 'Water Systems', issues: 189, resolved: 167, health: 88 },
+    { asset: 'Bridges', issues: 47, resolved: 31, health: 65 }
+  ]
+
+  const topIssues = [
+    { type: 'Potholes', count: 234, trend: '+12%' },
+    { type: 'Street Light Failures', count: 189, trend: '-8%' },
+    { type: 'Water Leaks', count: 156, trend: '+5%' },
+    { type: 'Surface Degradation', count: 134, trend: '-3%' },
+    { type: 'Structural Anomalies', count: 98, trend: '+18%' }
+  ]
 
   return (
     <div className="analytics">
@@ -99,21 +75,13 @@ const Analytics = () => {
             </div>
           </div>
           <div className="trend-chart-container">
-            <IssueTrendChart period={selectedPeriod} externalData={analyticsData.issueTrends} />
+            <IssueTrendChart period={selectedPeriod} />
           </div>
         </div>
 
-        {/* Section 3: Severity Distribution & Infrastructure Types */}
-        <div className="analytics-section charts-row">
-          <div className="analytics-card-container">
-            <h3 className="card-section-title centered-title">Severity Distribution</h3>
-            <div className="donut-wrapper">
-              <IssueDonutChart data={metrics.severity} />
-            </div>
-          </div>
-          <div className="analytics-card-container">
-            <InfrastructureBarChart data={assetBreakdown} />
-          </div>
+        {/* Section 3: Severity Distribution */}
+        <div className="analytics-section severity-section">
+          <IssueDonutChart data={metrics.severity} />
         </div>
       </div>
 
@@ -166,6 +134,50 @@ const Analytics = () => {
         </div>
       </div>
 
+      <div className="analytics-grid">
+        <div className="analytics-card glass-card">
+          <h2 className="card-section-title">Resolution Efficiency</h2>
+          <div className="efficiency-metrics">
+            <div className="efficiency-item">
+              <div className="efficiency-label">Average Response Time</div>
+              <div className="efficiency-value">1.2 hours</div>
+            </div>
+            <div className="efficiency-item">
+              <div className="efficiency-label">Average Resolution Time</div>
+              <div className="efficiency-value">{metrics.avgResolutionTime}</div>
+            </div>
+            <div className="efficiency-item">
+              <div className="efficiency-label">First-Time Fix Rate</div>
+              <div className="efficiency-value">87%</div>
+            </div>
+            <div className="efficiency-item">
+              <div className="efficiency-label">Customer Satisfaction</div>
+              <div className="efficiency-value">4.6/5.0</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="analytics-card glass-card">
+          <h2 className="card-section-title">AI Performance</h2>
+          <div className="ai-performance">
+            <div className="performance-item">
+              <div className="performance-label">Detection Accuracy</div>
+              <div className="performance-bar">
+                <div className="performance-fill" style={{ width: `${metrics.aiAccuracy}%`, backgroundColor: 'var(--accent-green)' }} />
+              </div>
+              <div className="performance-value">{metrics.aiAccuracy}%</div>
+            </div>
+            <div className="performance-item">
+              <div className="performance-label">Preventive Actions</div>
+              <div className="performance-value">{metrics.preventiveActions}</div>
+            </div>
+            <div className="performance-item">
+              <div className="performance-label">Cost Savings</div>
+              <div className="performance-value text-green">{metrics.costSavings}</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

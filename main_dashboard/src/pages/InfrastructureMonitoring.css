@@ -628,14 +628,6 @@
   color: var(--text-primary);
 }
 
-.actions-cell {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
-}
-
 .severity-badge {
   padding: 4px 10px;
   border-radius: 12px;
@@ -647,27 +639,20 @@
 }
 
 .action-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px 14px;
-  min-width: 100px;
-  border-radius: 999px;
-  border: 1px solid rgba(34, 211, 238, 0.4);
-  background: rgba(15, 23, 42, 0.4);
+  background: none;
+  border: none;
   color: var(--accent-cyan);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+  padding: 4px 8px;
   margin-right: 8px;
   transition: all 0.2s ease;
 }
 
 .action-link:hover {
-  background: rgba(34, 211, 238, 0.12);
   color: var(--accent-indigo);
-  border-color: rgba(99, 102, 241, 0.6);
+  text-decoration: underline;
   text-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
 }
 
@@ -696,10 +681,6 @@
 
   .asset-stats-grid {
     grid-template-columns: 1fr;
-  }
-
-  .actions-cell {
-    flex-wrap: wrap;
   }
 
   .status-cards-grid {

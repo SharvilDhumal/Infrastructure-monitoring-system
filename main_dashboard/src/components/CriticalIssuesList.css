@@ -176,24 +176,21 @@
 
 .issue-actions {
   display: flex;
-  flex-direction: row;
-  gap: 10px;
-  flex-wrap: nowrap;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .action-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 10px 18px;
-  min-width: 110px;
-  border-radius: 999px;
+  padding: 6px 12px;
+  border-radius: 8px;
   border: none;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .action-icon {
@@ -208,9 +205,8 @@
 
 .action-btn.primary:hover {
   background-color: #4f46e5;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-  filter: brightness(1.05);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
 .action-btn.secondary {
@@ -220,7 +216,7 @@
 }
 
 .action-btn.secondary:hover {
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.1);
   color: var(--text-primary);
   border-color: rgba(255, 255, 255, 0.2);
 }
@@ -248,7 +244,6 @@
 
   .issue-actions {
     flex-direction: column;
-    flex-wrap: wrap;
   }
 
   .action-btn {

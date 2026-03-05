@@ -3,15 +3,19 @@ import './CriticalIssuesList.css'
 
 const CriticalIssuesList = ({ issues = [], onViewDetails, onAssign }) => {
   const getSeverityStyle = (severity) => {
-    const s = severity.toLowerCase();
-    if (s === 'critical' || s === 'high') {
-      return { color: '#ffffff', bg: '#ef4444', label: 'High' };
-    } else if (s === 'medium' || s === 'warning') {
-      return { color: '#ffffff', bg: '#f59e0b', label: 'Medium' };
-    } else if (s === 'low') {
-      return { color: '#ffffff', bg: '#10b981', label: 'Low' };
+    switch (severity.toLowerCase()) {
+      case 'critical':
+        return { color: '#ffffff', bg: '#dc3545', label: 'Critical' };
+      case 'high':
+      case 'warning':
+        return { color: '#ffffff', bg: '#fd7e14', label: 'High' };
+      case 'medium':
+        return { color: '#000000', bg: '#ffc107', label: 'Medium' };
+      case 'low':
+        return { color: '#ffffff', bg: '#28a745', label: 'Low' };
+      default:
+        return { color: '#ffffff', bg: '#6c757d', label: severity };
     }
-    return { color: '#ffffff', bg: '#64748b', label: severity };
   }
 
   if (issues.length === 0) {
@@ -34,10 +38,11 @@ const CriticalIssuesList = ({ issues = [], onViewDetails, onAssign }) => {
         <span className="section-count">{issues.length} Issues Pending</span>
       </div>
       <div className="table-container">
-        <table className="critical-table">
+        <table className="issues-table">
           <thead>
             <tr>
               <th>Issue Type</th>
+              <th>Location</th>
               <th>Severity</th>
               <th>Reported Time</th>
               <th>Confidence</th>
@@ -53,9 +58,9 @@ const CriticalIssuesList = ({ issues = [], onViewDetails, onAssign }) => {
                     <div className="issue-type-cell">
                       <span className="type-icon">{issue.image}</span>
                       <span className="type-text">{issue.title}</span>
-                      <span className="type-badge">{issue.issueType}</span>
                     </div>
                   </td>
+                  <td>{issue.exactLocation}</td>
                   <td>
                     <span
                       className="severity-badge"
@@ -64,7 +69,7 @@ const CriticalIssuesList = ({ issues = [], onViewDetails, onAssign }) => {
                       {style.label}
                     </span>
                   </td>
-                  <td>{issue.reportedTime}</td>
+                  <td>{issue.timestamp}</td>
                   <td>
                     <div className="confidence-cell">
                       <div className="confidence-track">

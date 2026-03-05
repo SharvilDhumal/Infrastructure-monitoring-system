@@ -51,16 +51,7 @@ const UserIssues = () => {
         }
     };
 
-    if (loading) {
-        return (
-            <div className="dashboard-loading">
-                <div className="loading-spinner">
-                    <div style={{ fontSize: '40px' }}>📋</div>
-                </div>
-                <p>Loading infrastructure reports...</p>
-            </div>
-        );
-    }
+    if (loading) return <div className="loading">Loading infrastructure reports...</div>;
     if (error) return <div className="error-message">{error}</div>;
 
     return (
@@ -107,8 +98,8 @@ const UserIssues = () => {
                                     </a>
                                 </td>
                                 <td>
-                                    <span className={`status-badge ${(issue.status || 'Pending').toLowerCase()}`}>
-                                        {(issue.status === 'Pending' || !issue.status) && '⏳ '}
+                                    <span className={`status-badge ${issue.status.toLowerCase()}`}>
+                                        {issue.status === 'Pending' && '⏳ '}
                                         {issue.status === 'Approved' && '✅ '}
                                         {issue.status === 'In Progress' && '🚧 '}
                                         {issue.status === 'Resolved' && '🎉 '}

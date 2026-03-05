@@ -8,28 +8,26 @@ const defaultModules = [
   { name: 'Bridges', value: 65, color: 'var(--accent-red)' }
 ]
 
-const ModuleBarChart = ({ modules = [] }) => {
-  const maxVal = Math.max(...modules.map(m => m.value || 0), 1);
-
+const ModuleBarChart = ({ modules = defaultModules }) => {
   return (
     <div className="bar-card">
       <div className="bar-header">
         <h3>Issue Velocity – Module-wise</h3>
       </div>
-      <div className="bar-list">
+      <div className="bar-grid">
         {modules.map((module) => (
-          <div key={module.name} className="bar-row">
+          <div key={module.name} className="bar-item">
             <div className="bar-label">{module.name}</div>
-            <div className="bar-track">
+            <div className="bar-wrapper">
               <div
                 className="bar-fill"
                 style={{
-                  width: `${((module.value || 0) / maxVal) * 100}%`,
-                  background: 'var(--primary-navy, #001f3f)'
+                  height: `${module.value}%`,
+                  background: module.color
                 }}
               />
             </div>
-            <div className="bar-value-text">{module.value || 0}</div>
+            <div className="bar-value">{module.value}%</div>
           </div>
         ))}
       </div>

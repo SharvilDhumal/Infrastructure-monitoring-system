@@ -24,35 +24,35 @@ const AssignedIssuesList = ({ assignedIssues }) => {
         <span className="card-badge">{assignedIssues.length}</span>
       </div>
       <div className="issues-list">
-        {assignedIssues.map((issue) => {
-          const severityColor = getSeverityColor(issue.severity)
+        {assignedIssues.map((assigned) => {
+          const severityColor = getSeverityColor(assigned.issue.severity)
           return (
-            <div key={issue.id} className="assigned-issue-card">
+            <div key={assigned.issue.id} className="assigned-issue-card">
               <div className="assigned-issue-image" style={{ backgroundColor: `${severityColor}15` }}>
-                <span className="assigned-issue-icon">{issue.image || '📋'}</span>
+                <span className="assigned-issue-icon">{assigned.issue.image}</span>
               </div>
               <div className="assigned-issue-content">
                 <div className="assigned-issue-header">
-                  <h3 className="assigned-issue-title">{issue.title}</h3>
-                  <span
-                    className="assigned-issue-severity"
-                    style={{
+                  <h3 className="assigned-issue-title">{assigned.issue.title}</h3>
+                  <span 
+                    className="assigned-issue-severity" 
+                    style={{ 
                       backgroundColor: `${severityColor}20`,
                       color: severityColor,
                       borderColor: severityColor
                     }}
                   >
-                    {issue.severity}
+                    {assigned.issue.severity}
                   </span>
                 </div>
                 <div className="assigned-issue-meta">
                   <div className="assigned-meta-item">
                     <span className="assigned-meta-icon">📍</span>
-                    <span className="assigned-meta-value">{issue.location}</span>
+                    <span className="assigned-meta-value">{assigned.issue.exactLocation}</span>
                   </div>
                   <div className="assigned-meta-item">
                     <span className="assigned-meta-icon">👥</span>
-                    <span className="assigned-meta-value">{issue.assignedTeam || 'Unassigned'}</span>
+                    <span className="assigned-meta-value">{assigned.team}</span>
                   </div>
                 </div>
               </div>
