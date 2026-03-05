@@ -3,12 +3,12 @@
 #include <ArduinoJson.h>
 
 // WiFi Credentials
-const char* ssid = "YOUR_WIFI_SSID";
-const char* password = "YOUR_WIFI_PASSWORD";
+const char* ssid = "Sharvil";
+const char* password = "12345678";
 
 // Backend Server URL
 // IMPORTANT: Replace with your computer's local IP address if testing locally
-const char* serverUrl = "http://192.168.1.100:5000/api/streetlight-data";
+const char* serverUrl = "http://10.26.229.119:5001/api/streetlight-data";
 
 // Pin Definitions
 // Current Sensors (ACS712) - Analog Pins

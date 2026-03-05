@@ -4,7 +4,16 @@
 #include <HTTPClient.h>
 
 /************ BACKEND SETTINGS ************/
-const char* serverUrl = "http://10.146.41.119:5001/api/streetlight-data"; // Laptop IP & Backend Port
+// backend configuration - change to whatever IP/hostname your PC is on the *same* WiFi network
+// you can also use mDNS (see later) once the ESP announces itself.
+const char* BACKEND_HOST = "10.26.229.119";      // ← <<< update this to your machine's current address
+const int BACKEND_PORT = 5001;
+
+// helper to build url at runtime (avoids hard-coding when address changes)
+String makeServerUrl() {
+  return String("http://") + BACKEND_HOST + ":" + BACKEND_PORT + "/api/streetlight-data";
+}
+
 unsigned long lastSendTime = 0;
 const unsigned long sendInterval = 5000; // Send data every 5 seconds
 
@@ -90,13 +99,20 @@ void setup() {
   digitalWrite(RELAY4_PIN, HIGH);
 
   WiFi.begin(ssid, password);
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
+    Serial.print('.');
   }
 
   Serial.println("\nWiFi Connected");
   Serial.print("IP Address: ");
   Serial.println(WiFi.localIP());
+
+  // print target backend URL for verification
+  Serial.print("Backend URL: ");
+  Serial.println(makeServerUrl());
 
   /* ================= mDNS START ================= */
   if (MDNS.begin("streetlight")) {  // hostname = streetlight.local
@@ -138,17 +154,22 @@ void loop() {
 }
 
 void sendDataToBackend() {
-  if (WiFi.status() == WL_CONNECTED) {
-    sendChannelData("SL-01", voltage1, current1, status1, (digitalRead(RELAY1_PIN) == HIGH));
-    sendChannelData("SL-02", voltage2, current2, status2, (digitalRead(RELAY2_PIN) == HIGH));
-    sendChannelData("SL-03", voltage3, current3, status3, (digitalRead(RELAY3_PIN) == HIGH));
-    sendChannelData("SL-04", voltage4, current4, status4, (digitalRead(RELAY4_PIN) == HIGH));
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("WiFi lost – attempting reconnect");
+    WiFi.reconnect();
+    return;
   }
+
+  sendChannelData("SL-01", voltage1, current1, status1, (digitalRead(RELAY1_PIN) == HIGH));
+  sendChannelData("SL-02", voltage2, current2, status2, (digitalRead(RELAY2_PIN) == HIGH));
+  sendChannelData("SL-03", voltage3, current3, status3, (digitalRead(RELAY3_PIN) == HIGH));
+  sendChannelData("SL-04", voltage4, current4, status4, (digitalRead(RELAY4_PIN) == HIGH));
 }
 
 void sendChannelData(String id, float voltage, float current, String status, bool relayState) {
     HTTPClient http;
-    http.begin(serverUrl);
+    String url = makeServerUrl();
+    http.begin(url);
     http.addHeader("Content-Type", "application/json");
 
     String json = "{";
@@ -160,13 +181,13 @@ void sendChannelData(String id, float voltage, float current, String status, boo
     json += "}";
 
     int httpResponseCode = http.POST(json);
-    
     if (httpResponseCode > 0) {
-      Serial.print("Data sent to backend for " + id + ". Response: ");
+      Serial.print("[HTTP] " + id + " -> ");
       Serial.println(httpResponseCode);
     } else {
-      Serial.print("Error sending data for " + id + ". Error code: ");
+      Serial.print("[HTTP ERROR] ");
       Serial.println(httpResponseCode);
+      Serial.println(http.errorToString(httpResponseCode));
     }
     http.end();
 }
