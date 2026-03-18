@@ -3,8 +3,20 @@
 #include <ESPmDNS.h>
 #include <HTTPClient.h>
 
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+#define OLED_RESET -1    // Reset pin # (or -1 if sharing Arduino reset pin)
+#define SCREEN_ADDRESS 0x3C // Target I2C address (could be 0x3D for some OLEDs)
+
+// Initialize the display object
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
 /************ BACKEND SETTINGS ************/
-const char* serverUrl = "http://10.39.59.119:5000/api/streetlight-data"; // Laptop IP
+const char* serverUrl = "http://10.237.137.119:5001/api/streetlight-data"; // Laptop IP
 unsigned long lastSendTime = 0;
 const unsigned long sendInterval = 5000; // Send data every 5 seconds
 
@@ -50,6 +62,21 @@ bool loadState4 = false;
 void setup() {
 
   Serial.begin(115200);
+
+  // Initialize the OLED screen
+  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;); // Don't proceed, loop forever
+  }
+  
+  // Clear the buffer and display a startup message
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 10);
+  display.println("Streetlight Monitor");
+  display.println("Connecting WiFi...");
+  display.display();
 
   pinMode(RELAY1_PIN, OUTPUT);
   pinMode(RELAY2_PIN, OUTPUT);
@@ -131,10 +158,47 @@ void loop() {
   // Send data to backend periodically
   if (millis() - lastSendTime > sendInterval) {
     sendDataToBackend();
+    updateScreen();
     lastSendTime = millis();
   }
 
   delay(100);
+}
+
+void updateScreen() {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+
+  // Example: Show WiFi Status and IP
+  if(WiFi.status() == WL_CONNECTED) {
+    display.print("WiFi: OK ");
+    display.println(WiFi.localIP());
+  } else {
+    display.println("WiFi: Disconnected");
+  }
+
+  // Example: Show Current for CH1 and CH2
+  display.print("SL1: ");
+  display.print(current1, 2);
+  display.print("A [");
+  display.print(digitalRead(RELAY1_PIN) == HIGH ? "ON" : "OFF");
+  display.println("]");
+
+  display.print("SL2: ");
+  display.print(current2, 2);
+  display.print("A [");
+  display.print(digitalRead(RELAY2_PIN) == HIGH ? "ON" : "OFF");
+  display.println("]");
+  
+  // Show Voltage
+  display.print("Volts: ");
+  display.print(voltage1, 1);
+  display.println("V");
+  
+  // Refresh the display with new data
+  display.display();
 }
 
 void sendDataToBackend() {

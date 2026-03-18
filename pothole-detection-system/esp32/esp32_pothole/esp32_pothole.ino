@@ -9,7 +9,7 @@
 // =====================
 const char* ssid = "kavya";
 const char* password = "1234567890";
-String serverUrl = "http://10.133.231.171:8000/upload/";
+String serverUrl = "http://10.79.118.171:8000/upload/";
 
 
 // =====================
