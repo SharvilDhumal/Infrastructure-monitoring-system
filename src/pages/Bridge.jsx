@@ -1,15 +1,13 @@
 import React, { useState, useMemo } from "react";
-import { Check, X, MapPin, AlertTriangle, Clock, User, Calendar, Menu, Info } from "lucide-react";
+import { Check, X, MapPin, AlertTriangle, Clock, User, Calendar, Info, Activity, ShieldCheck, FileText } from "lucide-react";
 
-const Bridge = () => {
+const Bridge = ({ hideLayout = false }) => {
     const [activeTab, setActiveTab] = useState("Overview");
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [showResolveModal, setShowResolveModal] = useState(false);
     const [resolverName, setResolverName] = useState("");
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    // State Management for Bridge-Specific Issues with Photos
     const [detectedIssues, setDetectedIssues] = useState([
         {
             id: 1,
@@ -63,9 +61,6 @@ const Bridge = () => {
         },
     ]);
 
-    const sidebarItems = ["Overview", "Detected Issues", "Resolved Issues"];
-
-    // Dynamic Statistics
     const stats = useMemo(() => {
         const total = detectedIssues.length + resolvedIssues.length;
         const res = resolvedIssues.length;
@@ -98,280 +93,302 @@ const Bridge = () => {
 
     const getSeverityStyles = (severity) => {
         switch (severity) {
-            case "High": return "bg-red-50 text-red-600 border-red-100";
-            case "Medium": return "bg-orange-50 text-orange-600 border-orange-100";
-            case "Low": return "bg-green-50 text-green-600 border-green-100";
-            default: return "bg-gray-50 text-gray-600 border-gray-100";
+            case "High": return "bg-red-50 text-red-600 border-red-200";
+            case "Medium": return "bg-orange-50 text-orange-600 border-orange-200";
+            case "Low": return "bg-green-50 text-green-600 border-green-200";
+            default: return "bg-gray-50 text-gray-600 border-gray-200";
         }
+    };
+
+    const StatCard = ({ title, value, unit, icon, description, color }) => {
+      const colorMap = {
+        indigo: 'from-indigo-500/10 to-transparent border-indigo-500/20',
+        emerald: 'from-emerald-500/10 to-transparent border-emerald-500/20',
+        red: 'from-red-500/10 to-transparent border-red-500/20',
+        amber: 'from-amber-500/10 to-transparent border-amber-500/20',
+      };
+      return (
+        <div className="group relative bg-white border border-slate-200 p-5 rounded-[2rem] transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{title}</span>
+            <div className="p-2 bg-slate-50 rounded-lg border border-slate-100 group-hover:scale-110 transition-transform">
+              {icon}
+            </div>
+          </div>
+          <div className="flex items-baseline gap-1 mb-2">
+            <span className="text-3xl font-black text-slate-800">{value}</span>
+            {unit && <span className="text-xs font-bold text-slate-500 uppercase">{unit}</span>}
+          </div>
+          <p className="text-[10px] text-slate-500 font-medium">{description}</p>
+          <div className={`absolute bottom-0 left-0 right-0 h-1 rounded-full bg-gradient-to-r ${colorMap[color] || colorMap.indigo}`}></div>
+        </div>
+      );
     };
 
     const renderContent = () => {
         switch (activeTab) {
             case "Overview":
                 return (
-                    <>
-                        <header className="mb-6 md:mb-10">
-                            <h1 className="text-2xl md:text-3xl font-black text-gray-900 mb-2">Overview</h1>
-                            <p className="text-gray-500 text-xs md:text-sm italic">Status summary of bridge structural health and intervention metrics.</p>
-                        </header>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-12 font-bold">
-                            {[
-                                { label: "TOTAL ISSUES", value: stats.total, color: "text-gray-900" },
-                                { label: "RESOLVED", value: stats.resolved, color: "text-green-600" },
-                                { label: "DETECTED", value: stats.detected, color: "text-red-600" },
-                                { label: "RESOLUTION RATE", value: stats.rate, color: "text-blue-600" },
-                            ].map((card, idx) => (
-                                <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
-                                    <p className="text-[10px] font-bold text-gray-400 tracking-wider mb-2 uppercase">{card.label}</p>
-                                    <h3 className={`text-3xl md:text-4xl font-extrabold ${card.color}`}>{card.value}</h3>
-                                </div>
-                            ))}
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                            <StatCard
+                              title="Total Issues"
+                              value={stats.total}
+                              icon={<Activity className="text-indigo-500" size={20} />}
+                              color="indigo"
+                              description="Historical tracked data"
+                            />
+                            <StatCard
+                              title="Resolved"
+                              value={stats.resolved}
+                              icon={<Check className="text-emerald-500" size={20} />}
+                              color="emerald"
+                              description="Maintenance completed"
+                            />
+                            <StatCard
+                              title="Active Defects"
+                              value={stats.detected}
+                              icon={<AlertTriangle className="text-red-500" size={20} />}
+                              color="red"
+                              description="Requires immediate attention"
+                            />
+                            <StatCard
+                              title="Resolution Rate"
+                              value={stats.rate}
+                              icon={<ShieldCheck className="text-amber-500" size={20} />}
+                              color="amber"
+                              description="Overall efficiency score"
+                            />
                         </div>
 
-                        <section>
-                            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4 md:mb-6 uppercase tracking-tight">Severity Breakdown</h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+                        <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] shadow-sm">
+                            <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                                <AlertTriangle className="text-indigo-500" size={24} /> Severity Breakdown
+                            </h2>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                                 {[
-                                    { label: "High", count: detectedIssues.filter(i => i.severity === "High").length, subtitle: "NEEDS IMMEDIATE ACTION", bgColor: "bg-red-50", textColor: "text-red-600" },
-                                    { label: "Medium", count: detectedIssues.filter(i => i.severity === "Medium").length, subtitle: "PLAN INTERVENTION", bgColor: "bg-orange-50", textColor: "text-orange-600" },
-                                    { label: "Low", count: detectedIssues.filter(i => i.severity === "Low").length, subtitle: "ROUTINE MONITORING", bgColor: "bg-green-50", textColor: "text-green-600" },
+                                    { label: "High Priority", count: detectedIssues.filter(i => i.severity === "High").length, subtitle: "Needs Immediate Action", bgColor: "bg-red-50", textColor: "text-red-500", ring: "ring-red-500/20" },
+                                    { label: "Medium Priority", count: detectedIssues.filter(i => i.severity === "Medium").length, subtitle: "Plan Intervention", bgColor: "bg-orange-50", textColor: "text-orange-500", ring: "ring-orange-500/20" },
+                                    { label: "Low Priority", count: detectedIssues.filter(i => i.severity === "Low").length, subtitle: "Routine Monitoring", bgColor: "bg-emerald-50", textColor: "text-emerald-500", ring: "ring-emerald-500/20" },
                                 ].map((item, idx) => (
-                                    <div key={idx} className={`${item.bgColor} p-6 md:p-8 rounded-2xl shadow-sm flex flex-col items-start`}>
-                                        <h3 className={`text-base md:text-lg font-bold ${item.textColor} mb-1`}>{item.label}</h3>
-                                        <p className="text-4xl md:text-5xl font-black text-gray-900 mb-3">{item.count}</p>
-                                        <p className="text-[10px] font-bold text-gray-500 tracking-widest uppercase mt-auto">{item.subtitle}</p>
+                                    <div key={idx} className={`${item.bgColor} p-8 rounded-[2rem] border border-white/40 shadow-sm flex flex-col items-center text-center relative overflow-hidden group`}>
+                                        <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full ${item.bgColor} ring-8 ${item.ring} opacity-50 group-hover:scale-150 transition-transform duration-700`}></div>
+                                        <h3 className={`text-sm font-bold uppercase tracking-widest ${item.textColor} mb-2 relative z-10`}>{item.label}</h3>
+                                        <p className="text-5xl font-black text-slate-900 mb-3 relative z-10">{item.count}</p>
+                                        <p className="text-[10px] font-bold text-slate-500 tracking-widest uppercase mt-auto relative z-10">{item.subtitle}</p>
                                     </div>
                                 ))}
                             </div>
-                        </section>
-                    </>
+                        </div>
+                    </div>
                 );
 
             case "Detected Issues":
                 return (
-                    <>
-                        <header className="mb-6 md:mb-10">
-                            <h1 className="text-2xl md:text-3xl font-black text-gray-900 mb-2">Detected Issues</h1>
-                            <p className="text-gray-500 text-xs md:text-sm">Real-time analysis of structural defects and corrosion detection.</p>
-                        </header>
-                        <div className="flex flex-col gap-4">
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {detectedIssues.length === 0 ? (
-                                <div className="bg-white p-12 rounded-2xl text-center border border-dashed border-gray-300">
-                                    <p className="text-gray-400 font-bold">All parameters within safety thresholds.</p>
+                                <div className="col-span-full bg-white border border-slate-200 p-12 rounded-[2.5rem] shadow-sm flex flex-col items-center justify-center text-center">
+                                  <div className="p-4 bg-emerald-500/10 rounded-full mb-4 ring-8 ring-emerald-500/5">
+                                    <Check className="text-emerald-500" size={48} />
+                                  </div>
+                                  <h3 className="text-xl font-bold text-slate-900 mb-2">All Clear!</h3>
+                                  <p className="text-slate-500 font-medium tracking-wide">Structural parameters are nominal.</p>
                                 </div>
                             ) : (
                                 detectedIssues.map((issue) => (
                                     <div
                                         key={issue.id}
                                         onClick={() => { setSelectedIssue(issue); setShowDetailModal(true); }}
-                                        className="w-full bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-4 md:gap-6 cursor-pointer hover:shadow-md transition-all group"
+                                        className="bg-white border border-slate-200 rounded-[2rem] overflow-hidden hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200 transition-all flex flex-col group p-1.5 cursor-pointer"
                                     >
-                                        <div className="w-full md:w-24 h-48 md:h-24 bg-gray-50 rounded-xl overflow-hidden border border-gray-100 shrink-0">
-                                            <img src={issue.image} alt={issue.type} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                                        </div>
-                                        <div className="flex-1 min-w-0 text-center md:text-left">
-                                            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3 mb-2">
-                                                <h3 className="text-lg md:text-xl font-bold text-gray-900 truncate tracking-tight">{issue.type}</h3>
-                                                <span className={`px-2 py-0.5 text-[10px] font-bold rounded-lg uppercase border shrink-0 ${getSeverityStyles(issue.severity)}`}>
-                                                    {issue.severity}
-                                                </span>
-                                            </div>
-                                            <div className="flex flex-col md:flex-row flex-wrap justify-center md:justify-start gap-x-6 gap-y-1 text-xs md:text-sm text-gray-500 font-medium font-bold">
-                                                <span className="flex items-center justify-center md:justify-start gap-1.5"><MapPin size={16} className="text-blue-500/80" /> {issue.location}</span>
-                                                <span className="flex items-center justify-center md:justify-start gap-1.5"><Clock size={16} className="text-blue-500/80" /> Detected: {issue.detectedAt}</span>
+                                        <div className="relative h-48 bg-slate-100 overflow-hidden rounded-[1.5rem]">
+                                            <img src={issue.image} alt={issue.type} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                            <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                                               <span className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg backdrop-blur bg-white/90 ${issue.severity === 'High' ? 'text-red-600' : issue.severity === 'Medium' ? 'text-orange-600' : 'text-emerald-600'}`}>
+                                                   {issue.severity} Risk
+                                               </span>
                                             </div>
                                         </div>
-                                        <div className="w-full md:w-auto mt-2 md:mt-0">
+                                        <div className="p-4 flex-1 flex flex-col">
+                                            <div className="mb-4">
+                                                <h4 className="font-bold text-slate-900 text-lg mb-2">{issue.type}</h4>
+                                                <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1.5">
+                                                    <MapPin size={14} className="text-slate-400" />
+                                                    {issue.location}
+                                                </div>
+                                                <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                                                    <Clock size={14} className="text-slate-400" />
+                                                    {issue.detectedAt}
+                                                </div>
+                                            </div>
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     setSelectedIssue(issue);
                                                     setShowResolveModal(true);
                                                 }}
-                                                className="w-full md:w-12 h-12 bg-green-50 text-green-600 rounded-xl md:rounded-full flex items-center justify-center hover:bg-green-600 hover:text-white transition-all border border-green-100 shadow-sm py-3 md:py-0"
-                                                title="Resolve"
+                                                className="mt-auto w-full py-3 bg-slate-900 hover:bg-indigo-600 text-white rounded-xl font-bold text-sm transition-colors shadow-sm"
                                             >
-                                                <span className="md:hidden text-xs font-black uppercase tracking-widest mr-2">Mark Resolved</span>
-                                                <Check size={26} strokeWidth={3} />
+                                                Resolve Defect
                                             </button>
                                         </div>
                                     </div>
                                 ))
                             )}
                         </div>
-                    </>
+                    </div>
                 );
 
             case "Resolved Issues":
                 return (
-                    <>
-                        <header className="mb-6 md:mb-10">
-                            <h1 className="text-2xl md:text-3xl font-black text-gray-900 mb-2">Resolved Issues</h1>
-                            <p className="text-gray-500 text-sm">Archived logs of completed structural maintenance.</p>
-                        </header>
-                        <div className="flex flex-col gap-4">
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {resolvedIssues.length === 0 ? (
-                                <div className="bg-white p-12 rounded-2xl text-center border border-dashed border-gray-300">
-                                    <p className="text-gray-400 font-bold">Archive currently empty.</p>
+                                <div className="col-span-full bg-white border border-slate-200 p-12 rounded-[2.5rem] shadow-sm flex flex-col items-center justify-center text-center">
+                                    <div className="p-4 bg-slate-500/10 rounded-full mb-4 ring-8 ring-slate-500/5">
+                                        <FileText className="text-slate-500" size={48} />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-slate-900 mb-2">No History</h3>
+                                    <p className="text-slate-500 font-medium tracking-wide">Archived logs will appear here once maintenance is completed.</p>
                                 </div>
                             ) : (
                                 resolvedIssues.map((issue) => (
                                     <div
                                         key={issue.id}
-                                        className="w-full bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-4 md:gap-6 opacity-80"
+                                        className="bg-white border border-slate-200 rounded-[2rem] overflow-hidden flex flex-col p-1.5 opacity-90 hover:opacity-100 transition-opacity"
                                     >
-                                        <div className="w-full md:w-24 h-48 md:h-24 bg-gray-50 rounded-xl overflow-hidden border border-gray-100 shrink-0 grayscale">
+                                        <div className="relative h-40 bg-slate-100 grayscale rounded-[1.5rem] overflow-hidden">
                                             <img src={issue.image} alt={issue.type} className="w-full h-full object-cover" />
-                                        </div>
-                                        <div className="flex-1 min-w-0 text-center md:text-left">
-                                            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3 mb-2">
-                                                <h3 className="text-lg md:text-xl font-bold text-gray-400 line-through truncate">{issue.type}</h3>
-                                                <span className="px-2 py-0.5 text-[10px] font-bold rounded uppercase bg-blue-50 text-blue-600 border border-blue-100 shrink-0">
-                                                    RESOLVED
-                                                </span>
+                                            <div className="absolute top-3 left-3 bg-emerald-500/90 backdrop-blur text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+                                                <Check size={12} /> Fixed
                                             </div>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-xs md:text-sm text-gray-500 font-medium font-bold">
-                                                <span className="flex items-center justify-center md:justify-start gap-1.5"><MapPin size={16} /> {issue.location}</span>
-                                                <span className="flex items-center justify-center md:justify-start gap-1.5"><User size={16} /> By: {issue.resolvedBy}</span>
-                                                <span className="flex items-center justify-center md:justify-start gap-1.5 font-bold"><Clock size={16} /> Detected: {issue.detectedAt}</span>
-                                                <span className="flex items-center justify-center md:justify-start gap-1.5 text-green-600 font-bold"><Check size={16} /> Resolved: {issue.resolvedAt}</span>
+                                        </div>
+                                        <div className="p-4 flex-1 flex flex-col bg-slate-50/50 rounded-b-[1.5rem]">
+                                            <h4 className="font-bold text-slate-900 text-lg mb-3 line-through decoration-slate-300">{issue.type}</h4>
+                                            <div className="space-y-2">
+                                                <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 bg-white px-3 py-2 rounded-lg border border-slate-200 shadow-sm">
+                                                    <User size={14} className="text-slate-400" />
+                                                    <span className="truncate">By <strong>{issue.resolvedBy}</strong></span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 bg-white px-3 py-2 rounded-lg border border-slate-200 shadow-sm">
+                                                    <Calendar size={14} className="text-slate-400" />
+                                                    {issue.resolvedAt}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 ))
                             )}
                         </div>
-                    </>
+                    </div>
                 );
-
-            default:
-                return null;
+            default: return null;
         }
     };
 
     return (
-        <div className="flex h-screen bg-gray-50 font-sans overflow-hidden relative">
-            {/* Mobile Sidebar Overlay */}
-            {isSidebarOpen && (
-                <div
-                    className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
-                    onClick={() => setIsSidebarOpen(false)}
-                />
-            )}
-
-            {/* Sidebar - Left Fixed Panel */}
-            <aside className={`
-        fixed inset-y-0 left-0 z-50 w-64 bg-gray-100 border-r border-gray-200 flex flex-col h-full shrink-0 transition-transform duration-300 lg:relative lg:translate-x-0
-        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
-      `}>
-                <div className="p-8">
-                    <div className="flex items-center justify-between lg:block mb-8">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white font-black shadow-lg shadow-blue-500/30 transform -rotate-3">
-                                IA
+        <div className={`min-h-screen transition-colors duration-700 bg-slate-50`}>
+            <div className={`relative z-10 max-w-[1400px] mx-auto ${hideLayout ? 'px-4 py-4' : 'px-6 py-8'}`}>
+                
+                {/* Header */}
+                {!hideLayout && (
+                    <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-slate-200">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2.5 bg-indigo-600/20 rounded-xl border border-indigo-500/30">
+                                <ShieldCheck className="text-indigo-500" size={24} />
                             </div>
                             <div>
-                                <h2 className="text-lg font-black text-gray-900 leading-tight tracking-tight">InfravisionAI</h2>
-                                <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">BRIDGEDASHBOARD</p>
+                                <h1 className="text-2xl font-bold text-slate-900 tracking-tight">InfraVision <span className="text-indigo-500 underline decoration-indigo-500/30 underline-offset-4">Bridge</span></h1>
+                                <p className="text-sm text-slate-600 font-medium">Structural Integrity Dashboard</p>
                             </div>
                         </div>
-                        <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden text-gray-500 p-2">
-                            <X size={24} />
+
+                        <div className="flex items-center gap-6 bg-white shadow-sm px-4 py-2.5 rounded-2xl border border-slate-200">
+                            <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20 animate-pulse"></div>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-500">
+                                    Sensors Active
+                                </span>
+                            </div>
+                        </div>
+                    </header>
+                )}
+
+                {/* Tab Navigation */}
+                <div className="flex bg-white/60 backdrop-blur-md p-1.5 rounded-2xl w-fit mb-8 border border-slate-200 shadow-sm overflow-x-auto">
+                    {["Overview", "Detected Issues", "Resolved Issues"].map(tab => (
+                        <button 
+                            key={tab}
+                            onClick={() => setActiveTab(tab)} 
+                            className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab ? 'bg-white shadow-sm border border-slate-100 text-slate-900' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'}`}
+                        >
+                            {tab === "Overview" && <Activity size={16} className={activeTab === tab ? 'text-indigo-500' : ''} />}
+                            {tab === "Detected Issues" && (
+                                <>
+                                    <AlertTriangle size={16} className={activeTab === tab ? 'text-orange-500' : ''} />
+                                    {detectedIssues.length > 0 && <span className={`w-1.5 h-1.5 rounded-full ${activeTab === tab ? 'bg-orange-500' : 'bg-red-500'} animate-pulse hidden sm:inline-block`}></span>}
+                                </>
+                            )}
+                            {tab === "Resolved Issues" && <Check size={16} className={activeTab === tab ? 'text-emerald-500' : ''} />}
+                            {tab}
                         </button>
-                    </div>
-
-                    <nav className="space-y-1.5">
-                        {sidebarItems.map((item) => (
-                            <button
-                                key={item}
-                                onClick={() => { setActiveTab(item); setIsSidebarOpen(false); }}
-                                className={`w-full text-left px-4 py-3.5 rounded-xl flex items-center transition-all duration-300 font-bold ${activeTab === item
-                                    ? "bg-white border-l-4 border-blue-600 text-gray-900 shadow-sm"
-                                    : "text-gray-500 hover:bg-gray-200"
-                                    }`}
-                            >
-                                <span className="text-sm tracking-tight">{item}</span>
-                            </button>
-                        ))}
-                    </nav>
-                </div>
-                <div className="mt-auto p-6 border-t border-gray-200 bg-gray-50/50">
-                    <p className="text-[10px] text-gray-400 font-bold tracking-widest uppercase">System Status</p>
-                    <div className="flex items-center gap-2 mt-2 font-bold">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                        <span className="text-xs font-bold text-gray-600">Active Monitoring</span>
-                    </div>
-                </div>
-            </aside>
-
-            {/* Main Content Area */}
-            <main className="flex-1 overflow-y-auto p-4 md:p-8 lg:p-12 bg-gray-50 relative">
-                {/* Mobile Header */}
-                <div className="lg:hidden flex items-center justify-between mb-6 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black text-sm">IA</div>
-                        <span className="font-black text-gray-900 text-sm tracking-tight">InfravisionAI</span>
-                    </div>
-                    <button onClick={() => setIsSidebarOpen(true)} className="p-2 text-gray-600 hover:bg-gray-100 rounded-xl transition-colors">
-                        <Menu size={24} />
-                    </button>
+                    ))}
                 </div>
 
                 {renderContent()}
-            </main>
+
+            </div>
 
             {/* DETAIL MODAL */}
             {showDetailModal && selectedIssue && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-md">
-                    <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] w-full max-w-lg max-h-[95vh] overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-300 border border-white/20">
-                        <div className="relative h-48 sm:h-64 md:h-72 bg-gray-200 overflow-hidden shrink-0">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setShowDetailModal(false)}>
+                    <div className="bg-white rounded-[2.5rem] w-full max-w-2xl max-h-[95vh] overflow-hidden overflow-y-auto shadow-2xl animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+                        <div className="relative h-64 sm:h-72 bg-slate-100 overflow-hidden shrink-0">
                             <img src={selectedIssue.image} alt={selectedIssue.type} className="w-full h-full object-cover" />
                             <button
                                 onClick={() => setShowDetailModal(false)}
-                                className="absolute top-4 right-4 w-10 h-10 bg-black/30 hover:bg-black/50 text-white rounded-full flex items-center justify-center backdrop-blur-xl transition-all shadow-lg"
+                                className="absolute top-4 right-4 w-10 h-10 bg-white/30 hover:bg-white/50 text-slate-800 rounded-full flex items-center justify-center backdrop-blur-xl transition-all shadow-lg border border-white/40"
                             >
                                 <X size={20} />
                             </button>
-                        </div>
-                        <div className="p-6 sm:p-8 md:p-10">
-                            <div className="flex flex-col sm:flex-row items-center gap-3 mb-4 text-center sm:text-left">
-                                <h2 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">{selectedIssue.type}</h2>
-                                <span className={`px-2.5 py-1 text-[10px] font-black rounded-lg uppercase border-2 shadow-sm ${getSeverityStyles(selectedIssue.severity)}`}>
-                                    {selectedIssue.severity}
+                            <div className="absolute bottom-4 left-4 flex gap-2">
+                                <span className={`px-4 py-1.5 text-xs font-black rounded-xl uppercase tracking-widest shadow-lg backdrop-blur bg-white/90 ${selectedIssue.severity === 'High' ? 'text-red-600' : selectedIssue.severity === 'Medium' ? 'text-orange-600' : 'text-emerald-600'}`}>
+                                    {selectedIssue.severity} Priority
                                 </span>
                             </div>
-                            <p className="text-gray-500 mb-6 md:mb-10 leading-relaxed text-xs sm:text-sm font-medium text-center sm:text-left">{selectedIssue.description}</p>
+                        </div>
+                        <div className="p-8 md:p-10">
+                            <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-4">{selectedIssue.type}</h2>
+                            <p className="text-slate-500 mb-8 leading-relaxed font-medium">{selectedIssue.description}</p>
 
-                            <div className="grid grid-cols-1 gap-3 mb-8 md:mb-10 font-bold">
-                                <div className="flex items-center gap-4 p-4 bg-blue-50/50 rounded-2xl border border-blue-100/50 group hover:border-blue-300 transition-colors">
-                                    <MapPin size={22} className="text-blue-600 shrink-0" />
-                                    <div className="min-w-0">
-                                        <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-0.5">Location</p>
-                                        <p className="text-xs sm:text-sm text-gray-900 font-bold truncate">{selectedIssue.location}</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+                                <div className="flex flex-col p-5 bg-slate-50 rounded-[1.5rem] border border-slate-100 gap-2">
+                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-400">
+                                        <MapPin size={16} /> Location
                                     </div>
+                                    <p className="font-bold text-slate-900">{selectedIssue.location}</p>
                                 </div>
-                                <div className="flex items-center gap-4 p-4 bg-blue-50/50 rounded-2xl border border-blue-100/50 group hover:border-blue-300 transition-colors">
-                                    <Clock size={22} className="text-blue-600 shrink-0" />
-                                    <div>
-                                        <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-0.5">Detection Time</p>
-                                        <p className="text-xs sm:text-sm text-gray-900 font-bold">{selectedIssue.detectedAt}</p>
+                                <div className="flex flex-col p-5 bg-slate-50 rounded-[1.5rem] border border-slate-100 gap-2">
+                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-400">
+                                        <Clock size={16} /> Detection Time
                                     </div>
+                                    <p className="font-bold text-slate-900">{selectedIssue.detectedAt}</p>
                                 </div>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row gap-3">
+                            <div className="flex flex-col sm:flex-row gap-4 bg-slate-50 -mx-10 -mb-10 p-8 border-t border-slate-100 rounded-b-[2.5rem] justify-end">
                                 <button
                                     onClick={() => setShowDetailModal(false)}
-                                    className="w-full sm:flex-1 bg-gray-100 text-gray-600 py-4 rounded-2xl font-black hover:bg-gray-200 transition-all text-xs uppercase tracking-widest"
+                                    className="px-8 py-3.5 bg-white border border-slate-200 text-slate-600 rounded-xl font-bold hover:bg-slate-100 transition-all text-sm shadow-sm"
                                 >
-                                    Close
+                                    Cancel
                                 </button>
                                 <button
                                     onClick={() => { setShowDetailModal(false); setShowResolveModal(true); }}
-                                    className="w-full sm:flex-1 bg-blue-600 text-white py-4 rounded-2xl font-black hover:bg-blue-700 shadow-xl shadow-blue-500/30 transition-all text-xs uppercase tracking-widest flex items-center justify-center gap-2 group"
+                                    className="px-8 py-3.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 shadow-xl shadow-indigo-500/30 transition-all flex items-center justify-center gap-2 text-sm"
                                 >
-                                    Resolve <Check size={18} strokeWidth={3} className="group-hover:scale-125 transition-transform" />
+                                    Resolve Defect <Check size={18} strokeWidth={3} />
                                 </button>
                             </div>
                         </div>
@@ -381,67 +398,50 @@ const Bridge = () => {
 
             {/* RESOLVE MODAL */}
             {showResolveModal && selectedIssue && (
-                <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-md">
-                    <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] w-full max-w-md shadow-2xl animate-in fade-in slide-in-from-bottom-8 duration-300 overflow-hidden overflow-y-auto max-h-[95vh] font-bold">
-                        <div className="p-6 md:p-8 border-b border-gray-100 flex items-center justify-between bg-gray-50/50 px-6 sm:px-8">
-                            <h3 className="text-lg md:text-xl font-black text-gray-900 flex items-center gap-3 tracking-tight"><Check size={24} className="text-green-600" /> Resolve Issue</h3>
-                            <button onClick={() => setShowResolveModal(false)} className="text-gray-400 hover:text-gray-900 transition-colors bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-sm"><X size={20} /></button>
+                <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setShowResolveModal(false)}>
+                    <div className="bg-white rounded-[2.5rem] w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-200 overflow-hidden">
+                        <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                            <h3 className="text-xl font-bold text-slate-900 flex items-center gap-3"><ShieldCheck size={24} className="text-indigo-500" /> Log Maintenance</h3>
+                            <button onClick={() => setShowResolveModal(false)} className="text-slate-400 hover:text-slate-900 hover:bg-slate-200 p-2 rounded-full transition-colors"><X size={20} /></button>
                         </div>
 
-                        <div className="p-6 sm:p-8 md:p-10 font-bold">
-                            <div className="mb-6 md:mb-8 font-bold">
-                                <div className="flex items-center gap-4 md:gap-5 p-4 md:p-5 bg-gray-50 rounded-2xl border border-gray-100 shadow-inner">
-                                    <img src={selectedIssue.image} alt={selectedIssue.type} className="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shrink-0 shadow-sm" />
-                                    <div className="min-w-0 font-bold">
-                                        <p className="text-sm font-black text-gray-900 truncate tracking-tight">{selectedIssue.type}</p>
-                                        <p className="text-xs text-gray-500 truncate font-semibold font-bold">{selectedIssue.location}</p>
-                                    </div>
+                        <div className="p-8">
+                            <div className="mb-8 p-4 bg-white border border-slate-200 rounded-[1.5rem] flex items-center gap-4 shadow-sm">
+                                <img src={selectedIssue.image} alt={selectedIssue.type} className="w-16 h-16 rounded-xl object-cover shrink-0" />
+                                <div className="min-w-0">
+                                    <p className="text-sm font-bold text-slate-900 truncate">{selectedIssue.type}</p>
+                                    <p className="text-xs text-slate-500 font-semibold truncate">{selectedIssue.location}</p>
                                 </div>
                             </div>
 
-                            <div className="mb-6 md:mb-8 font-bold">
-                                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Resolver Name</label>
-                                <div className="relative font-bold">
-                                    <User className="absolute left-5 top-1/2 -translate-y-1/2 text-blue-500" size={20} />
+                            <div className="mb-8">
+                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Personnel Name</label>
+                                <div className="relative">
+                                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                                     <input
                                         type="text"
                                         placeholder="Enter full name"
                                         autoFocus
                                         value={resolverName}
                                         onChange={(e) => setResolverName(e.target.value)}
-                                        className="w-full pl-14 pr-6 py-4 bg-white border-2 border-gray-100 rounded-2xl text-sm focus:outline-none focus:border-blue-500 transition-all font-bold placeholder-gray-300 shadow-sm"
+                                        className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 placeholder:font-semibold"
                                     />
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 mb-8 md:mb-10 font-bold">
-                                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Date</label>
-                                    <div className="flex items-center gap-2 text-xs font-black text-gray-900">
-                                        <Calendar size={16} className="text-blue-500" /> {new Date().toLocaleDateString()}
-                                    </div>
-                                </div>
-                                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 font-bold">
-                                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Time</label>
-                                    <div className="flex items-center gap-2 text-xs font-black text-gray-900">
-                                        <Clock size={16} className="text-blue-500" /> {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 font-bold">
+                            <div className="flex flex-col sm:flex-row gap-3 -mx-8 -mb-8 p-6 bg-slate-50 border-t border-slate-100 rounded-b-[2.5rem] justify-end mt-4">
                                 <button
                                     onClick={() => setShowResolveModal(false)}
-                                    className="w-full sm:flex-1 px-4 py-4 border-2 border-gray-100 text-gray-500 rounded-2xl text-[10px] sm:text-xs font-black uppercase tracking-widest hover:bg-gray-50 transition-colors"
+                                    className="px-6 py-2.5 text-slate-500 font-bold rounded-xl hover:bg-slate-200 transition-colors text-sm border border-transparent"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     onClick={handleResolve}
                                     disabled={!resolverName.trim()}
-                                    className="w-full sm:flex-1 px-4 py-4 bg-green-600 text-white rounded-2xl text-[10px] sm:text-xs font-black uppercase tracking-widest hover:bg-green-700 transition-all shadow-lg shadow-green-500/30 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                    className="px-6 py-2.5 bg-emerald-500 text-white rounded-xl font-bold hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/30 disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-2 text-sm"
                                 >
-                                    Confirm <Check size={18} strokeWidth={3} />
+                                    Confirm Update <Check size={18} strokeWidth={3} />
                                 </button>
                             </div>
                         </div>

@@ -14,6 +14,10 @@ import {
   BarChart3,
   Radio,
   PowerOff,
+  ChevronRight,
+  Database,
+  Layers,
+  Cpu
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
@@ -22,9 +26,6 @@ import toast from "react-hot-toast";
 const STALE_THRESHOLD_MS = 15000; // 15 seconds
 const OVERLOAD_CURRENT_A = 5.0;
 
-/**
- * RelativeTime Component
- */
 const RelativeTime = ({ timestamp }) => {
   const [secondsAgo, setSecondsAgo] = useState(0);
 
@@ -45,27 +46,20 @@ const RelativeTime = ({ timestamp }) => {
   return `${secondsAgo}s ago`;
 };
 
-/**
- * StreetlightCard Component
- */
 const StreetlightCard = ({ data, index, onToggle }) => {
   const isStale =
     !data.timestamp ||
     Date.now() - new Date(data.timestamp).getTime() > STALE_THRESHOLD_MS;
   const isOverload = data.current > OVERLOAD_CURRENT_A;
   const isRelayOn = data.relayState === true;
-
-  // Logical Status from data
-  // "NORMAL Operation", "⚠ STREETLIGHT FAULTY", "Relay OFF", "🚨 OVERCURRENT! Relay OFF"
   const backendStatus = data.status || "Unknown";
 
-  // Status computation for visual identity
   const statusConfig = isStale
     ? {
       color: "text-rose-500",
       bg: "bg-rose-500/10",
       border: "border-rose-500/20",
-      label: "OFFLINE",
+      label: "Node Offline",
       icon: <WifiOff size={14} />,
     }
     : backendStatus.includes("OVERCURRENT")
@@ -73,7 +67,7 @@ const StreetlightCard = ({ data, index, onToggle }) => {
         color: "text-red-500",
         bg: "bg-red-500/10",
         border: "border-red-500/30",
-        label: "FAULTY",
+        label: "Hardware Fault",
         icon: <AlertTriangle size={14} />,
       }
       : backendStatus.includes("FAULTY")
@@ -81,7 +75,7 @@ const StreetlightCard = ({ data, index, onToggle }) => {
           color: "text-amber-500",
           bg: "bg-amber-500/10",
           border: "border-amber-500/30",
-          label: "CHECK LAMP",
+          label: "Maintenance Req.",
           icon: <AlertTriangle size={14} />,
         }
         : isRelayOn
@@ -89,14 +83,14 @@ const StreetlightCard = ({ data, index, onToggle }) => {
             color: "text-emerald-500",
             bg: "bg-emerald-500/10",
             border: "border-emerald-500/20",
-            label: "ACTIVE",
+            label: "Synchronized",
             icon: <Wifi size={14} />,
           }
           : {
             color: "text-slate-500",
             bg: "bg-slate-100",
             border: "border-slate-200",
-            label: "STANDBY",
+            label: "Standby Mode",
             icon: <Radio size={14} />,
           };
 
@@ -107,204 +101,174 @@ const StreetlightCard = ({ data, index, onToggle }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
       whileHover={{ y: -4, scale: 1.01 }}
-      className={`relative group bg-white border ${statusConfig.border} rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300`}
+      className={`relative group bg-white/80 backdrop-blur-3xl border border-white/50 rounded-[3rem] p-8 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col min-h-[440px]`}
     >
-      {/* Background Glow for Active Lights */}
+      {/* Dynamic Glow Effect */}
       {isRelayOn && !isStale && (
-        <div className="absolute inset-0 bg-emerald-500/5 blur-xl rounded-2xl -z-10 group-hover:bg-emerald-500/10 transition-colors" />
+        <div className="absolute -top-24 -right-24 w-64 h-64 bg-amber-400/20 rounded-full blur-[80px] -z-10 group-hover:scale-125 transition-transform duration-1000" />
       )}
 
-      {/* Header Info */}
-      <div className="flex items-start justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div
-            className={`p-3 rounded-xl transition-colors ${isRelayOn ? "bg-emerald-500/20 text-emerald-500" : "bg-slate-100 text-slate-500"}`}
-          >
-            <Lightbulb
-              size={22}
-              className={
-                isRelayOn && !isStale
-                  ? "drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]"
-                  : ""
-              }
-            />
-          </div>
-          <div>
-            <h3 className="text-slate-900 font-semibold flex items-center gap-2 tracking-tight">
-              Streetlight {index + 1}
-              {isStale && (
-                <motion.span
-                  animate={{ opacity: [1, 0.4, 1] }}
-                  transition={{ repeat: Infinity, duration: 2 }}
-                  className="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]"
-                />
-              )}
-            </h3>
-            <span className="text-slate-500 font-mono text-[10px] tracking-wider uppercase">
-              {data.streetlightId}
-            </span>
-          </div>
-        </div>
-
-        {/* Intelligence Badge */}
-        <div
-          className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold tracking-tighter uppercase ${statusConfig.bg} ${statusConfig.color}`}
-        >
-          {statusConfig.icon}
-          {statusConfig.label}
-        </div>
-      </div>
-
-      {/* Primary Metrics Grid */}
-      <div className="grid grid-cols-2 gap-3 mb-6">
-        <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 group-hover:border-slate-300 transition-colors">
-          <div className="flex items-center gap-1.5 text-slate-500 mb-1">
-            <Zap size={12} />
-            <span className="text-[10px] font-bold uppercase tracking-widest">
-              Voltage
-            </span>
-          </div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-lg font-mono font-bold text-slate-900 leading-none">
-              {(data.voltage || 0).toFixed(1)}
-            </span>
-            <span className="text-[10px] text-slate-500 font-bold uppercase">
-              V
-            </span>
-          </div>
-        </div>
-
-        <div
-          className={`p-3 rounded-xl border transition-colors ${isOverload ? "bg-amber-50 border-amber-300" : "bg-slate-50 border-slate-200 group-hover:border-slate-300"}`}
-        >
-          <div className="flex items-center gap-1.5 text-slate-500 mb-1">
-            <Activity size={12} />
-            <span className="text-[10px] font-bold uppercase tracking-widest">
-              Current
-            </span>
-          </div>
-          <div className="flex items-baseline gap-1">
-            <span
-              className={`text-lg font-mono font-bold leading-none ${isOverload ? "text-amber-500" : "text-slate-900"}`}
-            >
-              {(data.current || 0).toFixed(2)}
-            </span>
-            <span className="text-[10px] text-slate-500 font-bold uppercase">
-              A
-            </span>
-          </div>
-        </div>
-
-        <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 col-span-2 group-hover:border-slate-300 transition-colors flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-1.5 text-slate-500 mb-1">
-              <Power size={12} />
-              <span className="text-[10px] font-bold uppercase tracking-widest">
-                Power Draw
-              </span>
-            </div>
-            <div className="flex items-baseline gap-1">
-              <span className="text-xl font-mono font-bold text-slate-900 leading-none">
-                {(data.power || 0).toFixed(1)}
-              </span>
-              <span className="text-xs text-slate-500 font-bold uppercase tracking-tight">
-                Watts
-              </span>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-end">
-            <span className="text-[9px] text-slate-500 font-bold uppercase mb-1">
-              Relay State
-            </span>
-            <div
-              className={`w-8 h-4 rounded-full relative transition-colors ${isRelayOn ? "bg-emerald-500" : "bg-slate-300"}`}
-            >
+      <div className="relative z-10 flex-1">
+          <div className="flex items-start justify-between mb-8">
+            <div className="flex items-center gap-4">
               <div
-                className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${isRelayOn ? "left-[1.125rem]" : "left-0.5"}`}
-              />
+                className={`w-14 h-14 rounded-2xl border border-white flex items-center justify-center transition-all duration-500 shadow-inner ${
+                    isRelayOn && !isStale ? "bg-amber-400 text-white shadow-amber-500/20" : "bg-slate-50 text-slate-400"
+                }`}
+              >
+                <Lightbulb
+                  size={28}
+                  strokeWidth={2.5}
+                  className={isRelayOn && !isStale ? "drop-shadow-[0_0_12px_rgba(255,255,255,0.8)]" : ""}
+                />
+              </div>
+              <div>
+                <h3 className="text-xl font-black text-slate-900 tracking-tighter uppercase italic">
+                  Node <span className="text-blue-600">#{index + 1}</span>
+                </h3>
+                <span className="text-slate-400 font-black text-[9px] tracking-[0.2em] uppercase">
+                  {data.streetlightId}
+                </span>
+              </div>
+            </div>
+
+            <div
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[9px] font-black tracking-widest uppercase border ${statusConfig.bg} ${statusConfig.color} ${statusConfig.border}`}
+            >
+              <div className={`w-1.5 h-1.5 rounded-full ${statusConfig.color.replace('text', 'bg')} animate-pulse`} />
+              {statusConfig.label}
             </div>
           </div>
-        </div>
+
+          {/* Telemetry Grid */}
+          <div className="grid grid-cols-2 gap-4 mb-8">
+            <BentoMetrics label="Voltage" value={data.voltage?.toFixed(1) || "0.0"} unit="V" icon={Zap} />
+            <BentoMetrics 
+                label="Current" 
+                value={data.current?.toFixed(2) || "0.00"} 
+                unit="A" 
+                icon={Activity} 
+                alert={isOverload}
+            />
+            
+            <div className="col-span-2 bg-slate-50/50 border border-slate-100 rounded-[1.5rem] p-4 flex items-center justify-between group-hover:bg-white transition-colors">
+                <div>
+                   <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Energy Utilization</div>
+                   <div className="flex items-baseline gap-2">
+                        <span className="text-2xl font-black text-slate-900 tracking-tighter italic">{(data.power || 0).toFixed(1)}</span>
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Watts</span>
+                   </div>
+                </div>
+                <div className={`w-12 h-12 rounded-full border-4 flex items-center justify-center transition-all duration-500 ${
+                    isRelayOn ? 'border-emerald-500/20' : 'border-slate-100'
+                }`}>
+                    <div className={`w-3 h-3 rounded-full ${isRelayOn ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-slate-200'}`} />
+                </div>
+            </div>
+          </div>
       </div>
 
       {/* Control Actions */}
-      <div className="grid grid-cols-2 gap-3 mb-6 px-1">
-        <button
-          onClick={() => onToggle(index + 1, "on")}
-          disabled={isRelayOn && !isStale}
-          className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${isRelayOn && !isStale
-            ? "bg-emerald-500/10 text-emerald-500/50 cursor-not-allowed border border-emerald-500/10"
-            : "bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 border border-emerald-500/30 active:scale-95"
-            }`}
-        >
-          <Power size={14} />
-          ON
-        </button>
-        <button
-          onClick={() => onToggle(index + 1, "off")}
-          disabled={!isRelayOn && !isStale}
-          className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${!isRelayOn && !isStale
-            ? "bg-rose-500/10 text-rose-500/50 cursor-not-allowed border border-rose-500/10"
-            : "bg-rose-600/20 text-rose-400 hover:bg-rose-600/30 border border-rose-500/30 active:scale-95"
-            }`}
-        >
-          <PowerOff size={14} />
-          OFF
-        </button>
-      </div>
-
-      {/* Footer Meta */}
-      <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-        <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-          <Clock size={12} className="text-slate-600" />
-          <RelativeTime timestamp={data.timestamp} />
+      <div className="relative z-10 pt-6 border-t border-slate-50">
+        <div className="grid grid-cols-2 gap-4 mb-6">
+            <ControlButton 
+                active={isRelayOn && !isStale}
+                onClick={() => onToggle(index + 1, "on")}
+                label="Power On"
+                color="emerald"
+                icon={Power}
+            />
+            <ControlButton 
+                active={!isRelayOn && !isStale}
+                onClick={() => onToggle(index + 1, "off")}
+                label="Deactivate"
+                color="rose"
+                icon={PowerOff}
+            />
         </div>
-        <div className="flex items-center gap-1">
-          <div
-            className={`w-1.5 h-1.5 rounded-full ${isStale ? "bg-rose-500" : "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)] animate-pulse"}`}
-          />
-          <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-            {isStale ? "STALE" : "LIVE"}
-          </span>
+
+        <div className="flex items-center justify-between px-2">
+            <div className="flex items-center gap-2 text-[9px] text-slate-400 font-black uppercase tracking-widest italic">
+              <Clock size={12} strokeWidth={2.5} />
+              <RelativeTime timestamp={data.timestamp} />
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className={`text-[8px] font-black uppercase tracking-widest ${isStale ? "text-rose-500" : "text-emerald-500"}`}>
+                {isStale ? "Protocol Stale" : "Live Link Active"}
+              </span>
+            </div>
         </div>
       </div>
     </motion.div>
   );
 };
 
-/**
- * SummaryMetric Card
- */
-const SummaryMetric = ({ label, value, unit, icon: Icon, colorClass }) => (
-  <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-2xl flex items-center gap-4">
-    <div className={`p-3 rounded-xl bg-slate-50 ${colorClass}`}>
-      <Icon size={20} />
+const BentoMetrics = ({ label, value, unit, icon: Icon, alert }) => (
+    <div className={`bg-slate-50/50 border rounded-2xl p-4 transition-all group-hover:bg-white ${
+        alert ? 'border-rose-200 bg-rose-50/50' : 'border-slate-100'
+    }`}>
+        <div className="flex items-center gap-2 text-slate-400 mb-2">
+            <Icon size={12} />
+            <span className="text-[9px] font-black uppercase tracking-widest">{label}</span>
+        </div>
+        <div className="flex items-baseline gap-1.5">
+            <span className={`text-xl font-black italic tracking-tighter ${alert ? 'text-rose-600' : 'text-slate-900'}`}>{value}</span>
+            <span className="text-[9px] font-black text-slate-400 uppercase">{unit}</span>
+        </div>
     </div>
-    <div>
-      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">
-        {label}
-      </p>
-      <div className="flex items-baseline gap-1">
-        <span className="text-xl font-bold text-slate-900 leading-none">
-          {value}
-        </span>
-        {unit && (
-          <span className="text-xs text-slate-500 font-bold uppercase">
-            {unit}
-          </span>
-        )}
-      </div>
-    </div>
-  </div>
 );
 
-/**
- * StreetlightDashboard Component
- */
+const ControlButton = ({ active, onClick, label, color, icon: Icon }) => {
+    const activeStyles = {
+        emerald: 'bg-emerald-50/50 text-emerald-400 border-emerald-100 cursor-not-allowed',
+        rose: 'bg-rose-50/50 text-rose-400 border-rose-100 cursor-not-allowed'
+    };
+    const hoverStyles = {
+        emerald: 'bg-slate-900 text-white hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-500/20',
+        rose: 'bg-slate-900 text-white hover:bg-rose-600 hover:shadow-lg hover:shadow-rose-500/20'
+    };
+    
+    return (
+        <button
+          onClick={onClick}
+          disabled={active}
+          className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[9px] font-black uppercase tracking-widest border transition-all ${
+              active ? activeStyles[color] : hoverStyles[color]
+          }`}
+        >
+          <Icon size={14} strokeWidth={2.5} />
+          {label}
+        </button>
+    );
+};
+
+const BentoStat = ({ label, value, unit, icon: Icon, color, description }) => {
+    const variants = {
+        blue: 'text-blue-600 bg-blue-50 border-blue-100',
+        amber: 'text-amber-600 bg-amber-50 border-amber-100',
+        emerald: 'text-emerald-600 bg-emerald-50 border-emerald-100',
+        rose: 'text-rose-600 bg-rose-50 border-rose-100'
+    };
+    return (
+        <div className="bg-white/80 backdrop-blur-3xl border border-white/50 rounded-[3rem] p-8 shadow-sm group hover:-translate-y-1 transition-all">
+            <div className="flex items-center justify-between mb-6">
+                <div className={`p-3 rounded-2xl border ${variants[color]}`}>
+                    <Icon size={20} strokeWidth={2.5} />
+                </div>
+                <TrendingUp size={16} className="text-slate-200" />
+            </div>
+            <div className="flex items-baseline gap-2 mb-2">
+                <div className="text-4xl font-black text-slate-900 tracking-tighter">{value}</div>
+                {unit && <span className="text-sm font-black text-slate-400 uppercase">{unit}</span>}
+            </div>
+            <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{label}</div>
+            <p className="text-[10px] font-bold text-slate-300 italic">{description}</p>
+        </div>
+    );
+};
+
 const StreetlightDashboard = ({ hideLayout = false }) => {
   const [streetlights, setStreetlights] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [displayData, setDisplayData] = useState(() =>
     Array.from({ length: 4 }, (_, i) => ({
       streetlightId: `SL-0${i + 1}`,
@@ -322,7 +286,7 @@ const StreetlightDashboard = ({ hideLayout = false }) => {
       const response = await axios.get("http://localhost:5001/api/latest");
       if (Array.isArray(response.data)) setStreetlights(response.data);
     } catch (e) {
-      console.error(e);
+      console.error("Link to streetlights not active");
     }
   };
 
@@ -355,7 +319,6 @@ const StreetlightDashboard = ({ hideLayout = false }) => {
       toast.success(`Streetlight ${channel} turned ${state.toUpperCase()}`, {
         id: toastId,
       });
-      // Update local state optimisticially or wait for next poll
       fetchData();
     } catch (error) {
       console.error(error);
@@ -366,7 +329,6 @@ const StreetlightDashboard = ({ hideLayout = false }) => {
     }
   };
 
-  // Derived Summary Metrics
   const stats = useMemo(() => {
     const total = displayData.length;
     const now = Date.now();
@@ -385,95 +347,77 @@ const StreetlightDashboard = ({ hideLayout = false }) => {
   }, [displayData]);
 
   return (
-    <div className={`min-h-screen ${hideLayout ? 'p-4' : 'p-6 md:p-10'} bg-slate-50 text-slate-700 selection:bg-blue-500 selection:text-white`}>
-      <div className="max-w-7xl mx-auto">
-        {/* Real-time Header */}
+    <div className="w-full h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-[1600px] mx-auto pt-16 pb-24 px-4 md:px-0">
         {!hideLayout && (
-          <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tighter uppercase italic">
-                  Control Panel
-                </h1>
-                <div className="flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
-                  <motion.div
-                    animate={{ scale: [1, 1.2, 1], opacity: [1, 0.6, 1] }}
-                    transition={{ repeat: Infinity, duration: 1.5 }}
-                    className="w-1.5 h-1.5 rounded-full bg-emerald-500"
-                  />
-                  <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">
-                    Live Monitoring
-                  </span>
+            <div className="mb-14 px-2 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                <div>
+                   <div className="flex items-center gap-3 mb-4">
+                      <div className="p-3 bg-amber-500 rounded-2xl shadow-lg shadow-amber-500/25 text-white">
+                        <Lightbulb size={24} strokeWidth={2.5} />
+                      </div>
+                      <h1 className="text-5xl font-black text-slate-900 tracking-tighter capitalize underline decoration-amber-500/10 underline-offset-8">Smart <span className="text-amber-500 italic">Lighting</span></h1>
+                   </div>
+                   <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] ml-1 leading-relaxed max-w-lg">Neural Grid Telemetry & Remote Luminary Interface</p>
                 </div>
-              </div>
-              <p className="text-slate-500 text-sm font-medium">
-                Smart City Infrastructure • Streetlight Telemetry Hub
-              </p>
-            </div>
 
-            <div className="bg-white border border-slate-200 shadow-sm px-4 py-2 rounded-xl flex items-center gap-3">
-              <ShieldCheck
-                className={
-                  stats.health === "OPTIMAL"
-                    ? "text-emerald-400"
-                    : "text-amber-400"
-                }
-                size={20}
-              />
-              <div>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-                  Global Status
-                </p>
-                <p
-                  className={`text-sm font-black tracking-tight ${stats.health === "OPTIMAL" ? "text-emerald-400" : "text-amber-400"}`}
-                >
-                  {stats.health}
-                </p>
-              </div>
+                <div className="flex items-center gap-6 bg-white/80 backdrop-blur-3xl px-6 py-4 rounded-[2rem] border border-white/50 shadow-xl shadow-slate-200/50">
+                    <div className="flex items-center gap-3">
+                        <div className={`w-2.5 h-2.5 rounded-full shadow-lg animate-pulse ${stats.health === "OPTIMAL" ? "bg-emerald-500 shadow-emerald-500/40" : "bg-amber-500 shadow-amber-500/40"}`} />
+                        <span className={`text-[10px] font-black uppercase tracking-widest italic ${stats.health === "OPTIMAL" ? "text-emerald-500" : "text-amber-500"}`}>System {stats.health}</span>
+                    </div>
+                    <div className="w-px h-6 bg-slate-200" />
+                    <div className="flex items-center gap-3">
+                        <ShieldCheck size={16} className={stats.health === "OPTIMAL" ? "text-emerald-500" : "text-amber-500"} />
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Grid Protection Active</span>
+                    </div>
+                </div>
             </div>
-          </header>
         )}
 
-        {/* Top Summary Section */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-          <SummaryMetric
-            label="Connected"
+        {/* Global Bento Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16 px-2">
+          <BentoStat
+            label="Grid Nodes"
             value={stats.total}
-            icon={BarChart3}
-            colorClass="text-blue-500"
+            icon={Layers}
+            color="blue"
+            description="Active luminary hardware"
           />
-          <SummaryMetric
-            label="Operational"
+          <BentoStat
+            label="Telemetry Latency"
             value={stats.online}
-            icon={Wifi}
-            colorClass="text-emerald-500"
+            icon={Cpu}
+            color="emerald"
+            description="Synchronized edge clients"
           />
-          <SummaryMetric
-            label="Fault Detected"
+          <BentoStat
+            label="Grid Anomalies"
             value={stats.faulty}
-            icon={WifiOff}
-            colorClass="text-rose-500"
+            icon={AlertTriangle}
+            color="rose"
+            description="Critical hardware repairs"
           />
-          <SummaryMetric
-            label="Total Power"
+          <BentoStat
+            label="Total Power Draw"
             value={stats.power.toFixed(1)}
             unit="W"
-            icon={TrendingUp}
-            colorClass="text-amber-500"
+            icon={Zap}
+            color="amber"
+            description="Live energy consumption"
           />
-        </section>
-
-        {/* Asset Grid */}
-        <div className="flex items-center justify-between mb-6 pb-2 border-b border-slate-200">
-          <h2 className="text-sm font-black text-slate-500 uppercase tracking-[0.2em]">
-            Active Deployment
-          </h2>
-          <span className="text-[10px] text-slate-600 font-mono italic">
-            Showing {displayData.length} nodes
-          </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="flex items-center justify-between mb-8 px-4 border-b border-slate-100 pb-4">
+          <h2 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-3">
+            <Radio size={14} className="text-blue-500" /> Neural Node Deployment
+          </h2>
+          <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 border border-slate-100 rounded-full">
+            <Database size={10} className="text-slate-400" />
+            <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">{displayData.length} active sockets</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-2">
           <AnimatePresence mode="popLayout">
             {displayData.map((data, index) => (
               <StreetlightCard
@@ -485,7 +429,6 @@ const StreetlightDashboard = ({ hideLayout = false }) => {
             ))}
           </AnimatePresence>
         </div>
-      </div>
     </div>
   );
 };

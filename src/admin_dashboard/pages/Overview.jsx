@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ContextHeader from "../components/ContextHeader";
 import IssueTable from "../components/IssueTable";
 import OperationsPanel from "../components/OperationsPanel";
 import SeverityLadder from "../components/SeverityLadder";
@@ -11,9 +10,24 @@ import AdminWelcomeBanner from "../components/AdminWelcomeBanner";
 import SeverityDistributionChart from "../components/SeverityDistributionChart";
 import ModuleIssueVelocityChart from "../components/ModuleIssueVelocityChart";
 import { groupIssuesByModule } from "../services/issuesService";
-import "./Overview.css";
+import { Loader2, Activity, Settings, AlertTriangle, Layers, PieChart } from "lucide-react";
 
-const Overview = () => {
+// The Bento Card Wrapper makes any component fit into a rounded aesthetic
+const BentoCard = ({ children, title, icon: Icon, spanClass = "col-span-1" }) => (
+  <div className={`bg-white border border-slate-200 rounded-[2.5rem] p-6 md:p-8 shadow-sm hover:shadow-xl hover:scale-[1.015] transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden flex flex-col ${spanClass}`}>
+    {title && (
+      <h2 className="text-lg font-black text-slate-900 mb-10 flex items-center gap-3">
+        {Icon && <div className="p-2 bg-slate-50 border border-slate-100 rounded-xl"><Icon className="text-blue-500" size={20} /></div>}
+        {title}
+      </h2>
+    )}
+    <div className="flex-1 w-full h-full relative">
+      {children}
+    </div>
+  </div>
+);
+
+const Overview = ({ hideLayout = false }) => {
   const {
     allIssues,
     criticalIssues,
@@ -67,63 +81,82 @@ const Overview = () => {
   };
 
   return (
-    <div className="overview">
+    <div className={`w-full h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 mx-auto ${hideLayout ? 'max-w-none pt-4 px-10 pb-20' : 'max-w-[1600px] pt-12 pb-20'}`}>
       <AdminWelcomeBanner alertCount={criticalIssues.length} />
-      <ContextHeader />
 
       {loading && allIssues.length === 0 ? (
-        <div className="dashboard-loading">
-          <div className="loading-spinner">
-            <img src="/logo192.png" alt="Loading..." style={{ width: '60px', height: '60px', opacity: 0.7 }}
-              onError={(e) => { e.target.src = '📋'; e.target.style.fontSize = '40px'; }} />
-          </div>
-          <p>Loading overview data...</p>
+        <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] text-slate-500 space-y-4">
+          <Loader2 size={48} className="animate-spin text-blue-500" />
+          <p className="font-bold tracking-widest uppercase text-xs">Loading Overview Data...</p>
         </div>
       ) : (
-        <div className="overview-content">
-          <div className="overview-main">
-            <section className="overview-section-group">
-              <h2 className="section-title">Critical Issues – Action Required</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 auto-rows-max">
+            
+          {/* Main Tables */}
+          <BentoCard title="Critical Issues Action Required" icon={AlertTriangle} spanClass="col-span-1 md:col-span-2 lg:col-span-2 xl:col-span-3">
+             <div className="-mx-2 -my-2">
               <IssueTable
                 issues={criticalIssues}
                 onAssign={handleAssignClick}
                 onResolve={handleResolveClick}
                 onViewDetails={handleViewDetails}
               />
-            </section>
+             </div>
+          </BentoCard>
 
-            {assignedIssues.length > 0 && (
-              <section className="overview-section-group">
-                <h2 className="section-title">Currently Assigned Tasks</h2>
+          {/* Operations Panel side */}
+          <BentoCard title="Operations Overview" icon={Settings} spanClass="col-span-1 md:col-span-2 lg:col-span-1 xl:col-span-1">
+             <div className="-mx-4 -my-4 h-full flex items-center justify-center">
+               <OperationsPanel stats={workflowStats} />
+             </div>
+          </BentoCard>
+
+          {/* Module Velocity Chart */}
+          <BentoCard title="Velocity Chart" icon={Activity} spanClass="col-span-1 md:col-span-2 lg:col-span-2 xl:col-span-2">
+             <ModuleIssueVelocityChart data={moduleData} />
+          </BentoCard>
+
+          {/* Severity Ladder */}
+          <BentoCard title="Severity Ladder" icon={Layers} spanClass="col-span-1">
+             <div className="-mx-4 -my-4 h-full flex items-center justify-center">
+               <SeverityLadder counts={severityCounts} />
+             </div>
+          </BentoCard>
+
+          {/* Severity Distribution */}
+          <BentoCard title="Severity Distribution" icon={PieChart} spanClass="col-span-1">
+             <SeverityDistributionChart issues={allIssues} />
+          </BentoCard>
+
+          {/* Assigned Tasks */}
+          {assignedIssues.length > 0 && (
+            <BentoCard title="Currently Assigned Tasks" spanClass="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-4">
+              <div className="-mx-2 -my-2">
                 <IssueTable
                   issues={assignedIssues}
                   onAssign={handleAssignClick}
                   onResolve={handleResolveClick}
                   onViewDetails={handleViewDetails}
                 />
-              </section>
-            )}
-
-            <ModuleIssueVelocityChart data={moduleData} />
-          </div>
-
-          <div className="overview-sidebar">
-            <OperationsPanel stats={workflowStats} />
-            <SeverityLadder counts={severityCounts} />
-            <SeverityDistributionChart issues={allIssues} />
-          </div>
+              </div>
+            </BentoCard>
+          )}
         </div>
       )}
 
-      {error && <div className="overview-error">{error}</div>}
+      {error && (
+        <div className="mt-8 p-6 bg-red-50 border border-red-200 text-red-600 rounded-2xl font-bold flex items-center justify-center shadow-sm">
+           <AlertTriangle className="mr-3" /> {error}
+        </div>
+      )}
 
+      {/* Modals */}
       {showDetailsModal && (
         <IssueDetailsModal
           issue={selectedIssue}
           onClose={handleCloseModals}
         />
       )}
-
       {showAssignModal && (
         <AssignIssueModal
           isOpen={showAssignModal}
@@ -132,7 +165,6 @@ const Overview = () => {
           onClose={handleCloseModals}
         />
       )}
-
       {showResolveModal && (
         <ResolveIssueModal
           isOpen={showResolveModal}

@@ -11,9 +11,9 @@ const Sidebar = ({ user, activeTab, setActiveTab, onLogout }) => {
     ];
 
     return (
-        <div className="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col z-50 shadow-sm">
+        <div className="w-64 bg-white/95 backdrop-blur-xl border border-slate-200 fixed left-6 top-24 bottom-12 rounded-[2.5rem] flex flex-col z-50 shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-y-auto hide-scrollbar">
             {/* Logo Section */}
-            <div className="p-6 pb-4 border-b border-gray-100">
+            <div className="p-5 pb-3 border-b border-gray-100">
                 <button
                     onClick={() => navigate('/')}
                     className="flex items-center gap-3 text-[#002147] font-bold text-xl hover:opacity-80 transition-opacity"
@@ -26,9 +26,9 @@ const Sidebar = ({ user, activeTab, setActiveTab, onLogout }) => {
             </div>
 
             {/* User Info Container */}
-            <div className="px-6 py-6 border-b border-gray-100 mb-2">
+            <div className="px-5 py-4 border-b border-gray-100 mb-1">
                 <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3 border border-gray-200">
+                    <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-2 border border-gray-200">
                         <UserIcon size={28} className="text-[#002147]" />
                     </div>
                     <h2 className="text-lg font-bold text-gray-900 text-center w-full truncate">{user?.name || 'Citizen'}</h2>
@@ -45,7 +45,7 @@ const Sidebar = ({ user, activeTab, setActiveTab, onLogout }) => {
                         <button
                             key={item.id}
                             onClick={() => setActiveTab(item.id)}
-                            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${activeTab === item.id
+                            className={`w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl transition-all duration-200 ${activeTab === item.id
                                 ? 'bg-[#002147] text-white font-bold shadow-md'
                                 : 'text-gray-600 hover:text-[#002147] hover:bg-gray-50 font-medium border border-transparent'
                                 }`}

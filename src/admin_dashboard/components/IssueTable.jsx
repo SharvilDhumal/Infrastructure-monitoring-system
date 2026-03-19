@@ -30,7 +30,7 @@ const IssueTable = ({
     };
 
     return (
-        <div className="issue-table-wrapper">
+        <div className="issue-table-wrapper hide-scrollbar">
             <table className="issue-table">
                 <thead>
                     <tr>

@@ -50,7 +50,30 @@ const LoginForm = () => {
 
         setIsLoading(true);
         try {
-            // Hardcoded Admin Bypass
+            // Hardcoded Role-Based Bypass
+            const roleRoutes = {
+                'admin@pothole': '/pothole',
+                'admin@bridge': '/bridge',
+                'admin@streetlights': '/streetlights',
+                'admin@water': '/water-leakage',
+                'admin@main': '/main-dashboard'
+            };
+
+            if (roleRoutes[formData.email] && formData.password === 'pass123') {
+                const roleName = formData.email.split('@')[1];
+                const roleUser = {
+                    id: `${roleName}-admin-id`,
+                    name: `${roleName.charAt(0).toUpperCase() + roleName.slice(1)} Admin`,
+                    email: formData.email
+                };
+                sessionStorage.setItem('user', JSON.stringify(roleUser));
+                sessionStorage.setItem('token', `mock-${roleName}-token`);
+                toast.success(`${roleUser.name} Login successful!`);
+                navigate(roleRoutes[formData.email]);
+                return;
+            }
+
+            // Legacy Hardcoded Admin Bypass
             if (formData.email === 'admin@gmail.com' && formData.password === 'Admin@123') {
                 const adminUser = {
                     id: 'admin-id',
