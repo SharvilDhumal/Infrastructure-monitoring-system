@@ -146,6 +146,57 @@ const ReportFormPage = () => {
     };
   }, [stream]);
 
+  // Auto-fill precise location based on GPS and fallback to IP
+  useEffect(() => {
+    const fetchPreciseLocation = async (lat, lon) => {
+      try {
+        const res = await axios.get(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+        if (res.data && res.data.display_name) {
+          setFormData(prev => ({
+            ...prev,
+            location: res.data.display_name
+          }));
+        } else {
+          fetchLocationByIP();
+        }
+      } catch (error) {
+        console.error("Reverse geocoding failed", error);
+        fetchLocationByIP();
+      }
+    };
+
+    const fetchLocationByIP = async () => {
+      try {
+        // We use ipapi.co to get the location from the user's public IP
+        const res = await axios.get('https://ipapi.co/json/');
+        if (res.data && res.data.city) {
+          const defaultLocation = `${res.data.city}, ${res.data.region}, ${res.data.country_name}`;
+          setFormData(prev => ({
+            ...prev,
+            location: prev.location || defaultLocation
+          }));
+        }
+      } catch (error) {
+        console.error("Could not fetch location by IP", error);
+      }
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          fetchPreciseLocation(position.coords.latitude, position.coords.longitude);
+        },
+        (error) => {
+          console.warn("Geolocation denied or failed", error);
+          fetchLocationByIP();
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    } else {
+      fetchLocationByIP();
+    }
+  }, []);
+
   const validateForm = () => {
     const newErrors = {};
     if (!formData.image) newErrors.image = 'Image is required';
