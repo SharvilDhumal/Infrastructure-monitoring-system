@@ -6,7 +6,9 @@ import {
   AlertTriangle,
   Clock,
   CheckCircle2,
-  Waves
+  Waves,
+  User,
+  MapPin
 } from 'lucide-react';
 
 const API_URL = 'http://localhost:5001/latest';
@@ -15,6 +17,19 @@ function WaterLeakage({ hideLayout = false }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeView, setActiveView] = useState("telemetry");
+  const [userReports, setUserReports] = useState([]);
+
+  const fetchUserReports = async () => {
+    try {
+      const res = await axios.get('http://localhost:5001/api/issues?faultType=drainage');
+      if (res.data.success) {
+        setUserReports(res.data.issues);
+      }
+    } catch (err) {
+      console.error('Error fetching reports:', err);
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -33,7 +48,8 @@ function WaterLeakage({ hideLayout = false }) {
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 2000);
+    fetchUserReports();
+    const interval = setInterval(() => { fetchData(); fetchUserReports(); }, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -99,95 +115,140 @@ function WaterLeakage({ hideLayout = false }) {
           </div>
         )}
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
-          <StatCard
-            title="Supply Line A"
-            value={data?.flow1 || 0}
-            unit="L/min"
-            icon={<Activity className="text-blue-400" size={20} />}
-            color="blue"
-            description="Main pump intake"
-          />
-          <StatCard
-            title="Outlet Line B"
-            value={data?.flow2 || 0}
-            unit="L/min"
-            icon={<Activity className="text-cyan-400" size={20} />} // Changed Zap to Activity for consistency with imports
-            color="cyan"
-            description="Garden irrigation"
-          />
-          <StatCard
-            title="Ground Moisture"
-            value={data?.moisture || 0}
-            unit="/ 1024"
-            icon={<Droplets className="text-indigo-400" size={20} />}
-            color="indigo"
-            description="Kitchen area sensor"
-          />
-          <StatCard
-            title="Sync Status"
-            value="Stable"
-            unit="2s poll"
-            icon={<Activity className="text-emerald-400" size={20} />}
-            color="emerald"
-            description="Connection health"
-          />
-          <StatusCard
-            title="System State"
-            isLeak={isLeakDetected}
-            description="Hardware override status"
-          />
+        <div className="flex bg-white/60 backdrop-blur-md p-1.5 rounded-2xl w-fit mb-8 mx-auto xl:mx-0 border border-slate-200 shadow-sm overflow-x-auto">
+            <button onClick={() => setActiveView('telemetry')} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${activeView === 'telemetry' ? 'bg-white shadow-sm border border-slate-100 text-slate-900' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'}`}><Activity size={16} /> Live Telemetry</button>
+            <button onClick={() => setActiveView('reports')} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${activeView === 'reports' ? 'bg-white shadow-sm border border-slate-100 text-slate-900' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'}`}><User size={16} /> User Reports</button>
         </div>
 
-        {/* Analytics Placeholder */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-white border border-slate-200 p-6 rounded-[2.5rem] shadow-sm">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <Activity size={20} className="text-blue-500" />
-                Live Flow Analytics
-              </h3>
-              <div className="flex gap-2">
-                <div className="flex items-center gap-1.5 px-3 py-1 bg-blue-500/10 rounded-full border border-blue-500/20 text-[10px] font-bold text-blue-400 uppercase">Input</div>
-                <div className="flex items-center gap-1.5 px-3 py-1 bg-cyan-500/10 rounded-full border border-cyan-500/20 text-[10px] font-bold text-cyan-400 uppercase">Output</div>
+        {activeView === 'telemetry' ? (
+          <>
+            {/* Dashboard Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
+              <StatCard
+                title="Supply Line A"
+                value={data?.flow1 || 0}
+                unit="L/min"
+                icon={<Activity className="text-blue-400" size={20} />}
+                color="blue"
+                description="Main pump intake"
+              />
+              <StatCard
+                title="Outlet Line B"
+                value={data?.flow2 || 0}
+                unit="L/min"
+                icon={<Activity className="text-cyan-400" size={20} />} // Changed Zap to Activity for consistency with imports
+                color="cyan"
+                description="Garden irrigation"
+              />
+              <StatCard
+                title="Ground Moisture"
+                value={data?.moisture || 0}
+                unit="/ 1024"
+                icon={<Droplets className="text-indigo-400" size={20} />}
+                color="indigo"
+                description="Kitchen area sensor"
+              />
+              <StatCard
+                title="Sync Status"
+                value="Stable"
+                unit="2s poll"
+                icon={<Activity className="text-emerald-400" size={20} />}
+                color="emerald"
+                description="Connection health"
+              />
+              <StatusCard
+                title="System State"
+                isLeak={isLeakDetected}
+                description="Hardware override status"
+              />
+            </div>
+
+            {/* Analytics Placeholder */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 bg-white border border-slate-200 p-6 rounded-[2.5rem] shadow-sm">
+                <div className="flex items-center justify-between mb-8">
+                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <Activity size={20} className="text-blue-500" />
+                    Live Flow Analytics
+                  </h3>
+                  <div className="flex gap-2">
+                    <div className="flex items-center gap-1.5 px-3 py-1 bg-blue-500/10 rounded-full border border-blue-500/20 text-[10px] font-bold text-blue-400 uppercase">Input</div>
+                    <div className="flex items-center gap-1.5 px-3 py-1 bg-cyan-500/10 rounded-full border border-cyan-500/20 text-[10px] font-bold text-cyan-400 uppercase">Output</div>
+                  </div>
+                </div>
+
+                <div className="h-[240px] w-full flex items-end gap-1 px-2">
+                  {[40, 65, 45, 80, 55, 90, 40, 60, 35, 75, 45, 85, 50, 70, 40].map((h, i) => (
+                    <div key={i} className="flex-1 group relative flex flex-col items-center gap-2 h-full justify-end">
+                      <div
+                        style={{ height: `${h}%` }}
+                        className={`w-full rounded-t-lg transition-all duration-1000 bg-gradient-to-t from-blue-600/40 to-blue-400/60 group-hover:from-blue-500 group-hover:to-cyan-400`}
+                      ></div>
+                      <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl -m-2"></div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex justify-between mt-6 px-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                  <span>-30m</span>
+                  <span>-20m</span>
+                  <span>-15m</span>
+                  <span>-10m</span>
+                  <span>-5m</span>
+                  <span>Now</span>
+                </div>
+              </div>
+
+              <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] shadow-sm flex flex-col justify-center items-center text-center">
+                <div className={`mb-6 p-6 rounded-full ${isLeakDetected ? 'bg-red-500/10 ring-4 ring-red-500/5' : 'bg-blue-500/10 ring-4 ring-blue-500/5'}`}>
+                  <CheckCircle2 size={48} className={isLeakDetected ? 'text-red-500' : 'text-blue-500'} />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">Automated Shutoff</h3>
+                <p className="text-slate-600 text-sm leading-relaxed mb-8 px-4">
+                  System is configured to auto-shutoff main valve if flow &gt; 100L or moisture thresholds are breached.
+                </p>
+                <button className="w-full py-4 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-2xl text-slate-700 font-bold transition-all hover:scale-[1.02] active:scale-[0.98]">
+                  Reset Alarm Config
+                </button>
               </div>
             </div>
-
-            <div className="h-[240px] w-full flex items-end gap-1 px-2">
-              {[40, 65, 45, 80, 55, 90, 40, 60, 35, 75, 45, 85, 50, 70, 40].map((h, i) => (
-                <div key={i} className="flex-1 group relative flex flex-col items-center gap-2 h-full justify-end">
-                  <div
-                    style={{ height: `${h}%` }}
-                    className={`w-full rounded-t-lg transition-all duration-1000 bg-gradient-to-t from-blue-600/40 to-blue-400/60 group-hover:from-blue-500 group-hover:to-cyan-400`}
-                  ></div>
-                  <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl -m-2"></div>
-                </div>
-              ))}
-            </div>
-            <div className="flex justify-between mt-6 px-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">
-              <span>-30m</span>
-              <span>-20m</span>
-              <span>-15m</span>
-              <span>-10m</span>
-              <span>-5m</span>
-              <span>Now</span>
-            </div>
+          </>
+        ) : (
+          <div className="pb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {userReports.length === 0 ? (
+                      <div className="col-span-full bg-white border border-slate-200 p-12 rounded-[2.5rem] shadow-sm flex flex-col items-center justify-center text-center">
+                          <div className="p-4 bg-blue-500/10 rounded-full mb-4 ring-8 ring-blue-500/5">
+                              <User className="text-blue-500" size={48} />
+                          </div>
+                          <h3 className="text-xl font-bold text-slate-900 mb-2">No Reports</h3>
+                          <p className="text-slate-500 font-medium tracking-wide">No citizen reports for drainage/leakage yet.</p>
+                      </div>
+                  ) : (
+                      userReports.map((issue) => (
+                          <div key={issue._id} className="bg-white border border-slate-200 rounded-[2rem] overflow-hidden flex flex-col p-1.5 transition-opacity">
+                              <div className="relative h-40 bg-slate-100 rounded-[1.5rem] overflow-hidden">
+                                  <img src={issue.imageUrl || 'https://placehold.co/600x400/f1f5f9/94a3b8?text=Image+Unavailable'} alt={issue.title} className="w-full h-full object-cover" />
+                                  <div className="absolute top-3 left-3 bg-blue-500/90 backdrop-blur text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center shadow-lg">
+                                      {issue.status}
+                                  </div>
+                              </div>
+                              <div className="p-4 flex-1 flex flex-col bg-slate-50/50 rounded-b-[1.5rem]">
+                                  <h4 className="font-bold text-slate-900 text-lg mb-2 truncate uppercase italic">{issue.title}</h4>
+                                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-2 truncate">
+                                      <MapPin size={14} className="text-slate-400" />
+                                      {issue.location}
+                                  </div>
+                                  <p className="text-xs text-slate-600 mb-4 flex-1">{issue.description}</p>
+                                  <div className="text-[10px] font-bold text-slate-400 mt-auto uppercase tracking-widest border-t border-slate-200 pt-3">
+                                      Reported By: {issue.user?.name || 'Citizen'}
+                                  </div>
+                              </div>
+                          </div>
+                      ))
+                  )}
+              </div>
           </div>
-
-          <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] shadow-sm flex flex-col justify-center items-center text-center">
-            <div className={`mb-6 p-6 rounded-full ${isLeakDetected ? 'bg-red-500/10 ring-4 ring-red-500/5' : 'bg-blue-500/10 ring-4 ring-blue-500/5'}`}>
-              <CheckCircle2 size={48} className={isLeakDetected ? 'text-red-500' : 'text-blue-500'} />
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">Automated Shutoff</h3>
-            <p className="text-slate-600 text-sm leading-relaxed mb-8 px-4">
-              System is configured to auto-shutoff main valve if flow &gt; 100L or moisture thresholds are breached.
-            </p>
-            <button className="w-full py-4 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-2xl text-slate-700 font-bold transition-all hover:scale-[1.02] active:scale-[0.98]">
-              Reset Alarm Config
-            </button>
-          </div>
-        </div>
+        )}
 
         {!hideLayout && (
           <footer className="mt-12 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-slate-600">

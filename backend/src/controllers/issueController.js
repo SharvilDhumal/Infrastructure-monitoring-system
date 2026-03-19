@@ -7,7 +7,8 @@ const { UnassignedIssue, AssignedIssue, ResolvedIssue } = require('../models/Act
 
 exports.getAllIssues = async (req, res) => {
     try {
-        const issues = await Issue.find().populate('user', 'name email').sort({ createdAt: -1 });
+        const query = req.query.faultType ? { faultType: req.query.faultType } : {};
+        const issues = await Issue.find(query).populate('user', 'name email').sort({ createdAt: -1 });
 
         res.status(200).json({
             success: true,

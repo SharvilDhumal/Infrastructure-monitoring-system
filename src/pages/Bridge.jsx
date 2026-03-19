@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Check, X, MapPin, AlertTriangle, Clock, User, Calendar, Info, Activity, ShieldCheck, FileText } from "lucide-react";
 
 const Bridge = ({ hideLayout = false }) => {
@@ -7,6 +7,25 @@ const Bridge = ({ hideLayout = false }) => {
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [showResolveModal, setShowResolveModal] = useState(false);
     const [resolverName, setResolverName] = useState("");
+    const [userReports, setUserReports] = useState([]);
+
+    useEffect(() => {
+        const fetchUserReports = async () => {
+            try {
+                const res = await fetch('http://localhost:5001/api/issues?faultType=bridge-issue');
+                const data = await res.json();
+                if (data.success) {
+                    setUserReports(data.issues);
+                }
+            } catch (error) {
+                console.error("Error fetching user reports:", error);
+            }
+        };
+
+        fetchUserReports();
+        const interval = setInterval(fetchUserReports, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
     const [detectedIssues, setDetectedIssues] = useState([
         {
@@ -283,6 +302,48 @@ const Bridge = ({ hideLayout = false }) => {
                         </div>
                     </div>
                 );
+
+            case "User Reports":
+                return (
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {userReports.length === 0 ? (
+                                <div className="col-span-full bg-white border border-slate-200 p-12 rounded-[2.5rem] shadow-sm flex flex-col items-center justify-center text-center">
+                                    <div className="p-4 bg-blue-500/10 rounded-full mb-4 ring-8 ring-blue-500/5">
+                                        <User className="text-blue-500" size={48} />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-slate-900 mb-2">No User Reports</h3>
+                                    <p className="text-slate-500 font-medium tracking-wide">Citizen reports will appear here.</p>
+                                </div>
+                            ) : (
+                                userReports.map((issue) => (
+                                    <div
+                                        key={issue._id}
+                                        className="bg-white border border-slate-200 rounded-[2rem] overflow-hidden flex flex-col p-1.5 opacity-90 hover:opacity-100 transition-opacity"
+                                    >
+                                        <div className="relative h-40 bg-slate-100 rounded-[1.5rem] overflow-hidden">
+                                            <img src={issue.imageUrl || 'https://placehold.co/600x400/f1f5f9/94a3b8?text=Image+Unavailable'} alt={issue.title} className="w-full h-full object-cover" />
+                                            <div className="absolute top-3 left-3 bg-blue-500/90 backdrop-blur text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+                                                {issue.status}
+                                            </div>
+                                        </div>
+                                        <div className="p-4 flex-1 flex flex-col bg-slate-50/50 rounded-b-[1.5rem]">
+                                            <h4 className="font-bold text-slate-900 text-lg mb-2">{issue.title}</h4>
+                                            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-2">
+                                                <MapPin size={14} className="text-slate-400" />
+                                                {issue.location}
+                                            </div>
+                                            <p className="text-xs text-slate-600 mb-4 flex-1">{issue.description}</p>
+                                            <div className="text-[10px] font-bold text-slate-400 mt-auto uppercase tracking-widest border-t border-slate-200 pt-3">
+                                                Reported By: {issue.user?.name || 'Citizen'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                );
             default: return null;
         }
     };
@@ -317,7 +378,7 @@ const Bridge = ({ hideLayout = false }) => {
 
                 {/* Tab Navigation */}
                 <div className="flex bg-white/60 backdrop-blur-md p-1.5 rounded-2xl w-fit mb-8 border border-slate-200 shadow-sm overflow-x-auto">
-                    {["Overview", "Detected Issues", "Resolved Issues"].map(tab => (
+                    {["Overview", "Detected Issues", "Resolved Issues", "User Reports"].map(tab => (
                         <button 
                             key={tab}
                             onClick={() => setActiveTab(tab)} 
@@ -331,6 +392,7 @@ const Bridge = ({ hideLayout = false }) => {
                                 </>
                             )}
                             {tab === "Resolved Issues" && <Check size={16} className={activeTab === tab ? 'text-emerald-500' : ''} />}
+                            {tab === "User Reports" && <User size={16} className={activeTab === tab ? 'text-blue-500' : ''} />}
                             {tab}
                         </button>
                     ))}

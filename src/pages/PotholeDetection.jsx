@@ -27,6 +27,7 @@ const API_URL = 'http://localhost:8000';
 
 const PotholeDetection = ({ hideLayout = false }) => {
   const [detections, setDetections] = useState([]);
+  const [userReports, setUserReports] = useState([]);
   const [activeTab, setActiveTab] = useState('unsolved');
   const [selectedIssueId, setSelectedIssueId] = useState(null);
   const [solverName, setSolverName] = useState('');
@@ -42,9 +43,22 @@ const PotholeDetection = ({ hideLayout = false }) => {
     }
   };
 
+  const fetchUserReports = async () => {
+    try {
+      const res = await fetch('http://localhost:5001/api/issues?faultType=road-damage');
+      const data = await res.json();
+      if (data.success) {
+        setUserReports(data.issues);
+      }
+    } catch (error) {
+      console.error("Error fetching user reports:", error);
+    }
+  };
+
   useEffect(() => {
     fetchDetections();
-    const interval = setInterval(fetchDetections, 5000);
+    fetchUserReports();
+    const interval = setInterval(() => { fetchDetections(); fetchUserReports(); }, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -171,6 +185,14 @@ const PotholeDetection = ({ hideLayout = false }) => {
             label="Analytic Log" 
             color="blue"
           />
+          <TabButton 
+            active={activeTab === 'user-reports'} 
+            onClick={() => setActiveTab('user-reports')} 
+            icon={User} 
+            label="User Reports" 
+            count={userReports.length}
+            color="indigo"
+          />
         </div>
 
         {/* Content Area */}
@@ -273,6 +295,35 @@ const PotholeDetection = ({ hideLayout = false }) => {
                   </div>
                </div>
             )}
+
+            {activeTab === 'user-reports' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                {userReports.length === 0 ? (
+                  <EmptyState icon={User} title="No User Reports" description="No road damage reported by users." color="emerald" />
+                ) : (
+                  userReports.map(item => (
+                    <div key={item._id} className="group bg-white/80 backdrop-blur-3xl border border-white/50 rounded-[3rem] p-2 shadow-sm transition-all flex flex-col mt-4">
+                        <div className="relative h-56 rounded-[2.5rem] overflow-hidden mb-6">
+                            <img src={item.imageUrl || 'https://placehold.co/600x400/f1f5f9/94a3b8?text=Image+Unavailable'} alt="Report" className="w-full h-full object-cover" />
+                            <div className="absolute top-4 left-4 bg-indigo-600/90 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full flex items-center gap-2 shadow-lg">
+                                {item.status}
+                            </div>
+                        </div>
+                        <div className="px-6 pb-6 flex-1 flex flex-col">
+                            <h4 className="text-xl font-bold text-slate-900 mb-2 truncate uppercase italic">{item.title}</h4>
+                            <div className="text-[10px] text-slate-500 mb-4 flex items-center font-bold tracking-widest gap-2 uppercase">
+                                <MapPin size={12} /> {item.location}
+                            </div>
+                            <p className="text-xs font-semibold text-slate-500 flex-1">{item.description}</p>
+                            <div className="text-[10px] font-bold text-slate-400 mt-4 uppercase tracking-widest">
+                                Reported By: {item.user?.name || 'Citizen'}
+                            </div>
+                        </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
         </div>
 
         {/* Ultra-Modern Resolve Modal */}
@@ -337,7 +388,8 @@ const TabButton = ({ active, onClick, icon: Icon, label, count, color }) => {
     const colors = {
         rose: 'text-rose-600 bg-rose-50 border-rose-100',
         emerald: 'text-emerald-600 bg-emerald-50 border-emerald-100',
-        blue: 'text-blue-600 bg-blue-50 border-blue-100'
+        blue: 'text-blue-600 bg-blue-50 border-blue-100',
+        indigo: 'text-indigo-600 bg-indigo-50 border-indigo-100'
     };
     return (
         <button 
