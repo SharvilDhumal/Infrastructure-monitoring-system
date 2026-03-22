@@ -28,6 +28,11 @@ const sensorSchema = new mongoose.Schema({
 
 const SensorData = mongoose.model('SensorData', sensorSchema);
 
+// Health Check Route
+app.get('/', (req, res) => {
+    res.status(200).send({ message: 'Water Leakage API is Running' });
+});
+
 // API Endpoints
 
 // POST: Receive data from ESP32
