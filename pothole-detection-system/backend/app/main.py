@@ -16,6 +16,10 @@ load_dotenv()
 
 app = FastAPI()
 
+@app.get("/")
+def read_root():
+    return {"status": "ok", "message": "Pothole Detection API is Running"}
+
 # -------------------- CORS --------------------
 app.add_middleware(
     CORSMiddleware,
