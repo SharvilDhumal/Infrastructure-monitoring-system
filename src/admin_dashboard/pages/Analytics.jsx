@@ -54,7 +54,9 @@ const Analytics = ({ hideLayout = false }) => {
         const fetchAnalytics = async () => {
             try {
                 setLoading(true);
-                const res = await axios.get(`${API_BASE_URL}/api/admin/analytics`);
+                const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+                const headers = token ? { Authorization: `Bearer ${token}` } : {};
+                const res = await axios.get(`${API_BASE_URL}/api/admin/analytics`, { headers });
                 setAnalyticsData(res.data.data);
                 setError(null);
             } catch (err) {
