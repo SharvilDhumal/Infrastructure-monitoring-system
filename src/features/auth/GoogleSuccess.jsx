@@ -9,21 +9,30 @@ const GoogleSuccess = () => {
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const token = searchParams.get('token');
-        const type = searchParams.get('type');
+        const role = searchParams.get('role');
 
         if (token) {
             // Save token
             sessionStorage.setItem('token', token);
 
-            // Optional: Store user type/flow if needed, but requirements say redirect to / and NOT /dashboard
+            // Role-Based Redirection
+            const roleRoutes = {
+                'pothole_admin': '/pothole',
+                'bridge_admin': '/bridge',
+                'streetlight_admin': '/streetlights',
+                'water_admin': '/water-leakage',
+                'admin': '/main-dashboard'
+            };
 
-            // Show success message briefly if desired, or just redirect
             setMessage('Authentication successful! Redirecting...');
 
-            // Short delay or immediate redirect? User said "Show a short loading message"
             const timer = setTimeout(() => {
-                navigate('/', { replace: true });
-            }, 1000); // 1.5s delay to show message
+                if (roleRoutes[role]) {
+                    navigate(roleRoutes[role], { replace: true });
+                } else {
+                    navigate('/', { replace: true });
+                }
+            }, 1000); // 1s delay to show message
 
             return () => clearTimeout(timer);
         } else {

@@ -136,7 +136,8 @@ exports.login = async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        role: user.role
       }
     });
   } catch (error) {
@@ -308,7 +309,7 @@ exports.googleCallback = async (req, res) => {
     // Login flow -> type=login (frontend will auto-redirect)
     // Signup flow -> type=signup (frontend will show success page)
     res.redirect(
-      `${FRONTEND_URL}/google-success?token=${token}&type=${flow}`
+      `${FRONTEND_URL}/google-success?token=${token}&type=${flow}&role=${user.role}`
     );
   } catch (error) {
     console.error('Google callback error:', error);

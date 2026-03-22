@@ -30,7 +30,9 @@ const SignupForm = () => {
         setIsLoading(true);
         try {
             const res = await authService.register(formData);
-            toast.success(res.message || 'Signup successful! Please verify your email.');
+            toast.success(res.message || 'Signup successful! Please check your email for a verification link.', {
+                duration: 5000,
+            });
             setIsLoading(false); // Stop loading before navigation
             // Redirect to login page to wait for verification
             navigate('/login');

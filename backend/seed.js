@@ -1,87 +1,74 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
+const bcrypt = require('bcryptjs');
+require('dotenv').config({ path: './.env' });
+const User = require('./src/models/User');
 
-const MONGO_URI = process.env.MONGO_URI;
+const seedUsers = [
+  {
+    name: 'Main Admin',
+    email: 'admin@gmail.com',
+    password: 'Admin@123',
+    role: 'admin',
+    isVerified: true
+  },
+  {
+    name: 'Pothole Admin',
+    email: 'admin@pothole',
+    password: 'pass123',
+    role: 'pothole_admin',
+    isVerified: true
+  },
+  {
+    name: 'Bridge Admin',
+    email: 'admin@bridge',
+    password: 'pass123',
+    role: 'bridge_admin',
+    isVerified: true
+  },
+  {
+    name: 'Streetlight Admin',
+    email: 'admin@streetlights',
+    password: 'pass123',
+    role: 'streetlight_admin',
+    isVerified: true
+  },
+  {
+    name: 'Water Admin',
+    email: 'admin@water',
+    password: 'pass123',
+    role: 'water_admin',
+    isVerified: true
+  }
+];
 
-if (!MONGO_URI) {
-    console.error('Error: MONGO_URI is not defined in environment variables.');
-    process.exit(1);
-}
+const seedDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('Connected to MongoDB for seeding...');
 
-// Data format definitions
-const potholesData = Array.from({ length: 5 }).map((_, i) => ({
-    location: {
-        latitude: 19.0760 + (Math.random() * 0.1),
-        longitude: 72.8777 + (Math.random() * 0.1)
-    },
-    image: `uploads/pothole_${i + 1}.jpg`,
-    severity: ["Low", "Medium", "High"][Math.floor(Math.random() * 3)],
-    issue: `Road surface damage at spot ${i + 1}`,
-    status: "Detected",
-    timestamp: new Date()
-}));
-
-const bridgesData = Array.from({ length: 5 }).map((_, i) => ({
-    bridgeId: `BR-0${i + 1}`,
-    image: `uploads/bridge_${i + 1}.jpg`,
-    severity: ["Low", "Medium", "High"][Math.floor(Math.random() * 3)],
-    issue: `Structural crack detected in pillar ${i + 1}`,
-    confidence: parseFloat((0.75 + Math.random() * (0.98 - 0.75)).toFixed(2)),
-    status: "Detected",
-    timestamp: new Date()
-}));
-
-const waterLeakageData = Array.from({ length: 5 }).map((_, i) => {
-    const supply = 50 + Math.random() * 50;
-    const outlet = supply - (Math.random() * 10);
-    const leakDetected = (supply - outlet) > 5;
-    return {
-        supplyLineFlow: parseFloat(supply.toFixed(2)),
-        outletLineFlow: parseFloat(outlet.toFixed(2)),
-        groundMoisture: parseFloat((20 + Math.random() * 60).toFixed(2)),
-        leakDetected: leakDetected,
-        leakSeverity: leakDetected ? ["Low", "Medium", "High"][Math.floor(Math.random() * 3)] : "Low",
-        autoShutoffTriggered: leakDetected && Math.random() > 0.5,
-        status: leakDetected ? "Leak Detected" : "All Clear",
-        timestamp: new Date()
-    };
-});
-
-async function seedDB() {
-    try {
-        console.log('Connecting to MongoDB Atlas...');
-        await mongoose.connect(MONGO_URI);
-        console.log('Connected to MongoDB.');
-
-        // Get collection references (creating them implicitly if they don't exist)
-        const Pothole = mongoose.connection.collection('potholes');
-        const Bridge = mongoose.connection.collection('bridge');
-        const WaterLeakage = mongoose.connection.collection('waterleakage');
-
-        // Optional: Clear existing data (uncomment if needed)
-        // await Pothole.deleteMany({});
-        // await Bridge.deleteMany({});
-        // await WaterLeakage.deleteMany({});
-
-        console.log('Inserting sample data...');
-
-        const potholeResult = await Pothole.insertMany(potholesData);
-        console.log(`Successfully inserted ${potholeResult.insertedCount} pothole documents.`);
-
-        const bridgeResult = await Bridge.insertMany(bridgesData);
-        console.log(`Successfully inserted ${bridgeResult.insertedCount} bridge documents.`);
-
-        const waterResult = await WaterLeakage.insertMany(waterLeakageData);
-        console.log(`Successfully inserted ${waterResult.insertedCount} water leakage documents.`);
-
-        console.log('Seeding completed successfully!');
-    } catch (error) {
-        console.error('Error during seeding:', error);
-    } finally {
-        await mongoose.connection.close();
-        console.log('MongoDB connection closed.');
-        process.exit();
+    for (const u of seedUsers) {
+      const existingUser = await User.findOne({ email: u.email });
+      if (existingUser) {
+        console.log(`User ${u.email} already exists, updating role...`);
+        existingUser.role = u.role;
+        await existingUser.save();
+      } else {
+        console.log(`Creating user: ${u.email}`);
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(u.password, salt);
+        await User.create({
+          ...u,
+          password: hashedPassword
+        });
+      }
     }
-}
+
+    console.log('Seeding completed successfully!');
+    process.exit(0);
+  } catch (err) {
+    console.error('Seeding error:', err);
+    process.exit(1);
+  }
+};
 
 seedDB();

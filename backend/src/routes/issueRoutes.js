@@ -13,13 +13,13 @@ router.get('/user', protect, issueController.getUserIssues);
 // POST a new issue (Protected)
 router.post('/', protect, issueController.createIssue);
 
-// UPDATE issue status (Temporarily public for testing with mock admin credentials)
-router.put('/:id/status', issueController.updateIssueStatus);
+// UPDATE issue status (Now Protected)
+router.put('/:id/status', protect, issueController.updateIssueStatus);
 
-// Admin Dashboard Actions
-router.post('/assign/:issueId', issueController.assignIssue);
-router.post('/resolve/:issueId', issueController.resolveIssue);
-router.get('/actions', issueController.getActionIssues);
-router.get('/analytics', analyticsController.getAnalytics);
+// Admin Dashboard Actions (All Protected)
+router.post('/assign/:issueId', protect, issueController.assignIssue);
+router.post('/resolve/:issueId', protect, issueController.resolveIssue);
+router.get('/actions', protect, issueController.getActionIssues);
+router.get('/analytics', protect, analyticsController.getAnalytics);
 
 module.exports = router;

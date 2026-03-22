@@ -26,7 +26,9 @@ import StreetlightDashboard from "./modules/streetlight/StreetlightDashboard";
 import AdminDashboard from "./admin_dashboard/App";
 import WaterLeakage from "./pages/WaterLeakage";
 import PotholeDetection from "./pages/PotholeDetection";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Bridge from "./pages/Bridge";
+
 
 // Home page
 const Home = () => {
@@ -95,9 +97,9 @@ const App = () => {
       <Toaster />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/report" element={<Report />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/bridge" element={<Bridge />} />
+        <Route path="/report" element={<ProtectedRoute><Report /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/bridge" element={<ProtectedRoute><Bridge /></ProtectedRoute>} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />
@@ -107,11 +109,11 @@ const App = () => {
         <Route path="/auth-success" element={<AuthSuccess />} />
         <Route path="/account-exists" element={<AccountExists />} />
         <Route path="/no-account-found" element={<NoAccountFound />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/streetlights" element={<StreetlightDashboard />} />
-        <Route path="/main-dashboard/*" element={<AdminDashboard />} />
-        <Route path="/water-leakage" element={<WaterLeakage />} />
-        <Route path="/pothole" element={<PotholeDetection />} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/streetlights" element={<ProtectedRoute><StreetlightDashboard /></ProtectedRoute>} />
+        <Route path="/main-dashboard/*" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/water-leakage" element={<ProtectedRoute><WaterLeakage /></ProtectedRoute>} />
+        <Route path="/pothole" element={<ProtectedRoute><PotholeDetection /></ProtectedRoute>} />
       </Routes>
 
       {/* Cursor outline */}

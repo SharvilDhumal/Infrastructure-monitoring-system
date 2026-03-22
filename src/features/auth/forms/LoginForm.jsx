@@ -50,46 +50,24 @@ const LoginForm = () => {
 
         setIsLoading(true);
         try {
-            // Hardcoded Role-Based Bypass
+            const res = await authService.login(formData);
+            toast.success('Login successful!');
+            
+            // Role-Based Redirection
+            const role = res.user?.role;
             const roleRoutes = {
-                'admin@pothole': '/pothole',
-                'admin@bridge': '/bridge',
-                'admin@streetlights': '/streetlights',
-                'admin@water': '/water-leakage',
-                'admin@main': '/main-dashboard'
+                'pothole_admin': '/pothole',
+                'bridge_admin': '/bridge',
+                'streetlight_admin': '/streetlights',
+                'water_admin': '/water-leakage',
+                'admin': '/main-dashboard'
             };
 
-            if (roleRoutes[formData.email] && formData.password === 'pass123') {
-                const roleName = formData.email.split('@')[1];
-                const roleUser = {
-                    id: `${roleName}-admin-id`,
-                    name: `${roleName.charAt(0).toUpperCase() + roleName.slice(1)} Admin`,
-                    email: formData.email
-                };
-                sessionStorage.setItem('user', JSON.stringify(roleUser));
-                sessionStorage.setItem('token', `mock-${roleName}-token`);
-                toast.success(`${roleUser.name} Login successful!`);
-                navigate(roleRoutes[formData.email]);
-                return;
+            if (roleRoutes[role]) {
+                navigate(roleRoutes[role]);
+            } else {
+                navigate('/');
             }
-
-            // Legacy Hardcoded Admin Bypass
-            if (formData.email === 'admin@gmail.com' && formData.password === 'Admin@123') {
-                const adminUser = {
-                    id: 'admin-id',
-                    name: 'Admin User',
-                    email: 'admin@gmail.com'
-                };
-                sessionStorage.setItem('user', JSON.stringify(adminUser));
-                sessionStorage.setItem('token', 'mock-admin-token');
-                toast.success('Admin Login successful!');
-                navigate('/main-dashboard');
-                return;
-            }
-
-            await authService.login(formData);
-            toast.success('Login successful!');
-            navigate('/');
         } catch (error) {
             console.error('Login error:', error);
             toast.error(error.message || 'Login failed. Please check your credentials.');

@@ -9,6 +9,11 @@ from pymongo import MongoClient
 
 from .yolo_inference import detect_pothole
 
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 app = FastAPI()
 
 # -------------------- CORS --------------------
@@ -30,10 +35,13 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_FOLDER), name="uploads")
 
 # -------------------- MongoDB Setup --------------------
-# Hardcoded URI as per user's environment/request context if .env is not easily accessible via relative path here, 
-# but I see it in c:\Users\User\OneDrive\Desktop\Infrastructure-monitoring-system-sharvil\backend\.env
-# Let's try to load it or use the one I found.
-MONGO_URI = "mongodb+srv://infravisonAI:InfravisionAI%402026@cluster0.cwovzrd.mongodb.net/auth-db"
+MONGO_URI = os.getenv("MONGO_URI")
+if not MONGO_URI:
+    # Fallback to local for development if .env is missing, 
+    # but for production it MUST be in .env
+    MONGO_URI = "mongodb://localhost:27017/auth-db"
+    print("WARNING: MONGO_URI not found in .env, using fallback.")
+
 client = MongoClient(MONGO_URI)
 db = client["auth-db"]
 potholes_col = db["potholes"]
@@ -122,3 +130,5 @@ def solve_issue(issue_id: str, data: SolveRequest):
         return {"message": "Issue not found"}, 404
 
     return {"message": "Issue marked as solved"}
+    
+
