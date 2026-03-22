@@ -20,4 +20,9 @@ app.use('/auth', authRoutes);
 app.use('/api/issues', issueRoutes);
 app.use('/api/admin', issueRoutes);
 
+// Health Check Route
+app.get('/', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Smart City API is Running' });
+});
+
 module.exports = app;
