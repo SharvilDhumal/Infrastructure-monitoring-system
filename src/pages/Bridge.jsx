@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Check, X, MapPin, AlertTriangle, Clock, User, Calendar, Info, Activity, ShieldCheck, FileText } from "lucide-react";
 
+import API_BASE_URL from "../config/api";
 const Bridge = ({ hideLayout = false }) => {
     const [activeTab, setActiveTab] = useState("Overview");
     const [selectedIssue, setSelectedIssue] = useState(null);
@@ -12,7 +13,7 @@ const Bridge = ({ hideLayout = false }) => {
     useEffect(() => {
         const fetchUserReports = async () => {
             try {
-                const res = await fetch('http://localhost:5001/api/issues?faultType=bridge-issue');
+                const res = await fetch(`${API_BASE_URL}/api/issues?faultType=bridge-issue`);
                 const data = await res.json();
                 if (data.success) {
                     setUserReports(data.issues);

@@ -23,7 +23,7 @@ import {
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-const API_URL = 'http://localhost:8000';
+import { POTHOLE_API_URL, API_BASE_URL } from '../config/api';
 
 const PotholeDetection = ({ hideLayout = false }) => {
   const [detections, setDetections] = useState([]);
@@ -35,7 +35,7 @@ const PotholeDetection = ({ hideLayout = false }) => {
 
   const fetchDetections = async () => {
     try {
-      const response = await fetch(`${API_URL}/detections/`);
+      const response = await fetch(`${POTHOLE_API_URL}/detections/`);
       const data = await response.json();
       setDetections(data);
     } catch (error) {
@@ -45,7 +45,7 @@ const PotholeDetection = ({ hideLayout = false }) => {
 
   const fetchUserReports = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/issues?faultType=road-damage');
+      const res = await fetch(`${API_BASE_URL}/api/issues?faultType=road-damage`);
       const data = await res.json();
       if (data.success) {
         setUserReports(data.issues);
@@ -68,7 +68,7 @@ const PotholeDetection = ({ hideLayout = false }) => {
       return;
     }
     try {
-      await fetch(`${API_URL}/solve/${selectedIssueId}`, {
+      await fetch(`${POTHOLE_API_URL}/solve/${selectedIssueId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ solver_name: solverName, resolved_time: resolveTime })
@@ -207,7 +207,7 @@ const PotholeDetection = ({ hideLayout = false }) => {
                         key={item.id} 
                         item={item} 
                         onResolve={() => setSelectedIssueId(item.id)} 
-                        API_URL={API_URL} 
+                        API_URL={POTHOLE_API_URL} 
                         formatDate={formatDate}
                     />
                   ))
@@ -224,7 +224,7 @@ const PotholeDetection = ({ hideLayout = false }) => {
                     <ResolvedCard 
                         key={item.id} 
                         item={item} 
-                        API_URL={API_URL} 
+                        API_URL={POTHOLE_API_URL} 
                         formatDate={formatDate}
                     />
                   ))

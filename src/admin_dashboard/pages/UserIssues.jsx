@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../../config/api';
 import { 
     User, 
     Mail, 
@@ -24,7 +25,7 @@ const UserIssues = ({ hideLayout = false }) => {
     const [error, setError] = useState(null);
     const [previewIssue, setPreviewIssue] = useState(null);
 
-    const API_URL = 'http://localhost:5001/api/issues';
+    const API_URL = `${API_BASE_URL}/api/issues`;
     const token = sessionStorage.getItem('token');
 
     const fetchIssues = async () => {

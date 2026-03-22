@@ -1,6 +1,7 @@
 import axios from 'axios';
+import API_BASE_URL_GLOBAL from '../../config/api';
 
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = API_BASE_URL_GLOBAL + '/api';
 
 /**
  * Helper to convert timestamp into "5 min ago", "2 hours ago", etc.

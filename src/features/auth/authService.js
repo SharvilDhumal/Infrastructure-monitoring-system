@@ -1,4 +1,5 @@
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5001') + '/api/auth/';
+import API_BASE_URL from '../../config/api';
+const API_URL = API_BASE_URL + '/api/auth/';
 
 const register = async (userData) => {
     const response = await fetch(API_URL + 'signup', {

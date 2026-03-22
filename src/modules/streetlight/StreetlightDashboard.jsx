@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 import {
   Lightbulb, Activity, Zap, Clock, AlertTriangle, ShieldCheck,
   Wifi, WifiOff, TrendingUp, TrendingDown, Layers, Cpu, User, MapPin, 
@@ -218,7 +219,7 @@ const StreetlightDashboard = ({ hideLayout = false }) => {
 
   const fetchUserReports = async () => {
     try {
-      const res = await fetch("http://localhost:5001/api/issues?faultType=street-light");
+      const res = await fetch(`${API_BASE_URL}/api/issues?faultType=street-light`);
       const data = await res.json();
       if (data.success) {
         setUserReports(data.issues);
@@ -230,7 +231,7 @@ const StreetlightDashboard = ({ hideLayout = false }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:5001/api/latest");
+      const response = await axios.get(`${API_BASE_URL}/api/latest`);
       if (Array.isArray(response.data)) {
           setStreetlights(response.data);
           setLastUpdateTime(Date.now());
@@ -268,7 +269,7 @@ const StreetlightDashboard = ({ hideLayout = false }) => {
   const handleToggle = async (channel, state) => {
     const toastId = toast.loading(`Turning ${state.toUpperCase()} Streetlight ${channel}...`);
     try {
-      await axios.post("http://localhost:5001/api/toggle-relay", { id: channel, state, });
+      await axios.post(`${API_BASE_URL}/api/toggle-relay`, { id: channel, state, });
       toast.success(`Streetlight ${channel} turned ${state.toUpperCase()}`, { id: toastId, });
       fetchData();
     } catch (error) {

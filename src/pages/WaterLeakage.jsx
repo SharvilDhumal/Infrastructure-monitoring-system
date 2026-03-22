@@ -11,7 +11,9 @@ import {
   MapPin
 } from 'lucide-react';
 
-const API_URL = 'http://localhost:5001/latest';
+import API_BASE_URL from '../config/api';
+
+const API_URL = API_BASE_URL + '/latest';
 
 function WaterLeakage({ hideLayout = false }) {
   const [data, setData] = useState(null);
@@ -22,7 +24,7 @@ function WaterLeakage({ hideLayout = false }) {
 
   const fetchUserReports = async () => {
     try {
-      const res = await axios.get('http://localhost:5001/api/issues?faultType=drainage');
+      const res = await axios.get(API_BASE_URL + '/api/issues?faultType=drainage');
       if (res.data.success) {
         setUserReports(res.data.issues);
       }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../../config/api';
 import KPICard from '../components/KPICard';
 import IssueTrendChart from '../components/IssueTrendChart';
 import IssueDonutChart from '../components/IssueDonutChart';
@@ -53,7 +54,7 @@ const Analytics = ({ hideLayout = false }) => {
         const fetchAnalytics = async () => {
             try {
                 setLoading(true);
-                const res = await axios.get('http://localhost:5001/api/admin/analytics');
+                const res = await axios.get(`${API_BASE_URL}/api/admin/analytics`);
                 setAnalyticsData(res.data.data);
                 setError(null);
             } catch (err) {

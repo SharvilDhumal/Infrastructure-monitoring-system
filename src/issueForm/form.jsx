@@ -14,6 +14,7 @@ import {
   MessageSquare
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import API_BASE_URL from '../config/api';
 
 const FAULT_TYPES = [
   { id: 'road-damage', label: 'Road Damage' },
@@ -89,7 +90,6 @@ const ReportFormPage = () => {
     }
   };
 
-  // Callback ref to handle video stream assignment precisely when element mounts
   const videoCallbackRef = useCallback((node) => {
     videoRef.current = node;
     if (node && stream) {
@@ -110,18 +110,10 @@ const ReportFormPage = () => {
       const video = videoRef.current;
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
-
-      // Match canvas dimensions to video
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-
-      // Draw current video frame to canvas
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      // Convert to data URL
       const dataUrl = canvas.toDataURL('image/jpeg');
-
-      // Create a file-like object from data URL
       fetch(dataUrl)
         .then(res => res.blob())
         .then(blob => {
@@ -137,7 +129,6 @@ const ReportFormPage = () => {
     }
   };
 
-  // Cleanup camera on unmount
   useEffect(() => {
     return () => {
       if (stream) {
@@ -146,7 +137,6 @@ const ReportFormPage = () => {
     };
   }, [stream]);
 
-  // Auto-fill precise location based on GPS and fallback to IP
   useEffect(() => {
     const fetchPreciseLocation = async (lat, lon) => {
       try {
@@ -167,7 +157,6 @@ const ReportFormPage = () => {
 
     const fetchLocationByIP = async () => {
       try {
-        // We use ipapi.co to get the location from the user's public IP
         const res = await axios.get('https://ipapi.co/json/');
         if (res.data && res.data.city) {
           const defaultLocation = `${res.data.city}, ${res.data.region}, ${res.data.country_name}`;
@@ -210,31 +199,24 @@ const ReportFormPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Check authentication
     const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-
     if (!token) {
       toast.error('Login first to report an issue');
       return;
     }
-
     if (!validateForm()) {
       toast.error('Please fill in all required fields');
       return;
     }
-
     setIsLoading(true);
-
     try {
-      const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5001') + '/api/issues';
-
+      const API_URL = API_BASE_URL + '/api/issues';
       const response = await axios.post(API_URL, {
-        title: formData.faultType, // Using faultType as title for now, or could combine
+        title: formData.faultType,
         faultType: formData.faultType,
         location: formData.location,
         description: formData.description,
-        imageUrl: formData.imagePreview // For now sending base64 preview, in prod use S3/Cloudinary
+        imageUrl: formData.imagePreview 
       }, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -244,14 +226,12 @@ const ReportFormPage = () => {
       if (response.data.success) {
         setIsSubmitted(true);
         toast.success('Report submitted successfully! Redirecting to your profile...');
-        // Navigate to profile after 2 seconds so user sees their new issue
         setTimeout(() => navigate('/profile'), 2000);
       }
     } catch (error) {
       console.error('Submission error:', error);
       toast.error(error.response?.data?.message || 'Failed to submit report');
     } finally {
-      setIsLoading(true); // Wait, should be false, but simulated was false.
       setIsLoading(false);
     }
   };
@@ -306,7 +286,6 @@ const ReportFormPage = () => {
 
         <div className="bg-white p-6 md:p-10 border border-gray-300 shadow-sm relative rounded-md">
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Image Upload */}
             <div className="space-y-2">
               <label className="text-gray-900 font-semibold flex items-center gap-2">
                 <Camera size={18} /> Evidence Image
@@ -320,7 +299,6 @@ const ReportFormPage = () => {
                     formData.imagePreview ? 'border-gray-300' : 'border-gray-300 hover:border-gray-400'
                   }`}
               >
-                {/* Hidden Canvas for capture */}
                 <canvas ref={canvasRef} className="hidden" />
 
                 {!isCameraOpen && (
@@ -416,7 +394,6 @@ const ReportFormPage = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Fault Type */}
               <div className="space-y-2">
                 <label htmlFor="faultType" className="text-gray-900 font-semibold flex items-center gap-2">
                   <AlertCircle size={18} /> Type of Issue
@@ -442,7 +419,6 @@ const ReportFormPage = () => {
                 {errors.faultType && <p className="text-red-600 text-sm mt-1">{errors.faultType}</p>}
               </div>
 
-              {/* Location */}
               <div className="space-y-2">
                 <label htmlFor="location" className="text-gray-900 font-semibold flex items-center gap-2">
                   <MapPin size={18} /> Incident Location
@@ -461,7 +437,6 @@ const ReportFormPage = () => {
               </div>
             </div>
 
-            {/* Description */}
             <div className="space-y-2">
               <label htmlFor="description" className="text-gray-900 font-semibold flex items-center gap-2">
                 <MessageSquare size={18} /> Detailed Description

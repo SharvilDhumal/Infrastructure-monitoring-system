@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Bell, User, LogOut, Settings, Globe, Shield, X, CheckCheck, MapPin, Clock, AlertTriangle, CheckCircle2, XCircle, Loader2, Trash2, Check, ChevronRight, InboxIcon } from 'lucide-react'
 import './Navbar.css'
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001'
+import API_BASE from '../../config/api'
 const SEEN_KEY = 'admin_navbar_seen_issue_ids'
 
 const FAULT_LABELS = {

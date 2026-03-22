@@ -22,6 +22,8 @@ import IssueFilter from '../components/IssueFilter';
 import EmptyState from '../components/EmptyState';
 import authService from '../features/auth/authService';
 
+import API_BASE_URL from '../config/api';
+
 const Profile = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -45,7 +47,7 @@ const Profile = () => {
         if (!silent) setLoading(true);
         else setRefreshing(true);
         try {
-            const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5001') + '/api/issues/user';
+            const API_URL = API_BASE_URL + '/api/issues/user';
             const response = await axios.get(API_URL, {
                 headers: { Authorization: `Bearer ${token}` },
             });
