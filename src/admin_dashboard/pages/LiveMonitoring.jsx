@@ -52,11 +52,11 @@ const monitoringModules = [
 
 const LiveMonitoring = () => {
     return (
-        <div className="w-full h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-[1400px] mx-auto pt-16 pb-24 px-4 md:px-0">
+        <div className="w-full h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-[1400px] mx-auto pt-4 px-4 sm:px-6 md:pt-16 md:px-8 pb-24">
             {/* Header Area */}
-            <div className="mb-16 px-2 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="mb-8 md:mb-16 px-2 flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-5xl font-black text-slate-900 tracking-tighter mb-4 capitalize">Live <span className="text-blue-600 font-black">Sensory</span> Feed</h1>
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter mb-2 md:mb-4 capitalize">Live <span className="text-blue-600 font-black">Sensory</span> Feed</h1>
                     <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] max-w-lg leading-relaxed">
                         Select a specialized diagnostic module to view real-time infrastructure telemetry and neural health.
                     </p>

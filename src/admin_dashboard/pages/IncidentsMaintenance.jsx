@@ -71,12 +71,12 @@ const IncidentsMaintenance = ({ hideLayout = false }) => {
   }
 
   return (
-    <div className={`w-full h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 mx-auto ${hideLayout ? 'max-w-none pt-4 px-10 pb-20' : 'max-w-[1600px] pt-12 pb-20 px-4 md:px-0'}`}>
+    <div className={`w-full h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 mx-auto ${hideLayout ? 'max-w-none pt-4 px-4 sm:px-10 pb-20' : 'max-w-[1600px] pt-4 px-4 sm:px-6 md:pt-12 md:px-8 pb-20'}`}>
       
       {/* Header Section */}
-      <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
+      <div className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8">
         <div>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-2">Incidents <span className="text-rose-600">&</span> Maintenance</h1>
+          <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-1 md:mb-2">Incidents <span className="text-rose-600">&</span> Maintenance</h1>
           <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Lifecycle tracking for active network anomalies</p>
         </div>
 

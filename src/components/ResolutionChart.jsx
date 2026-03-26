@@ -19,11 +19,10 @@ const ResolutionChart = ({ stats }) => {
     { name: 'Rejected', value: rejected, color: '#ef4444' },
   ].filter(d => d.value > 0);
 
-  // If no data yet, show empty state slice
-  const chartData = data.length > 0 ? data : [{ name: 'No Issues', value: 1, color: '#e5e7eb' }];
+    const chartData = data.length > 0 ? data : [{ name: 'No Issues', value: 1, color: '#e5e7eb' }];
 
   return (
-    <div className="bg-white border border-gray-200 rounded p-8 relative overflow-hidden shadow-sm">
+    <div className="bg-white border border-gray-200 rounded p-5 sm:p-8 relative overflow-hidden shadow-sm">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-2xl font-bold text-[#002147] tracking-tight">Resolution Overview</h3>
         <div className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold border border-blue-200">

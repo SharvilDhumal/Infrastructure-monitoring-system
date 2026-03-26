@@ -65,7 +65,7 @@ const Services = () => {
           desc="AI + IoT modules designed for real-world infrastructure monitoring: detection, telemetry, analytics and citizen reporting."
         />
       </div>
-      <div className="flex flex-col md:grid grid-cols-2">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 md:gap-6 w-full">
         {servicesData.map((service, index) => (
           <ServicesCard key={index} service={service} index={index} />
         ))}

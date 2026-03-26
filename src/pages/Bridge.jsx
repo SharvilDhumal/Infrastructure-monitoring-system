@@ -127,8 +127,8 @@ const Bridge = ({ hideLayout = false }) => {
         amber: 'from-amber-500/10 to-transparent border-amber-500/20',
       };
       return (
-        <div className="group relative bg-white border border-slate-200 p-5 rounded-[2rem] transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200">
-          <div className="flex items-center justify-between mb-4">
+        <div className="group relative bg-white border border-slate-200 p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200 w-full">
+          <div className="flex items-center justify-between mb-2 sm:mb-4">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{title}</span>
             <div className="p-2 bg-slate-50 rounded-lg border border-slate-100 group-hover:scale-110 transition-transform">
               {icon}
@@ -138,7 +138,7 @@ const Bridge = ({ hideLayout = false }) => {
             <span className="text-3xl font-black text-slate-800">{value}</span>
             {unit && <span className="text-xs font-bold text-slate-500 uppercase">{unit}</span>}
           </div>
-          <p className="text-[10px] text-slate-500 font-medium">{description}</p>
+          <p className="text-[10px] text-slate-500 font-medium leading-tight sm:leading-normal">{description}</p>
           <div className={`absolute bottom-0 left-0 right-0 h-1 rounded-full bg-gradient-to-r ${colorMap[color] || colorMap.indigo}`}></div>
         </div>
       );
@@ -148,52 +148,52 @@ const Bridge = ({ hideLayout = false }) => {
         switch (activeTab) {
             case "Overview":
                 return (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6 sm:space-y-8">
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 w-full">
                             <StatCard
                               title="Total Issues"
                               value={stats.total}
                               icon={<Activity className="text-indigo-500" size={20} />}
                               color="indigo"
-                              description="Historical tracked data"
+                              description="Historical data"
                             />
                             <StatCard
                               title="Resolved"
                               value={stats.resolved}
                               icon={<Check className="text-emerald-500" size={20} />}
                               color="emerald"
-                              description="Maintenance completed"
+                              description="Maintenance done"
                             />
                             <StatCard
                               title="Active Defects"
                               value={stats.detected}
                               icon={<AlertTriangle className="text-red-500" size={20} />}
                               color="red"
-                              description="Requires immediate attention"
+                              description="Immediate action"
                             />
                             <StatCard
-                              title="Resolution Rate"
+                              title="Resolve Rate"
                               value={stats.rate}
                               icon={<ShieldCheck className="text-amber-500" size={20} />}
                               color="amber"
-                              description="Overall efficiency score"
+                              description="Efficiency score"
                             />
                         </div>
 
-                        <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] shadow-sm">
-                            <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                                <AlertTriangle className="text-indigo-500" size={24} /> Severity Breakdown
+                        <div className="bg-white border border-slate-200 p-5 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-sm">
+                            <h2 className="text-lg sm:text-xl font-bold text-slate-900 mb-4 sm:mb-6 flex items-center gap-2">
+                                <AlertTriangle size={20} className="text-indigo-500 sm:w-[24px] sm:h-[24px]" /> Severity Breakdown
                             </h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                                 {[
-                                    { label: "High Priority", count: detectedIssues.filter(i => i.severity === "High").length, subtitle: "Needs Immediate Action", bgColor: "bg-red-50", textColor: "text-red-500", ring: "ring-red-500/20" },
+                                    { label: "High Priority", count: detectedIssues.filter(i => i.severity === "High").length, subtitle: "Immediate Action", bgColor: "bg-red-50", textColor: "text-red-500", ring: "ring-red-500/20" },
                                     { label: "Medium Priority", count: detectedIssues.filter(i => i.severity === "Medium").length, subtitle: "Plan Intervention", bgColor: "bg-orange-50", textColor: "text-orange-500", ring: "ring-orange-500/20" },
-                                    { label: "Low Priority", count: detectedIssues.filter(i => i.severity === "Low").length, subtitle: "Routine Monitoring", bgColor: "bg-emerald-50", textColor: "text-emerald-500", ring: "ring-emerald-500/20" },
+                                    { label: "Low Priority", count: detectedIssues.filter(i => i.severity === "Low").length, subtitle: "Routine Monitor", bgColor: "bg-emerald-50", textColor: "text-emerald-500", ring: "ring-emerald-500/20" },
                                 ].map((item, idx) => (
-                                    <div key={idx} className={`${item.bgColor} p-8 rounded-[2rem] border border-white/40 shadow-sm flex flex-col items-center text-center relative overflow-hidden group`}>
+                                    <div key={idx} className={`${item.bgColor} p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] border border-white/40 shadow-sm flex flex-col items-center text-center relative overflow-hidden group`}>
                                         <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full ${item.bgColor} ring-8 ${item.ring} opacity-50 group-hover:scale-150 transition-transform duration-700`}></div>
-                                        <h3 className={`text-sm font-bold uppercase tracking-widest ${item.textColor} mb-2 relative z-10`}>{item.label}</h3>
-                                        <p className="text-5xl font-black text-slate-900 mb-3 relative z-10">{item.count}</p>
+                                        <h3 className={`text-xs sm:text-sm font-bold uppercase tracking-widest ${item.textColor} mb-2 relative z-10`}>{item.label}</h3>
+                                        <p className="text-4xl sm:text-5xl font-black text-slate-900 mb-1 sm:mb-3 relative z-10">{item.count}</p>
                                         <p className="text-[10px] font-bold text-slate-500 tracking-widest uppercase mt-auto relative z-10">{item.subtitle}</p>
                                     </div>
                                 ))}
@@ -354,21 +354,21 @@ const Bridge = ({ hideLayout = false }) => {
                 
                 {/* Header */}
                 {!hideLayout && (
-                    <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-slate-200">
+                    <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 sm:mb-10 pb-4 sm:pb-6 border-b border-slate-200">
                         <div className="flex items-center gap-3">
-                            <div className="p-2.5 bg-indigo-600/20 rounded-xl border border-indigo-500/30">
-                                <ShieldCheck className="text-indigo-500" size={24} />
+                            <div className="p-2 sm:p-2.5 bg-indigo-600/20 rounded-xl border border-indigo-500/30 shrink-0">
+                                <ShieldCheck size={20} className="text-indigo-500 sm:w-[24px] sm:h-[24px]" />
                             </div>
-                            <div>
-                                <h1 className="text-2xl font-bold text-slate-900 tracking-tight">InfraVision <span className="text-indigo-500 underline decoration-indigo-500/30 underline-offset-4">Bridge</span></h1>
-                                <p className="text-sm text-slate-600 font-medium">Structural Integrity Dashboard</p>
+                            <div className="min-w-0 flex-1">
+                                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight truncate">InfraVision <span className="text-indigo-500 underline decoration-indigo-500/30 underline-offset-4">Bridge</span></h1>
+                                <p className="text-xs sm:text-sm text-slate-600 font-medium truncate">Structural Integrity Dashboard</p>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-6 bg-white shadow-sm px-4 py-2.5 rounded-2xl border border-slate-200">
+                        <div className="flex items-center gap-4 sm:gap-6 bg-white shadow-sm px-4 py-2.5 rounded-2xl border border-slate-200 self-start w-full md:w-auto">
                             <div className="flex items-center gap-2">
                                 <div className="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20 animate-pulse"></div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-500">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-500 overflow-hidden text-clip whitespace-nowrap">
                                     Sensors Active
                                 </span>
                             </div>
@@ -377,12 +377,12 @@ const Bridge = ({ hideLayout = false }) => {
                 )}
 
                 {/* Tab Navigation */}
-                <div className="flex bg-white/60 backdrop-blur-md p-1.5 rounded-2xl w-fit mb-8 border border-slate-200 shadow-sm overflow-x-auto">
+                <div className="flex overflow-x-auto hide-scrollbar bg-white/60 backdrop-blur-md p-1.5 rounded-2xl w-full mb-6 sm:mb-8 border border-slate-200 shadow-sm snap-x">
                     {["Overview", "Detected Issues", "Resolved Issues", "User Reports"].map(tab => (
                         <button 
                             key={tab}
                             onClick={() => setActiveTab(tab)} 
-                            className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab ? 'bg-white shadow-sm border border-slate-100 text-slate-900' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'}`}
+                            className={`touch-target shrink-0 snap-start px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab ? 'bg-white shadow-sm border border-slate-100 text-slate-900' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'}`}
                         >
                             {tab === "Overview" && <Activity size={16} className={activeTab === tab ? 'text-indigo-500' : ''} />}
                             {tab === "Detected Issues" && (

@@ -70,28 +70,28 @@ function WaterLeakage({ hideLayout = false }) {
       <div className={`relative z-10 max-w-[1400px] mx-auto ${hideLayout ? 'px-4 py-4' : 'px-6 py-8'}`}>
         {/* Header */}
         {!hideLayout && (
-          <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-white/5">
+          <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 sm:mb-10 pb-4 sm:pb-6 border-b border-white/5">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-blue-600/20 rounded-xl border border-blue-500/30">
-                <Waves className="text-blue-400" size={24} />
+              <div className="p-2 sm:p-2.5 bg-blue-600/20 rounded-xl border border-blue-500/30 shrink-0">
+                <Waves size={20} className="text-blue-400 sm:w-[24px] sm:h-[24px]" />
               </div>
-              <div>
-                <h1 className="text-2xl font-bold text-slate-900 tracking-tight">AquaGuard <span className="text-blue-500 underline decoration-blue-500/30 underline-offset-4">IoT</span></h1>
-                <p className="text-sm text-slate-600 font-medium">Real-time Water Monitoring System</p>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight truncate">AquaGuard <span className="text-blue-500 underline decoration-blue-500/30 underline-offset-4">IoT</span></h1>
+                <p className="text-xs sm:text-sm text-slate-600 font-medium truncate">Real-time Water Monitoring System</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-6 bg-white shadow-sm px-4 py-2.5 rounded-2xl border border-slate-200">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4 sm:gap-6 bg-white shadow-sm px-4 py-2.5 rounded-2xl border border-slate-200 self-start w-full md:w-auto overflow-x-auto hide-scrollbar">
+              <div className="flex items-center gap-2 shrink-0">
                 <div className={`w-2 h-2 rounded-full ${isLeakDetected ? 'bg-red-500 animate-pulse ring-4 ring-red-500/20' : 'bg-emerald-500 ring-4 ring-emerald-500/20'}`}></div>
-                <span className={`text-xs font-bold uppercase tracking-wider ${isLeakDetected ? 'text-red-400' : 'text-emerald-400'}`}>
+                <span className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider ${isLeakDetected ? 'text-red-400' : 'text-emerald-400'}`}>
                   {isLeakDetected ? 'Critical Alert' : 'System Healthy'}
                 </span>
               </div>
-              <div className="h-4 w-[1px] bg-white/10"></div>
-              <div className="flex items-center gap-2 text-slate-400">
+              <div className="h-4 w-[1px] bg-white/10 shrink-0"></div>
+              <div className="flex items-center gap-2 text-slate-400 shrink-0 pr-2">
                 <Clock size={14} />
-                <span className="text-xs font-medium">{data?.time || '--:--:--'}</span>
+                <span className="text-[10px] sm:text-xs font-medium">{data?.time || '--:--:--'}</span>
               </div>
             </div>
           </header>
@@ -99,38 +99,38 @@ function WaterLeakage({ hideLayout = false }) {
 
         {/* Leak Alert Banner */}
         {isLeakDetected && (
-          <div className="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
-            <div className="bg-red-500/10 border border-red-500/50 backdrop-blur-xl p-5 rounded-3xl flex items-center gap-5 shadow-2xl shadow-red-950/20">
-              <div className="p-4 bg-red-500 rounded-2xl animate-pulse ring-8 ring-red-500/20">
-                <AlertTriangle className="text-white" size={32} />
+          <div className="mb-6 sm:mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
+            <div className="bg-red-500/10 border border-red-500/50 backdrop-blur-xl p-4 sm:p-5 rounded-[1.5rem] sm:rounded-3xl flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5 shadow-2xl shadow-red-950/20">
+              <div className="p-3 sm:p-4 bg-red-500 rounded-2xl animate-pulse ring-8 ring-red-500/20 self-start sm:self-auto shrink-0">
+                <AlertTriangle size={24} className="text-white sm:w-[32px] sm:h-[32px]" />
               </div>
-              <div>
-                <h2 className="text-xl font-bold text-red-500 mb-1 leading-none">Emergency Leak Detected!</h2>
-                <p className="text-red-400/80 font-medium text-sm">Hardware sensors triggered a positive leakage status. Immediate inspection required.</p>
+              <div className="flex-1">
+                <h2 className="text-lg sm:text-xl font-bold text-red-500 mb-1 leading-none">Emergency Leak Detected!</h2>
+                <p className="text-red-400/80 font-medium text-xs sm:text-sm">Hardware sensors triggered a positive leakage status. Immediate inspection required.</p>
               </div>
-              <button className="ml-auto bg-red-500 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-red-600 transition-colors shadow-lg shadow-red-500/25">
+              <button className="touch-target w-full sm:w-auto bg-red-500 text-white px-6 py-3 sm:py-2.5 rounded-xl font-bold text-sm hover:bg-red-600 transition-colors shadow-lg shadow-red-500/25">
                 Mute Alert
               </button>
             </div>
           </div>
         )}
 
-        <div className="flex bg-white/60 backdrop-blur-md p-1.5 rounded-2xl w-fit mb-8 mx-auto xl:mx-0 border border-slate-200 shadow-sm overflow-x-auto">
-            <button onClick={() => setActiveView('telemetry')} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${activeView === 'telemetry' ? 'bg-white shadow-sm border border-slate-100 text-slate-900' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'}`}><Activity size={16} /> Live Telemetry</button>
-            <button onClick={() => setActiveView('reports')} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${activeView === 'reports' ? 'bg-white shadow-sm border border-slate-100 text-slate-900' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'}`}><User size={16} /> User Reports</button>
+        <div className="flex overflow-x-auto hide-scrollbar bg-white/60 backdrop-blur-md p-1.5 rounded-2xl w-full mb-6 sm:mb-8 mx-0 border border-slate-200 shadow-sm snap-x">
+            <button onClick={() => setActiveView('telemetry')} className={`touch-target shrink-0 snap-start px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 ${activeView === 'telemetry' ? 'bg-white shadow-sm border border-slate-100 text-slate-900' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'}`}><Activity size={14} className="sm:w-[16px] sm:h-[16px]" /> Live Telemetry</button>
+            <button onClick={() => setActiveView('reports')} className={`touch-target shrink-0 snap-start px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 ${activeView === 'reports' ? 'bg-white shadow-sm border border-slate-100 text-slate-900' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'}`}><User size={14} className="sm:w-[16px] sm:h-[16px]" /> User Reports</button>
         </div>
 
         {activeView === 'telemetry' ? (
           <>
             {/* Dashboard Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-5 mb-8 w-full">
               <StatCard
                 title="Supply Line A"
                 value={data?.flow1 || 0}
                 unit="L/min"
                 icon={<Activity className="text-blue-400" size={20} />}
                 color="blue"
-                description="Main pump intake"
+                description="Main pump int"
               />
               <StatCard
                 title="Outlet Line B"
@@ -138,15 +138,15 @@ function WaterLeakage({ hideLayout = false }) {
                 unit="L/min"
                 icon={<Activity className="text-cyan-400" size={20} />} // Changed Zap to Activity for consistency with imports
                 color="cyan"
-                description="Garden irrigation"
+                description="Garden irrig"
               />
               <StatCard
-                title="Ground Moisture"
+                title="Moisture"
                 value={data?.moisture || 0}
                 unit="/ 1024"
                 icon={<Droplets className="text-indigo-400" size={20} />}
                 color="indigo"
-                description="Kitchen area sensor"
+                description="Kitchen sensor"
               />
               <StatCard
                 title="Sync Status"
@@ -154,13 +154,15 @@ function WaterLeakage({ hideLayout = false }) {
                 unit="2s poll"
                 icon={<Activity className="text-emerald-400" size={20} />}
                 color="emerald"
-                description="Connection health"
+                description="Conn health"
               />
-              <StatusCard
-                title="System State"
-                isLeak={isLeakDetected}
-                description="Hardware override status"
-              />
+              <div className="col-span-2 md:col-span-1">
+                <StatusCard
+                    title="System State"
+                    isLeak={isLeakDetected}
+                    description="Hardware status"
+                />
+              </div>
             </div>
 
             {/* Analytics Placeholder */}

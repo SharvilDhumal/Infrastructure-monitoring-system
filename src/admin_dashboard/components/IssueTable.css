@@ -1,10 +1,12 @@
 .issue-table-wrapper {
     background: transparent;
     width: 100%;
+    overflow-x: auto;
 }
 
 .issue-table {
     width: 100%;
+    min-width: 700px;
     border-collapse: collapse;
     text-align: left;
     table-layout: fixed;

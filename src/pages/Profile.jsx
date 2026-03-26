@@ -138,29 +138,29 @@ const Profile = () => {
                 onLogout={handleLogout}
             />
 
-            <main className="flex-1 md:ml-64 p-6 md:p-10 w-full max-w-7xl mx-auto">
+            <main className="flex-1 md:ml-64 p-4 pt-20 sm:p-6 md:p-10 md:pt-10 w-full max-w-7xl mx-auto">
                 {activeTab === 'dashboard' ? (
                     <>
                         {/* Header */}
-                        <header className="mb-8 border-b border-gray-200 pb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                        <header className="mb-6 sm:mb-8 border-b border-gray-200 pb-4 sm:pb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                             <div>
-                                <h1 className="text-3xl font-bold text-[#002147] tracking-tight mb-2">
+                                <h1 className="text-2xl sm:text-3xl font-bold text-[#002147] tracking-tight mb-1 sm:mb-2">
                                     Welcome, {user?.name?.split(' ')[0] || 'Citizen'}
                                 </h1>
-                                <p className="text-gray-600 font-medium text-lg">Manage and track your reported infrastructure issues.</p>
+                                <p className="text-gray-600 font-medium text-sm sm:text-lg">Manage and track your reported infrastructure issues.</p>
                             </div>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 w-full md:w-auto">
                                 <button
                                     onClick={handleManualRefresh}
                                     disabled={refreshing}
                                     title="Refresh issues"
-                                    className="p-3 bg-white border border-gray-300 text-[#002147] hover:bg-gray-50 font-bold rounded-lg shadow-sm transition-colors disabled:opacity-50"
+                                    className="p-3 bg-white border border-gray-300 text-[#002147] hover:bg-gray-50 font-bold rounded-lg shadow-sm transition-colors disabled:opacity-50 touch-target shrink-0"
                                 >
                                     <RefreshCw size={18} className={refreshing ? 'animate-spin' : ''} />
                                 </button>
                                 <button
                                     onClick={() => setIsChartDrawerOpen(true)}
-                                    className="px-6 py-3 bg-white border border-gray-300 text-[#002147] hover:bg-gray-50 font-bold rounded-lg shadow-sm transition-colors"
+                                    className="flex-1 md:flex-none px-4 sm:px-6 py-3 bg-white border border-gray-300 text-[#002147] hover:bg-gray-50 font-bold rounded-lg shadow-sm transition-colors text-sm sm:text-base touch-target text-center"
                                 >
                                     View Resolution Stats
                                 </button>

@@ -134,26 +134,26 @@ const PotholeDetection = ({ hideLayout = false }) => {
         
         {/* Modern Header Area */}
         {!hideLayout && (
-          <div className="mb-14 px-2 flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div className="mb-8 sm:mb-14 px-2 flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-8">
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                 <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-500/25 text-white">
-                   <Zap size={24} strokeWidth={2.5} />
+              <div className="flex items-center gap-3 mb-2 sm:mb-4">
+                 <div className="p-2 sm:p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-500/25 text-white shrink-0">
+                   <Zap size={20} className="sm:w-[24px] sm:h-[24px]" strokeWidth={2.5} />
                  </div>
-                 <h1 className="text-5xl font-black text-slate-900 tracking-tighter capitalize">Pothole <span className="text-blue-600">Detection</span></h1>
+                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tighter capitalize flex-wrap leading-none">Pothole <span className="text-blue-600">Detection</span></h1>
               </div>
-              <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] ml-1">Real-time Road Hazard Analytics & Maintenance Lifecycle</p>
+              <p className="text-slate-500 font-bold uppercase tracking-[0.1em] sm:tracking-[0.2em] text-[8px] sm:text-[10px] ml-1">Real-time Road Hazard Analytics & Maintenance Lifecycle</p>
             </div>
 
-            <div className="flex items-center gap-6 bg-white/80 backdrop-blur-3xl px-6 py-4 rounded-3xl border border-white/50 shadow-xl shadow-slate-200/50">
-              <div className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
-                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Core Engine Online</span>
+            <div className="flex items-center gap-4 sm:gap-6 bg-white/80 backdrop-blur-3xl px-4 sm:px-6 py-3 sm:py-4 rounded-2xl sm:rounded-3xl border border-white/50 shadow-xl shadow-slate-200/50 self-start md:self-auto w-full md:w-auto overflow-x-auto hide-scrollbar">
+              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                <div className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
+                <span className="text-[8px] sm:text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Core Engine Online</span>
               </div>
-              <div className="w-px h-6 bg-slate-200" />
+              <div className="w-px h-6 bg-slate-200 shrink-0" />
               <button 
                 onClick={generatePDF}
-                className="flex items-center gap-2 text-blue-600 font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all"
+                className="flex items-center gap-2 text-blue-600 font-black text-[8px] sm:text-[10px] uppercase tracking-widest hover:scale-105 transition-all touch-target shrink-0 px-2"
               >
                 <Download size={14} /> Export Protocol
               </button>
@@ -162,7 +162,7 @@ const PotholeDetection = ({ hideLayout = false }) => {
         )}
 
         {/* Dynamic Tab Navigation */}
-        <div className="flex bg-white/40 backdrop-blur-3xl p-2 rounded-[2rem] w-fit mb-12 border border-white/50 shadow-sm mx-2">
+        <div className="flex overflow-x-auto hide-scrollbar bg-white/40 backdrop-blur-3xl p-2 rounded-[2rem] w-full mb-8 sm:mb-12 border border-white/50 shadow-sm snap-x">
           <TabButton 
             active={activeTab === 'unsolved'} 
             onClick={() => setActiveTab('unsolved')} 

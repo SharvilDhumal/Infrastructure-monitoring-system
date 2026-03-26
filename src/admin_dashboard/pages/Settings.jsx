@@ -40,11 +40,11 @@ const Settings = ({ hideLayout = false }) => {
     };
 
     return (
-        <div className={`w-full h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 mx-auto ${hideLayout ? 'max-w-none pt-4 px-10 pb-20' : 'max-w-[1600px] pt-16 pb-24 px-4 md:px-0'}`}>
+        <div className={`w-full h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 mx-auto ${hideLayout ? 'max-w-none pt-4 px-4 sm:px-10 pb-20' : 'max-w-[1600px] pt-4 px-4 sm:px-6 md:pt-16 md:px-8 pb-24'}`}>
             {/* Header Area */}
-            <div className="mb-14 px-2 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="mb-8 md:mb-14 px-2 flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-5xl font-black text-slate-900 tracking-tighter mb-3 capitalize">System <span className="text-blue-600">Preferences</span></h1>
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter mb-2 md:mb-3 capitalize">System <span className="text-blue-600">Preferences</span></h1>
                     <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px]">Configure core monitoring logic and notification protocols</p>
                 </div>
                 <div className="flex gap-3">

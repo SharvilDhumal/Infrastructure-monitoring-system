@@ -81,7 +81,7 @@ const Overview = ({ hideLayout = false }) => {
   };
 
   return (
-    <div className={`w-full h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 mx-auto ${hideLayout ? 'max-w-none pt-4 px-10 pb-20' : 'max-w-[1600px] pt-12 pb-20'}`}>
+    <div className={`w-full h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 mx-auto ${hideLayout ? 'max-w-none pt-4 px-4 sm:px-10 pb-20' : 'max-w-[1600px] pt-4 px-4 sm:px-6 md:pt-12 md:px-8 pb-20'}`}>
       <AdminWelcomeBanner alertCount={criticalIssues.length} />
 
       {loading && allIssues.length === 0 ? (
@@ -90,11 +90,11 @@ const Overview = ({ hideLayout = false }) => {
           <p className="font-bold tracking-widest uppercase text-xs">Loading Overview Data...</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 auto-rows-max">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 lg:gap-12 auto-rows-max">
             
           {/* Main Tables */}
           <BentoCard title="Critical Issues Action Required" icon={AlertTriangle} spanClass="col-span-1 md:col-span-2 lg:col-span-2 xl:col-span-3">
-             <div className="-mx-2 -my-2">
+             <div className="md:-mx-2 md:-my-2">
               <IssueTable
                 issues={criticalIssues}
                 onAssign={handleAssignClick}
@@ -106,7 +106,7 @@ const Overview = ({ hideLayout = false }) => {
 
           {/* Operations Panel side */}
           <BentoCard title="Operations Overview" icon={Settings} spanClass="col-span-1 md:col-span-2 lg:col-span-1 xl:col-span-1">
-             <div className="-mx-4 -my-4 h-full flex items-center justify-center">
+             <div className="md:-mx-4 md:-my-4 h-full flex items-center justify-center">
                <OperationsPanel stats={workflowStats} />
              </div>
           </BentoCard>
@@ -117,21 +117,21 @@ const Overview = ({ hideLayout = false }) => {
           </BentoCard>
 
           {/* Severity Ladder */}
-          <BentoCard title="Severity Ladder" icon={Layers} spanClass="col-span-1">
-             <div className="-mx-4 -my-4 h-full flex items-center justify-center">
+          <BentoCard title="Severity Ladder" icon={Layers} spanClass="col-span-1 md:col-span-2 lg:col-span-1">
+             <div className="md:-mx-4 md:-my-4 h-full flex items-center justify-center">
                <SeverityLadder counts={severityCounts} />
              </div>
           </BentoCard>
 
           {/* Severity Distribution */}
-          <BentoCard title="Severity Distribution" icon={PieChart} spanClass="col-span-1">
+          <BentoCard title="Severity Distribution" icon={PieChart} spanClass="col-span-1 md:col-span-2 lg:col-span-1">
              <SeverityDistributionChart issues={allIssues} />
           </BentoCard>
 
           {/* Assigned Tasks */}
           {assignedIssues.length > 0 && (
             <BentoCard title="Currently Assigned Tasks" spanClass="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-4">
-              <div className="-mx-2 -my-2">
+              <div className="md:-mx-2 md:-my-2">
                 <IssueTable
                   issues={assignedIssues}
                   onAssign={handleAssignClick}

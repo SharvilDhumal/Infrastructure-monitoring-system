@@ -6,6 +6,13 @@ export default {
   ],
   darkMode: 'class',
   theme: {
+    screens: {
+      'xs': '320px',    // small phones
+      'sm': '481px',    // tablet
+      'md': '769px',    // small laptop
+      'lg': '1025px',   // desktop
+      'xl': '1280px',   // large desktop
+    },
     extend: {
       colors: {
         primary: {

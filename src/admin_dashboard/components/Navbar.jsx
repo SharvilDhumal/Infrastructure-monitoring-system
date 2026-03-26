@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bell, User, LogOut, Settings, Globe, Shield, X, CheckCheck, MapPin, Clock, AlertTriangle, CheckCircle2, XCircle, Loader2, Trash2, Check, ChevronRight, InboxIcon } from 'lucide-react'
+import { Bell, User, LogOut, Settings, Globe, Shield, X, CheckCheck, MapPin, Clock, AlertTriangle, CheckCircle2, XCircle, Loader2, Trash2, Check, ChevronRight, InboxIcon, Menu } from 'lucide-react'
 import './Navbar.css'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001'
@@ -71,7 +71,7 @@ const PRIORITY_CONFIG = {
   'other': 'low',
 }
 
-const Navbar = () => {
+const Navbar = ({ toggleMobileSidebar }) => {
   const navigate = useNavigate()
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] = useState(false)
@@ -186,7 +186,14 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-content">
-        <div className="navbar-left">
+        <div className="navbar-left flex items-center gap-3">
+          <button 
+            className="lg:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-lg touch-target" 
+            onClick={toggleMobileSidebar}
+            aria-label="Toggle Menu"
+          >
+            <Menu size={24} />
+          </button>
           <div className="navbar-logo-container">
             <div className="navbar-logo-icon">
               <Shield size={22} strokeWidth={2.5} />

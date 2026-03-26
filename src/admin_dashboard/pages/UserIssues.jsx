@@ -71,10 +71,10 @@ const UserIssues = ({ hideLayout = false }) => {
     }
 
     return (
-        <div className={`w-full h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 mx-auto ${hideLayout ? 'max-w-none pt-4 px-10 pb-20' : 'max-w-[1600px] pt-10 pb-20 px-4 md:px-0'}`}>
+        <div className={`w-full h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 mx-auto ${hideLayout ? 'max-w-none pt-4 px-4 sm:px-10 pb-20' : 'max-w-[1600px] pt-4 px-4 sm:px-6 md:pt-10 md:px-8 pb-20'}`}>
             {/* Header Area */}
-            <div className="mb-12">
-                <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-2">Community <span className="text-blue-600">Feed</span></h1>
+            <div className="mb-8 md:mb-12">
+                <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-1 md:mb-2">Community <span className="text-blue-600">Feed</span></h1>
                 <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">Moderate and manage public infrastructure reports</p>
             </div>
 

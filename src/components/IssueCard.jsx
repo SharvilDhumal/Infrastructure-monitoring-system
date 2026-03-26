@@ -49,15 +49,15 @@ const IssueCard = ({ issue }) => {
     return (
         <motion.div
             whileHover={{ y: -2, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }}
-            className="group bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-5 transition-all duration-300 cursor-pointer overflow-hidden relative shadow-sm"
+            className="group bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-4 sm:p-5 transition-all duration-300 cursor-pointer overflow-hidden relative shadow-sm touch-target block!"
         >
-            <div className="absolute top-0 right-0 p-5 opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 duration-300 text-gray-400">
+            <div className="absolute top-0 right-0 p-4 sm:p-5 opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 duration-300 text-gray-400 hidden sm:block">
                 <ChevronRight size={20} />
             </div>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
                 {issue.imageUrl ? (
-                    <div className="relative w-full sm:w-32 h-40 sm:h-24 flex-shrink-0">
+                    <div className="relative w-full sm:w-32 h-48 sm:h-24 flex-shrink-0">
                         <img
                             src={issue.imageUrl}
                             alt={issue.title}

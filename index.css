@@ -3,5 +3,20 @@
 @tailwind utilities;
 
 /* optional minimal styles */
-html, body, #root { height: 100%; margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+html {
+  /* Fluid typography baseline: 16px at 1280px, 14px on smaller screens */
+  font-size: clamp(14px, 1.25vw, 16px); 
+}
+html, body, #root { 
+  height: 100%; 
+  margin: 0; 
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; 
+}
 body { background:#f8fafc; color:#0f172a; }
+
+/* Responsive utility helpers */
+@layer utilities {
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+  }
+}
